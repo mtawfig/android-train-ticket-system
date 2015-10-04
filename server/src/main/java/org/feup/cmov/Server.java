@@ -1,4 +1,4 @@
-package cmov.feup.org;
+package org.feup.cmov;
 
 import org.apache.commons.cli.*;
 

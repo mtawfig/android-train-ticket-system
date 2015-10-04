@@ -1,10 +1,11 @@
-package cmov.feup.org;
+package org.feup.cmov;
 
 import static spark.Spark.*;
 
 public class TimetableService implements Service {
 
     public void startService() {
-        get("/hello", (req, res) -> "Hello World");
+        get(Server.API_PREFIX + "/hello",
+                (req, res) -> "Hello World");
     }
 }
