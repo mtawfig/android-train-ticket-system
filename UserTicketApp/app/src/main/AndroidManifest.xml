@@ -37,10 +37,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".StationsMapFragment"
-            android:label="@string/title_activity_stations" >
-        </activity>
     </application>
 
 </manifest>

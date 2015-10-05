@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:id="@+id/map"
-        tools:context="org.feup.cmov.userticketapp.StationsMapFragment"
+        tools:context="org.feup.cmov.userticketapp.MainActivity"
         android:name="com.google.android.gms.maps.MapFragment" />
 
 </android.support.design.widget.CoordinatorLayout>
