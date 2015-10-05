@@ -30,6 +30,9 @@
         android:layout_height="300dp"
         android:id="@+id/map"
         tools:context="org.feup.cmov.userticketapp.MainActivity"
-        android:name="com.google.android.gms.maps.MapFragment" />
+        android:name="com.google.android.gms.maps.MapFragment"
+        map:cameraZoom="10"
+        map:mapType="normal"
+        map:liteMode="true"/>
 
 </android.support.design.widget.CoordinatorLayout>
