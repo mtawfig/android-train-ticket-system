@@ -1,13 +1,11 @@
 package org.feup.cmov.userticketapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
@@ -20,19 +18,26 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.ui.IconGenerator;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+    final static int STATION_CIRCLE_RADIUS = 1000;
+    final static int CLICK_MARGIN_ERROR = 500;
+
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,53 +88,111 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
-        LatLng campanha = new LatLng(41.1505929,-8.5859497);
-        LatLng espinho = new LatLng(41.0043836,-8.6456402);
-        LatLng francelos = new LatLng(41.0812921,-8.6475706);
-        LatLng saoromao = new LatLng(41.277871,-8.5536718);
-        LatLng ermesinde = new LatLng(41.2169514,-8.5540581);
-        LatLng parada = new LatLng(41.1602043,-8.3726025);
-        LatLng saomartinho = new LatLng(41.1603533,-8.4695933);
+        final List<Station> stations = Station.getAllStations();
 
-        LatLng[] stations = {campanha, espinho, francelos, saoromao, ermesinde, parada, saomartinho};
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(stations.get(0).getLocation()));
 
-        ArrayList<Pair<LatLng, LatLng>> connections = new ArrayList<>();
-        connections.add(new Pair<>(campanha, francelos));
-        connections.add(new Pair<>(francelos, espinho));
-        connections.add(new Pair<>(campanha, ermesinde));
-        connections.add(new Pair<>(ermesinde, saoromao));
-        connections.add(new Pair<>(campanha, saomartinho));
-        connections.add(new Pair<>(saomartinho, parada));
+        ArrayList<Pair<Station, Station>> connections = new ArrayList<>();
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(campanha));
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                int duration = Toast.LENGTH_SHORT;
 
-        for(LatLng station : stations) {
+                Toast toast = Toast.makeText(context, marker.getSnippet(), duration);
+                toast.show();
+
+                return true;
+            }
+        });
+
+        for(Station station : stations) {
             CircleOptions circleOptions = new CircleOptions()
-                    .center(station)
+                    .center(station.getLocation())
                     .fillColor(Color.BLUE)
                     .strokeColor(Color.BLUE)
-                    .radius(1000); // In meters
+                    .radius(STATION_CIRCLE_RADIUS); // In meters
              mMap.addCircle(circleOptions);
+
+            IconGenerator iconFactory = new IconGenerator(this);
+
+            iconFactory.setRotation(-station.getLabelRotationDegrees());
+            iconFactory.setContentRotation(station.getLabelRotationDegrees());
+
+            for (Map.Entry<String, Station> entry : station.getConnections().entrySet()) {
+                Pair<Station, Station> connection = new Pair<>(station, entry.getValue());
+                if(!connections.contains(connection)) {
+                    connections.add(connection);
+                }
+            }
+
+            LatLng location = station.getLocation();
+
+            LatLng offsetLatLng = location;
+            switch(station.getLabelRotationDegrees()) {
+                case Station.LABEL_LEFT:
+                    offsetLatLng = new LatLng(
+                            location.latitude,
+                            location.longitude - (180/Math.PI)*(STATION_CIRCLE_RADIUS/6378137.0)/Math.cos(Math.PI/180.0*location.latitude)
+                    );
+                    break;
+                case Station.LABEL_DOWN:
+                    offsetLatLng = new LatLng(
+                            location.latitude - (180/Math.PI)*(STATION_CIRCLE_RADIUS/6378137.0),
+                            location.longitude
+                    );
+                    break;
+                case Station.LABEL_UP:
+                    offsetLatLng = new LatLng(
+                            location.latitude + (180/Math.PI)*(STATION_CIRCLE_RADIUS/6378137.0),
+                            location.longitude
+                    );
+                    break;
+            }
+
+            mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory
+                            .fromBitmap(iconFactory.makeIcon(station.getName())))
+                    .snippet(station.getName())
+                    .position(offsetLatLng)
+                    .anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV()));
         }
 
-        for(Pair<LatLng, LatLng> connection : connections) {
+        for(Pair<Station, Station> connection : connections) {
             PolylineOptions rectOptions = new PolylineOptions()
                     .color(Color.BLUE)
-                    .add(connection.first)
-                    .add(connection.second);
+                    .add(connection.first.getLocation())
+                    .add(connection.second.getLocation());
 
             mMap.addPolyline(rectOptions);
         }
 
-        final Context context = this;
-
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapClick(LatLng latLng) {
-                int duration = Toast.LENGTH_SHORT;
+            public void onMapClick(LatLng clickLatLng) {
 
-                Toast toast = Toast.makeText(context, latLng.toString(), duration);
+                Station clickedStation = null;
+                for(Station station : stations) {
+                    float[] distance = new float[2];
+                    LatLng stationLatLng = station.getLocation();
+                    Location.distanceBetween(
+                            clickLatLng.latitude, clickLatLng.longitude,
+                            stationLatLng.latitude, stationLatLng.longitude,
+                            distance);
+                    if( distance[0] < STATION_CIRCLE_RADIUS + CLICK_MARGIN_ERROR ){
+                        clickedStation = station;
+                        break;
+                    }
+                }
+
+                Toast toast;
+                if (clickedStation != null) {
+                    toast = Toast.makeText(context, clickedStation.getName(), Toast.LENGTH_SHORT);
+                } else {
+                    toast = Toast.makeText(context, "Didn't click any station", Toast.LENGTH_SHORT);
+                }
                 toast.show();
+
             }
         });
     }
