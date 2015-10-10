@@ -1,0 +1,18 @@
+{
+  "name": "android-ticket-system",
+  "version": "0.0.1",
+  "description": "Objection.js express example",
+  "main": "app.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "bluebird": "^2.10.2",
+    "boom": "^2.9.0",
+    "hapi": "^10.4.1",
+    "joi": "^6.9.0",
+    "knex": "^0.8.6",
+    "objection": "^0.2.7",
+    "sqlite3": "^3.0.8"
+  }
+}

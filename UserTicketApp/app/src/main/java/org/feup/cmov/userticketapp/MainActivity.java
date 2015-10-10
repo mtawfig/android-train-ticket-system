@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.ui.IconGenerator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -88,11 +89,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
-        final List<Station> stations = Station.getAllStations();
+        new ApiService.GetStations(new ApiService.OnGetStationsTaskCompleted() {
+            @Override
+            public void onTaskCompleted(List<Station> stations) {
+                drawStations(stations);
+            }
+        }).execute();
+    }
+
+    public Map<String, Station> groupStationsById(List<Station> stations) {
+        HashMap<String, Station> map = new HashMap<>();
+        for (Station station : stations) {
+            String key = station.getStationId();
+            if(!map.containsKey(key)) {
+                map.put(key, station);
+            }
+        }
+        return map;
+    }
+
+    public void drawStations (final List<Station> stations) {
+        Map<String, Station> stationsById = groupStationsById(stations);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(stations.get(0).getLocation()));
-
-        ArrayList<Pair<Station, Station>> connections = new ArrayList<>();
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -106,23 +125,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        ArrayList<Pair<Station, Station>> stationPairs = new ArrayList<>();
+
         for(Station station : stations) {
             CircleOptions circleOptions = new CircleOptions()
                     .center(station.getLocation())
                     .fillColor(Color.BLUE)
                     .strokeColor(Color.BLUE)
                     .radius(STATION_CIRCLE_RADIUS); // In meters
-             mMap.addCircle(circleOptions);
+            mMap.addCircle(circleOptions);
 
             IconGenerator iconFactory = new IconGenerator(this);
 
             iconFactory.setRotation(-station.getLabelRotationDegrees());
             iconFactory.setContentRotation(station.getLabelRotationDegrees());
 
-            for (Map.Entry<String, Station> entry : station.getConnections().entrySet()) {
-                Pair<Station, Station> connection = new Pair<>(station, entry.getValue());
-                if(!connections.contains(connection)) {
-                    connections.add(connection);
+            for (Station.Connection connection : station.getConnections()) {
+                Pair<Station, Station> pair = new Pair<>(station, stationsById.get(connection.getToStationId()));
+                if(!stationPairs.contains(pair)) {
+                    stationPairs.add(pair);
                 }
             }
 
@@ -158,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV()));
         }
 
-        for(Pair<Station, Station> connection : connections) {
+        for(Pair<Station, Station> connection : stationPairs) {
             PolylineOptions rectOptions = new PolylineOptions()
                     .color(Color.BLUE)
                     .add(connection.first.getLocation())
@@ -172,14 +193,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onMapClick(LatLng clickLatLng) {
 
                 Station clickedStation = null;
-                for(Station station : stations) {
+                for (Station station : stations) {
                     float[] distance = new float[2];
                     LatLng stationLatLng = station.getLocation();
                     Location.distanceBetween(
                             clickLatLng.latitude, clickLatLng.longitude,
                             stationLatLng.latitude, stationLatLng.longitude,
                             distance);
-                    if( distance[0] < STATION_CIRCLE_RADIUS + CLICK_MARGIN_ERROR ){
+                    if (distance[0] < STATION_CIRCLE_RADIUS + CLICK_MARGIN_ERROR) {
                         clickedStation = station;
                         break;
                     }
