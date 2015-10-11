@@ -2,7 +2,9 @@
     <string name="app_name">Train Ticket App</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_stations">Stations</string>
-    <string name="title_activity_from_to">FromToActivity</string>
+    <string name="title_activity_from_to">Select Itinerary</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="get_me_somewhere">Get me somewhere</string>
+    <string name="calculate_route">Calculate Route</string>
+    <string name="select_station">Select station…</string>
 </resources>

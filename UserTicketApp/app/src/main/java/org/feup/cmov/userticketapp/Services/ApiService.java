@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.feup.cmov.userticketapp.Models.Station;
-import org.feup.cmov.userticketapp.Services.OnTaskCompleted;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
