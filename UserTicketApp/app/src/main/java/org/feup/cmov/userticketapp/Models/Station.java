@@ -1,4 +1,4 @@
-package org.feup.cmov.userticketapp;
+package org.feup.cmov.userticketapp.Models;
 
 
 import com.google.android.gms.maps.model.LatLng;

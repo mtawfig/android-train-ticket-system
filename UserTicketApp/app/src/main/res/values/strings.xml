@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">UserTicketApp</string>
+    <string name="app_name">Train Ticket App</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_stations">Stations</string>
+    <string name="title_activity_from_to">FromToActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="get_me_somewhere">Get me somewhere</string>
 </resources>

@@ -1,4 +1,4 @@
-package org.feup.cmov.userticketapp;
+package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -6,6 +6,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
@@ -26,6 +27,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.ui.IconGenerator;
 
+import org.feup.cmov.userticketapp.Models.Station;
+import org.feup.cmov.userticketapp.R;
+import org.feup.cmov.userticketapp.Services.ApiService;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +39,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private SwipeRefreshLayout swipeContainer;
 
     final static int STATION_CIRCLE_RADIUS = 1000;
     final static int CLICK_MARGIN_ERROR = 500;
@@ -47,18 +53,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchAndDrawStations();
+            }
+        });
     }
 
     @Override
@@ -89,6 +94,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
+        fetchAndDrawStations();
+    }
+
+    public void fetchAndDrawStations() {
         new ApiService.GetStations(new ApiService.OnGetStationsTaskCompleted() {
             @Override
             public void onTaskCompleted(List<Station> stations) {
@@ -108,8 +117,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return map;
     }
 
+    public void showToastMessage (String message) {
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, message, duration);
+        toast.show();
+    }
+
     public void drawStations (final List<Station> stations) {
         Map<String, Station> stationsById = groupStationsById(stations);
+
+        if (stations.size() == 0) {
+            showToastMessage("No connection to server. Please refresh later.");
+            swipeContainer.setRefreshing(false);
+            return;
+        }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(stations.get(0).getLocation()));
 
@@ -216,5 +238,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
+
+        swipeContainer.setRefreshing(false);
     }
 }

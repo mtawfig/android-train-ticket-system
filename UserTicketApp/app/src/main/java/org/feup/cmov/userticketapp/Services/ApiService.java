@@ -1,10 +1,11 @@
-package org.feup.cmov.userticketapp;
+package org.feup.cmov.userticketapp.Services;
 
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.Services.OnTaskCompleted;
 
 import java.io.BufferedInputStream;
@@ -51,9 +52,8 @@ public class ApiService {
                     urlConnection.disconnect();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                return new ArrayList<>();
             }
-            return new ArrayList<>();
         }
 
         @Override
