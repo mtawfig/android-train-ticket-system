@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.Station;
@@ -21,8 +23,15 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ListView drawerListView = (ListView) findViewById(R.id.left_drawer);
+
+        // Set the adapter for the list view
+        drawerListView.setAdapter(new ArrayAdapter<>(this,
+                R.layout.drawer_list_item, getResources().getStringArray(R.array.drawer_list)));
 
         final MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 
