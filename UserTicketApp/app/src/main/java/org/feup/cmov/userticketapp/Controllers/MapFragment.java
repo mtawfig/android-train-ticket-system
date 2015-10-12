@@ -245,23 +245,27 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
         markers.remove(station);
     }
 
-    public void setFromStation(Station station) {
-        if (station != null) {
+    public boolean setFromStation(Station station) {
+        if (station != null && station != toStation && station != fromStation) {
             if (fromStation != null) {
                 removeMarker(fromStation);
             }
             fromStation = station;
             putMarker(fromStation, IconGenerator.STYLE_GREEN);
+            return true;
         }
+        return false;
     }
 
-    public void setToStation(Station station) {
-        if (station != null) {
+    public boolean setToStation(Station station) {
+        if (station != null && station != toStation && station != fromStation) {
             if (toStation != null) {
                 removeMarker(toStation);
             }
             toStation = station;
             putMarker(toStation, IconGenerator.STYLE_RED);
+            return true;
         }
+        return false;
     }
 }

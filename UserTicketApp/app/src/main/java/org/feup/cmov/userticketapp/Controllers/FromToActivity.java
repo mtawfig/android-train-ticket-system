@@ -1,8 +1,6 @@
 package org.feup.cmov.userticketapp.Controllers;
 
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -16,12 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.EditText;
 
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
+
+import java.util.HashMap;
 
 public class FromToActivity extends AppCompatActivity implements MapFragment.StationsMapListener {
 
@@ -77,8 +75,20 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
 
     @Override
     public void onStationClickHandler(Station station) {
-        mSectionsPagerAdapter.
-        mapFragment.setFromStation(station);
+        int index = mViewPager.getCurrentItem();
+        SectionsPagerAdapter adapter = ((SectionsPagerAdapter)mViewPager.getAdapter());
+        StationTextFragment fragment = adapter.getFragment(index);
+
+        Boolean stationChanged = false;
+        if (index == SectionsPagerAdapter.FROM_STATION) {
+            stationChanged = mapFragment.setFromStation(station);
+        } else if (index == SectionsPagerAdapter.TO_STATION) {
+            stationChanged = mapFragment.setToStation(station);
+        }
+
+        if (stationChanged) {
+            fragment.setStation(station);
+        }
     }
 
     @Override
@@ -98,15 +108,20 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        private static final int FROM_STATION = 0;
+        private static final int TO_STATION = 1;
+
+        HashMap<Integer, StationTextFragment> mPageReferenceMap = new HashMap<>();
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            StationTextFragment fragment = StationTextFragment.newInstance();
+            mPageReferenceMap.put(position, fragment);
+            return fragment;
         }
 
         @Override
@@ -117,36 +132,51 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0:
+                case FROM_STATION:
                     return "From";
-                case 1:
+                case TO_STATION:
                     return "To";
             }
             return null;
         }
+
+        public StationTextFragment getFragment(int key) {
+            return mPageReferenceMap.get(key);
+        }
+
+        @Override
+        public void destroyItem (ViewGroup container, int position, Object object) {
+            super.destroyItem(container, position, object);
+            mPageReferenceMap.remove(position);
+        }
     }
 
-    public static class PlaceholderFragment extends Fragment {
+    public static class StationTextFragment extends Fragment {
 
-        private static final String ARG_SECTION_NUMBER = "section_number";
+        private Station station;
+        private EditText editText;
 
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
+        public static StationTextFragment newInstance() {
+            StationTextFragment fragment = new StationTextFragment();
+            // Bundle args = new Bundle();
+            // args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            // fragment.setArguments(args);
             return fragment;
         }
 
-        public PlaceholderFragment() {
+        public StationTextFragment() {}
+
+        public void setStation(Station station) {
+            this.station = station;
+            editText.setText(station.getName());
         }
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_from_to, container, false);
-            // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            // textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            editText = (EditText) rootView.findViewById(R.id.select_station_text);
             return rootView;
         }
     }

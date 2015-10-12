@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.feup.cmov.userticketapp.Controllers.FromToActivity$PlaceholderFragment">
+    tools:context="org.feup.cmov.userticketapp.Controllers.FromToActivity.StationTextFragment">
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/editText"
+        android:id="@+id/select_station_text"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:hint="@string/select_station" />
