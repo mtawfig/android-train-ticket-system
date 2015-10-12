@@ -268,4 +268,8 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
         }
         return false;
     }
+
+    public boolean isFromAndToStationSet() {
+        return fromStation != null && toStation != null;
+    }
 }

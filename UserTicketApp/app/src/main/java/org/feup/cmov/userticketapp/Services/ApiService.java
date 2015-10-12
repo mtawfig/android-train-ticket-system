@@ -19,7 +19,7 @@ import java.util.List;
 
 
 public class ApiService {
-    private static String SERVER_ADDRESS = "http://192.168.1.42:8000";
+    private static String SERVER_ADDRESS = "http://10.62.201.202:8000";
 
     final static Gson gson = new Gson();
 

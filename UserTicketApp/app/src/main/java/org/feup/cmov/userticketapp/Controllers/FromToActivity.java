@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import org.feup.cmov.userticketapp.Models.Station;
@@ -27,6 +28,7 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
 
     private ViewPager mViewPager;
     private MapFragment mapFragment;
+    private Button calculateRouteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,9 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
 
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.setStationClickListener(this);
+
+        calculateRouteButton = (Button) findViewById(R.id.button_calculate_route);
+        calculateRouteButton.setEnabled(false);
     }
 
 
@@ -88,6 +93,12 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
 
         if (stationChanged) {
             fragment.setStation(station);
+        }
+
+        if (mapFragment.isFromAndToStationSet()) {
+            calculateRouteButton.setEnabled(true);
+        } else {
+            calculateRouteButton.setEnabled(false);
         }
     }
 
