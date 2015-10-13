@@ -39,6 +39,7 @@ public class ApiService {
 
         @Override
         protected List<Station> doInBackground(Void... params) {
+            // TODO implement cache mechanism
             URL url = null;
             try {
                 url = new URL(SERVER_ADDRESS + "/stations");

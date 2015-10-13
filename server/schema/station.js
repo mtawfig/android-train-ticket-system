@@ -3,5 +3,7 @@
 var Joi = require('joi');
 
 module.exports = {
-    name: Joi.string().min(1).max(1024)
+  id: Joi.number().integer().min(1),
+  name: Joi.string().min(5).max(20),
+  date: Joi.string().isoDate()
 };
