@@ -18,54 +18,52 @@ module.exports = Connection;
 
 Connection.tableName = 'Connection';
 
-Connection.getPath = function(fromStationId, toStationId) {
-  var route = new Graph();
-  return Connection.query()
-    .then(function (connections) {
-      var groupedByStationAsDistanceNodes = _.chain(connections)
-        .groupBy(function(connection) {
-          return connection.fromStationId;
-        })
-        .mapValues(function(group) {
-          return group.reduce(function(acc, station) {
-            acc[station.toStationId] = 1;
-            return acc;
-          }, {})
-        })
-        .value();
+var graphPromise;
+var getGraph = function() {
+  if (graphPromise) {
+    return graphPromise;
+  } else {
+    graphPromise = Connection.query()
+      .then(function (connections) {
+        var graph = new Graph();
 
-      _.each(groupedByStationAsDistanceNodes, function(connections, stationId) {
-        route.addNode(stationId, connections)
+        var groupedByStationAsDistanceNodes = _.chain(connections)
+          .groupBy(function (connection) {
+            return connection.fromStationId;
+          })
+          .mapValues(function (group) {
+            return group.reduce(function (acc, station) {
+              acc[station.toStationId] = 1;
+              return acc;
+            }, {})
+          })
+          .value();
+
+        _.each(groupedByStationAsDistanceNodes, function (connections, stationId) {
+          graph.addNode(stationId, connections)
+        });
+
+        return graph;
       });
 
-      var path = route.path(fromStationId, toStationId);
+    return graphPromise;
+  }
+};
 
-      return Station.query()
-        .eager('connections')
-        .whereIn('stationId', path)
-        .then(function(stations) {
-          return path.map(function(stationId, index) {
-            var station = _.find(stations, function(station) {
-              return station.stationId == stationId
-            });
+Connection.getPath = function(fromStationId, toStationId) {
+  return getGraph().then(function(graph) {
+    var path = graph.path(fromStationId.toString(), toStationId.toString());
 
-            if (index + 1 < path.length) {
-              var nextStationId = parseInt(path[index + 1], 10);
-              var connection = _.find(station.connections, function(connection) {
-                return connection.toStationId === nextStationId;
-              });
-            }
-
-            if (connection) {
-              station.connections = [connection];
-            } else {
-              station.connections = [];
-            }
-
-            return station;
-          })
+    return Station.query()
+      .whereIn('stationId', path)
+      .then(function(stations) {
+        return path.map(function(stationId) {
+          return _.find(stations, function(station) {
+            return station.stationId == stationId
+          });
         })
-    });
+      })
+  });
 };
 
 Connection.relationMappings = {

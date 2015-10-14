@@ -14,11 +14,22 @@ exports.up = function (knex) {
       table.biginteger('fromStationId').unsigned().references('stationId').inTable('Station').onDelete('CASCADE');
       table.biginteger('toStationId').unsigned().references('stationId').inTable('Station').onDelete('CASCADE');
       table.primary(['fromStationId', 'toStationId']);
-    });
+    })
+    .createTable('Timetable', function(table) {
+      table.biginteger('fromStationId').unsigned().references('stationId').inTable('Station').onDelete('CASCADE');
+      table.biginteger('toStationId').unsigned().references('stationId').inTable('Station').onDelete('CASCADE');
+      table.integer('hoursStart');
+      table.integer('minutesStart');
+      table.integer('hoursEnd');
+      table.integer('minutesEnd');
+      table.integer('tripNumber');
+      table.integer('tripStepNumber');
+    })
 };
 
 exports.down = function (knex) {
   return knex.schema
+    .dropTableIfExists('Timetable')
     .dropTableIfExists('Connection')
     .dropTableIfExists('Station');
 
