@@ -1,5 +1,6 @@
 package org.feup.cmov.userticketapp.Controllers;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -110,6 +111,21 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
     @Override
     public void onStationsLoaded() {
 
+    }
+
+    public void onCalculateRouteClickHandler(View view) {
+        Station fromStation = mapFragment.getFromStation();
+        Station toStation = mapFragment.getToStation();
+        if (fromStation == null || toStation == null) {
+            return;
+        }
+
+        Intent intent = new Intent(getBaseContext(), ItineraryActivity.class);
+        Bundle b = new Bundle();
+        b.putInt("fromStationId", fromStation.getStationId());
+        b.putInt("toStationId", toStation.getStationId());
+        intent.putExtras(b);
+        startActivity(intent);
     }
 
 

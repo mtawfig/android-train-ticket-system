@@ -42,6 +42,10 @@
             android:label="@string/title_activity_from_to"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".Controllers.ItineraryActivity"
+            android:label="@string/title_activity_itinerary" >
+        </activity>
     </application>
 
 </manifest>

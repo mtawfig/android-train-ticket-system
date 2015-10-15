@@ -4,15 +4,13 @@ package org.feup.cmov.userticketapp.Models;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
 import lombok.Getter;
 import lombok.Setter;
 
 public class Station {
 
-    @Getter @Setter String stationId;
+    @Getter @Setter int stationId;
     @Getter @Setter String name;
     private LatLng location;
     @Getter @Setter Float latitude;
@@ -41,7 +39,7 @@ public class Station {
     public class Connection {
         @Getter @Setter String direction;
         @Getter @Setter String line;
-        @Getter @Setter String fromStationId;
-        @Getter @Setter String toStationId;
+        @Getter @Setter int fromStationId;
+        @Getter @Setter int toStationId;
     }
 }

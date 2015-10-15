@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import lombok.Getter;
+
 public class MapFragment extends com.google.android.gms.maps.MapFragment implements OnMapReadyCallback {
 
     final static int STATION_CIRCLE_RADIUS = 1000;
@@ -30,9 +32,8 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
     private GoogleMap mMap;
     private StationsMapListener listener;
     private List<Station> stations;
-    private Station fromStation;
-    private Station toStation;
-    private HashMap<String, Station> stationsById = new HashMap<>();
+    @Getter private Station fromStation;
+    @Getter private Station toStation;
     private HashMap<Station, Marker> markers = new HashMap<>();
 
     public MapFragment() {}
@@ -71,10 +72,10 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
         }).execute();
     }
 
-    public HashMap<String, Station> groupStationsById(List<Station> stations) {
-        HashMap<String, Station> map = new HashMap<>();
+    public HashMap<Integer, Station> groupStationsById(List<Station> stations) {
+        HashMap<Integer, Station> map = new HashMap<>();
         for (Station station : stations) {
-            String key = station.getStationId();
+            Integer key = station.getStationId();
             if(!map.containsKey(key)) {
                 map.put(key, station);
             }
@@ -116,7 +117,7 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
         mMap.clear();
         markers.clear();
 
-        stationsById = groupStationsById(stations);
+        HashMap<Integer, Station> stationsById = groupStationsById(stations);
 
         if (stations.size() == 0) {
             delegateNoStationsFoundToListener();

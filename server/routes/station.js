@@ -32,7 +32,7 @@ var buildItinerary = function(timetables) {
       hoursEnd: timetable.hoursEnd,
       minutesEnd: timetable.minutesEnd,
       line: timetable.line,
-      stops: 1
+      numberOfStops: 1
     }
   }
 
@@ -42,7 +42,7 @@ var buildItinerary = function(timetables) {
 
   _.rest(timetables).forEach(function(timetable) {
     if (timetable.line === currentStep.line) {
-      currentStep.stops += 1;
+      currentStep.numberOfStops += 1;
       currentStep.endStationId = timetable.toStationId;
       currentStep.hoursEnd = timetable.hoursEnd;
       currentStep.minutesEnd = timetable.minutesEnd;
@@ -82,7 +82,7 @@ var buildItinerary = function(timetables) {
 
 var calculateCost = function(itinerary) {
   return itinerary.reduce(function(cost, step) {
-    return cost + 100 + step.stops * 50;
+    return cost + 100 + step.numberOfStops * 50;
   }, 0);
 };
 
@@ -141,7 +141,7 @@ module.exports = function (server) {
             _.extend(startAndEndTime, {
               duration: getDuration(startAndEndTime),
               cost: calculateCost(itinerary),
-              itinerary: itinerary
+              steps: itinerary
             })
           );
         })
