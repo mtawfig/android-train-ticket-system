@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/buy_ticket" android:icon="@drawable/ic_ticket"
+        android:title="Buy Tickets" />
+    <item android:id="@+id/timetables" android:icon="@drawable/ic_timetable"
+        android:title="Timetables" />
+    <item android:id="@+id/my_tickets" android:icon="@drawable/ic_tickets"
+        android:title="My Tickets" />
+
+    <item android:title="Account">
+        <menu>
+            <item android:id="@+id/sign_in" android:icon="@drawable/ic_login"
+                android:title="Sign In" />
+            <item android:id="@+id/sign_out" android:icon="@drawable/ic_logout"
+                android:title="Sign Out" />
+        </menu>
+    </item>
+
+</menu>

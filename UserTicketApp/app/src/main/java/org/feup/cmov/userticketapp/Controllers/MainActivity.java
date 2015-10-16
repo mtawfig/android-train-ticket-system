@@ -2,20 +2,22 @@ package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
 
-public class MainActivity extends AppCompatActivity implements MapFragment.StationsMapListener {
+public class MainActivity extends AppCompatActivity implements MapFragment.StationsMapListener, NavigationView.OnNavigationItemSelectedListener {
 
     private SwipeRefreshLayout swipeContainer;
 
@@ -27,11 +29,14 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ListView drawerListView = (ListView) findViewById(R.id.left_drawer);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
-        // Set the adapter for the list view
-        drawerListView.setAdapter(new ArrayAdapter<>(this,
-                R.layout.drawer_list_item, getResources().getStringArray(R.array.drawer_list)));
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         final MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 
@@ -94,5 +99,28 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
     @Override
     public void onStationsLoaded() {
         swipeContainer.setRefreshing(false);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.buy_ticket) {
+            // Handle the camera action
+        } else if (id == R.id.timetables) {
+
+        } else if (id == R.id.my_tickets) {
+
+        } else if (id == R.id.sign_in) {
+
+        } else if (id == R.id.sign_out) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

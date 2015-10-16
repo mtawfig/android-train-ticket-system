@@ -1,9 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="drawer_list">
-        <item>Buy</item>
-        <item>Timetables</item>
-        <item>My Tickets</item>
-        <item>Sign In</item>
-    </array>
 </resources>

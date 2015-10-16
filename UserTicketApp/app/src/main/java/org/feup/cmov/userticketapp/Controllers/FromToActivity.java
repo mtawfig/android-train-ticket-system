@@ -2,6 +2,7 @@ package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -38,6 +39,9 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -73,6 +77,10 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        } else if (id == android.R.id.home) {
+
+            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
 

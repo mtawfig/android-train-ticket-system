@@ -41,6 +41,9 @@
             android:name=".Controllers.FromToActivity"
             android:label="@string/title_activity_from_to"
             android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.MainActivity"/>
         </activity>
         <activity
             android:name=".Controllers.ItineraryActivity"
