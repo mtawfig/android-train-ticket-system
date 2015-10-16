@@ -1,7 +1,6 @@
 package org.feup.cmov.userticketapp.Services;
 
 import android.os.AsyncTask;
-import android.util.Pair;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -22,7 +21,7 @@ import java.util.List;
 
 public class ApiService {
     // private static String SERVER_ADDRESS = "http://10.62.201.202:8000";
-    private static String SERVER_ADDRESS = "http://192.168.1.86:8000";
+    private static String SERVER_ADDRESS = "http://192.168.1.73:8000";
 
     final static Gson gson = new Gson();
 

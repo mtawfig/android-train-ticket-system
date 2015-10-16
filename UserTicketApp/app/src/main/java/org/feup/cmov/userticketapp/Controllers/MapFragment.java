@@ -15,14 +15,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.ui.IconGenerator;
 
+import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.Services.ApiService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import lombok.Getter;
 
 public class MapFragment extends com.google.android.gms.maps.MapFragment implements OnMapReadyCallback {
 
@@ -31,10 +30,9 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
 
     private GoogleMap mMap;
     private StationsMapListener listener;
-    private List<Station> stations;
-    @Getter private Station fromStation;
-    @Getter private Station toStation;
     private HashMap<Station, Marker> markers = new HashMap<>();
+
+    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
 
     public MapFragment() {}
 
@@ -112,8 +110,6 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
     }
 
     public void drawStations (final List<Station> stations) {
-        this.stations = stations;
-
         mMap.clear();
         markers.clear();
 
@@ -242,35 +238,33 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
 
     public void removeMarker(Station station) {
         Marker marker = markers.get(station);
-        marker.remove();
-        markers.remove(station);
+        if (marker != null) {
+            marker.remove();
+            markers.remove(station);
+        }
     }
 
     public boolean setFromStation(Station station) {
-        if (station != null && station != toStation && station != fromStation) {
-            if (fromStation != null) {
-                removeMarker(fromStation);
-            }
-            fromStation = station;
-            putMarker(fromStation, IconGenerator.STYLE_GREEN);
+        Station oldStation = sharedData.getFromStation();
+        if (sharedData.setFromStation(station)) {
+            removeMarker(oldStation);
+            putMarker(station, IconGenerator.STYLE_GREEN);
             return true;
         }
         return false;
     }
 
     public boolean setToStation(Station station) {
-        if (station != null && station != toStation && station != fromStation) {
-            if (toStation != null) {
-                removeMarker(toStation);
-            }
-            toStation = station;
-            putMarker(toStation, IconGenerator.STYLE_RED);
+        Station oldStation = sharedData.getToStation();
+        if (sharedData.setToStation(station)) {
+            removeMarker(oldStation);
+            putMarker(station, IconGenerator.STYLE_RED);
             return true;
         }
         return false;
     }
 
     public boolean isFromAndToStationSet() {
-        return fromStation != null && toStation != null;
+        return sharedData.isFromAndToStationSet();
     }
 }

@@ -5,9 +5,13 @@ import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import org.feup.cmov.userticketapp.Models.SharedDataFactory;
+import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
 
 public class ItineraryActivity extends AppCompatActivity {
+
+    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,9 +21,8 @@ public class ItineraryActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Bundle b = getIntent().getExtras();
-        int fromStationId = b.getInt("fromStationId");
-        int toStationId = b.getInt("toStationId");
+        Station fromStation = sharedData.getFromStation();
+        Station toStation = sharedData.getToStation();
     }
 
 }

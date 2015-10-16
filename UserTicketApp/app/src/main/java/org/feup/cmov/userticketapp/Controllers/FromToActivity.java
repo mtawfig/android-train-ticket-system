@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
 
@@ -31,6 +32,8 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
     private ViewPager mViewPager;
     private MapFragment mapFragment;
     private Button calculateRouteButton;
+
+    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,17 +125,11 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
     }
 
     public void onCalculateRouteClickHandler(View view) {
-        Station fromStation = mapFragment.getFromStation();
-        Station toStation = mapFragment.getToStation();
-        if (fromStation == null || toStation == null) {
+        if (sharedData.getFromStation() == null || sharedData.getToStation() == null) {
             return;
         }
 
         Intent intent = new Intent(getBaseContext(), ItineraryActivity.class);
-        Bundle b = new Bundle();
-        b.putInt("fromStationId", fromStation.getStationId());
-        b.putInt("toStationId", toStation.getStationId());
-        intent.putExtras(b);
         startActivity(intent);
     }
 
