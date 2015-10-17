@@ -7,31 +7,31 @@ import lombok.Setter;
 
 public class Itinerary {
 
-    @Getter @Setter int hoursStart;
-    @Getter @Setter int minutesStart;
+    @Getter int hoursStart;
+    @Getter int minutesStart;
 
-    @Getter @Setter int hoursEnd;
-    @Getter @Setter int minutesEnd;
+    @Getter int hoursEnd;
+    @Getter int minutesEnd;
 
-    @Getter @Setter int duration;
-    @Getter @Setter int cost;
+    @Getter int duration;
+    @Getter int cost;
 
-    @Getter @Setter ArrayList<Step> steps;
+    @Getter ArrayList<Step> steps;
 
-    private class Step {
-        @Getter @Setter int hoursStart;
-        @Getter @Setter int minutesStart;
+    public class Step {
+        @Getter int hoursStart;
+        @Getter int minutesStart;
 
-        @Getter @Setter int hoursEnd;
-        @Getter @Setter int minutesEnd;
+        @Getter int hoursEnd;
+        @Getter int minutesEnd;
 
-        @Getter @Setter String line;
-        @Getter @Setter int numberOfStops;
-        @Getter @Setter int duration;
+        @Getter String line;
+        @Getter int numberOfStops;
+        @Getter int duration;
 
-        @Getter @Setter int wait;
+        @Getter int wait;
 
-        @Getter @Setter Station startStation;
-        @Getter @Setter Station endStation;
+        @Getter Station startStation;
+        @Getter Station endStation;
     }
 }

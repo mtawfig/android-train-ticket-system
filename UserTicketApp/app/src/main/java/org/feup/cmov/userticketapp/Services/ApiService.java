@@ -104,7 +104,7 @@ public class ApiService {
             if (response == null) {
                 return null;
             }
-            return gson.fromJson(response, stationListType);
+            return gson.fromJson(response, Itinerary.class);
         }
 
         @Override
