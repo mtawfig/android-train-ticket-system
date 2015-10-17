@@ -1,6 +1,7 @@
 package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -28,10 +29,10 @@ import java.util.HashMap;
 public class FromToActivity extends AppCompatActivity implements MapFragment.StationsMapListener {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
     private ViewPager mViewPager;
     private MapFragment mapFragment;
     private Button calculateRouteButton;
+    private Boolean hasSelectedFromStation = false;
 
     private SharedDataFactory sharedData = SharedDataFactory.getInstance();
 
@@ -99,6 +100,10 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
         Boolean stationChanged = false;
         if (index == SectionsPagerAdapter.FROM_STATION) {
             stationChanged = mapFragment.setFromStation(station);
+            if (!hasSelectedFromStation) {
+                hasSelectedFromStation = true;
+                mViewPager.setCurrentItem(SectionsPagerAdapter.TO_STATION);
+            }
         } else if (index == SectionsPagerAdapter.TO_STATION) {
             stationChanged = mapFragment.setToStation(station);
         }

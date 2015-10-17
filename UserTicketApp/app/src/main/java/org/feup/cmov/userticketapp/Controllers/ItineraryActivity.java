@@ -1,22 +1,25 @@
 package org.feup.cmov.userticketapp.Controllers;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.Itinerary;
 import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
 import org.feup.cmov.userticketapp.Services.ApiService;
-
-import java.util.List;
+import org.feup.cmov.userticketapp.Views.DividerItemDecoration;
 
 public class ItineraryActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private ItineraryAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SharedDataFactory sharedData = SharedDataFactory.getInstance();
 
@@ -28,23 +31,62 @@ public class ItineraryActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Station fromStation = sharedData.getFromStation();
-        Station toStation = sharedData.getToStation();
+        final Station fromStation = sharedData.getFromStation();
+        final Station toStation = sharedData.getToStation();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.itinerary_recycler_view);
 
-        // TODO set to true if list has a fixed size
         mRecyclerView.setHasFixedSize(false);
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        RecyclerView.ItemDecoration itemDecoration =
+                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
+        mRecyclerView.addItemDecoration(itemDecoration);
+
+        mAdapter = new ItineraryAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+
         new ApiService.GetItinerary(new ApiService.OnGetItineraryTaskCompleted() {
             @Override
             public void onTaskCompleted(Itinerary itinerary) {
-                mAdapter = new ItineraryAdapter(itinerary);
-                mRecyclerView.setAdapter(mAdapter);
+                mAdapter.setItinerary(itinerary);
+
+                TextView tripNameText = (TextView) findViewById(R.id.trip_name_text);
+                tripNameText.setText(String.format(
+                        getString(R.string.trip_name_text),
+                        fromStation.getName(), toStation.getName()));
+
+                TextView sectionText = (TextView) findViewById(R.id.trip_duration_text);
+
+                Boolean isAboveOneHourWithZeroMinutes = itinerary.getDuration() > 60 && itinerary.getDuration() % 60 == 0;
+                Boolean isAboveOneHour = itinerary.getDuration() > 60;
+
+                if (isAboveOneHourWithZeroMinutes) {
+                    sectionText.setText(String.format(
+                            getString(R.string.trip_duration_text_hours),
+                            itinerary.getDuration() / 60));
+                } else if (isAboveOneHour) {
+                    sectionText.setText(String.format(
+                            getString(R.string.trip_duration_text_hours_minutes),
+                            itinerary.getDuration() / 60, itinerary.getDuration() % 60));
+                } else {
+                    sectionText.setText(String.format(
+                            getString(R.string.trip_duration_text_minutes),
+                            itinerary.getDuration()));
+                }
+
+                TextView tripCostText = (TextView) findViewById(R.id.trip_cost_text);
+                tripCostText.setText(String.format(
+                        getString(R.string.trip_cost_text),
+                        itinerary.getCost() / 100, itinerary.getCost() % 100));
+
             }
         }).execute(fromStation, toStation);
+    }
+
+    public void onCalculateRouteClickHandler(View view) {
+
     }
 }

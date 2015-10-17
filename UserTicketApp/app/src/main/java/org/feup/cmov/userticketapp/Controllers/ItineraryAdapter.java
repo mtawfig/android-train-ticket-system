@@ -1,5 +1,6 @@
 package org.feup.cmov.userticketapp.Controllers;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,47 +10,136 @@ import android.widget.TextView;
 import org.feup.cmov.userticketapp.Models.Itinerary;
 import org.feup.cmov.userticketapp.R;
 
-public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.ViewHolder> {
+public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.ItineraryViewHolder> {
     private Itinerary mItinerary;
+    private static Context mContext;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_ITEM = 1;
+
+    public static abstract class ItineraryViewHolder extends RecyclerView.ViewHolder {
+
+        public ItineraryViewHolder(View itemView) {
+            super(itemView);
+        }
+        
+        public abstract void bindView(Itinerary.Step step);
+    }
+
+    public static class VHHeader extends ItineraryViewHolder {
         public View mView;
-        public ViewHolder(View v) {
+        public VHHeader(View v) {
             super(v);
             mView = v;
         }
+
+        @Override
+        public void bindView(Itinerary.Step step) {
+            TextView sectionText = (TextView) mView.findViewById(R.id.section_text);
+            sectionText.setText(mContext.getString(R.string.trip_step_details));
+        }
     }
 
-    public ItineraryAdapter(Itinerary itinerary) {
+    public static class VHItem extends ItineraryViewHolder {
+        public View mView;
+        public VHItem(View v) {
+            super(v);
+            mView = v;
+        }
+
+        @Override
+        public void bindView(Itinerary.Step step) {
+            TextView startStationText = (TextView) mView.findViewById(R.id.start_station_name);
+            startStationText.setText(String.format(
+                    startStationText.getText().toString(),
+                    step.getStartStation().getName()));
+
+            TextView endStationText = (TextView) mView.findViewById(R.id.end_station_name);
+            endStationText.setText(String.format(
+                    endStationText.getText().toString(),
+                    step.getEndStation().getName()));
+
+
+            TextView startTimeText = (TextView) mView.findViewById(R.id.start_time);
+            startTimeText.setText(String.format(
+                    startTimeText.getText().toString(),
+                    step.getHoursStart(), step.getMinutesStart()));
+
+            TextView endTimeText = (TextView) mView.findViewById(R.id.end_time);
+            endTimeText.setText(String.format(
+                    endTimeText.getText().toString(),
+                    step.getHoursEnd(), step.getMinutesEnd()));
+
+            TextView lineNameText = (TextView) mView.findViewById(R.id.line_and_stops);
+            lineNameText.setText(String.format(
+                    lineNameText.getText().toString(),
+                    step.getLine(), step.getNumberOfStops()));
+
+            if (step.getWait() == null) {
+                View waitView = mView.findViewById(R.id.wait_layout);
+                waitView.setVisibility(View.GONE);
+            } else {
+                TextView waitText = (TextView) mView.findViewById(R.id.wait_text);
+                waitText.setText(String.format(
+                        waitText.getText().toString(),
+                        step.getWait()));
+            }
+        }
+    }
+
+    public ItineraryAdapter(Context context) {
+        mContext = context;
+    }
+
+    public void setItinerary(Itinerary itinerary) {
         mItinerary = itinerary;
+        this.notifyDataSetChanged();
     }
 
     @Override
-    public ItineraryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.itinerary_step_item, parent, false);
-
-        ViewHolder vh = new ViewHolder(v);
-        // ...
-        return vh;
+    public ItineraryAdapter.ItineraryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == TYPE_HEADER) {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.section, parent, false);
+            return new VHHeader(v);
+        }
+        else if (viewType == TYPE_ITEM) {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.itinerary_step_item, parent, false);
+            return new VHItem(v);
+        }
+        else {
+            return null;
+        }
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ItineraryAdapter.ItineraryViewHolder holder, int position) {
+        if (position == 0) {
+            holder.bindView(null);
+        } else {
+            Itinerary.Step step = mItinerary.getSteps().get(position - 1);
+            holder.bindView(step);
+        }
+    }
 
-        TextView textView = (TextView) holder.mView.findViewById(R.id.step_text_view);
-        textView.setText(mItinerary.getSteps().get(position).getEndStation().getName());
-        // TODO set all the pretty view stuff
+    @Override
+    public int getItemViewType(int position) {
+        if(isPositionHeader(position))
+            return TYPE_HEADER;
+        return TYPE_ITEM;
+    }
+
+    private boolean isPositionHeader(int position) {
+        return position == 0;
     }
 
     @Override
     public int getItemCount() {
-        return mItinerary.getSteps().size();
+        if (mItinerary == null){
+            return 1;
+        } else {
+            return mItinerary.getSteps().size() + 1;
+        }
     }
 }

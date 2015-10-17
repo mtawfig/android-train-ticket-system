@@ -29,7 +29,7 @@ public class Itinerary {
         @Getter int numberOfStops;
         @Getter int duration;
 
-        @Getter int wait;
+        @Getter Integer wait;
 
         @Getter Station startStation;
         @Getter Station endStation;

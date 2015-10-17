@@ -1,12 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:clickable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/step_text_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/start_station_name"
+            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:text="@string/station_name"
+            android:gravity="start"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:paddingTop="3dp"
+            android:text="@string/to"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/end_station_name"
+            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:text="@string/station_name"
+            android:gravity="end"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/start_time"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingTop="5dp"
+            android:text="@string/time_hh_mm"
+            android:gravity="start"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/line_and_stops"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:text="@string/line_and_stops"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/end_time"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingTop="5dp"
+            android:text="@string/time_hh_mm"
+            android:gravity="end"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/wait_layout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:background="@color/colorAccent"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/wait_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/change_platforms_and_wait"/>
+
+    </LinearLayout>
+
+</LinearLayout>
