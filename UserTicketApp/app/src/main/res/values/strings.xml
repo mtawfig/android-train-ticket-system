@@ -15,7 +15,7 @@
     <string name="trip_duration_text_minutes">%d minute trip</string>
     <string name="trip_duration_text_hours">%d hour trip</string>
     <string name="trip_duration_text_hours_minutes">%1$d hour, %2$d minute trip</string>
-    <string name="trip_cost_text">€%1$d.%02$d cost</string>
+    <string name="trip_cost_text">€%1$d.%2$02d cost</string>
     <string name="buy_tickets">Buy Tickets</string>
     <string name="station_name">%s</string>
     <string name="to">to</string>

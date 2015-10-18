@@ -46,7 +46,7 @@
 
         <Button
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:text="@string/calculate_route"
             android:id="@+id/button_calculate_route"
             android:padding="0dp"

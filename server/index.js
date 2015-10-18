@@ -1,6 +1,9 @@
 'use strict';
 
 var Hapi = require('hapi');
+var User = require('./models/User.js');
+var AuthJWT = require('hapi-auth-jwt2');
+var auth = require('./common/auth.js');
 
 var server = new Hapi.Server();
 server.connection({
@@ -14,18 +17,23 @@ var Model = require('objection').Model;
 var knex = Knex(knexConfig.development);
 Model.knex(knex);
 
-require('./routes/')(server);
+server.register(AuthJWT, function (err) {
 
-// Test route
-server.route({
-  method: 'GET',
-  path: '/',
-  handler: function (request, reply) {
-    reply('Hello! Yes, this is working.');
+  if(err){
+    console.log(err);
   }
+
+  server.auth.strategy('jwt', 'jwt', {
+    key: process.env.JWT_SECRET,
+    validateFunc: auth.validate,
+    verifyOptions: { algorithms: [ 'HS256' ] }
+  });
+
+  server.auth.default('jwt');
+
+  require('./routes/')(server);
 });
 
-// Start the server
 server.start(function() {
   console.log('Server running at:', server.info.uri);
 });

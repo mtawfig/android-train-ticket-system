@@ -25,6 +25,13 @@ exports.up = function (knex) {
       table.integer('tripNumber');
       table.integer('tripStepNumber');
     })
+    .createTable('User', function(table) {
+      table.bigincrements('userId').primary();
+      table.string('email').unique();
+      table.string('name');
+      table.string('password');
+      table.enu('role', ['user', 'inspector'])
+    })
 };
 
 exports.down = function (knex) {

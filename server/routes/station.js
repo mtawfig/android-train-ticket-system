@@ -90,7 +90,9 @@ module.exports = function (server) {
   server.route({
     method: 'GET',
     path: '/stations',
-    config: {},
+    config: {
+      auth: false
+    },
     handler: function (request, reply) {
       Station.query().eager('connections')
         .then(function (stations) {
@@ -104,8 +106,35 @@ module.exports = function (server) {
 
   server.route({
     method: 'GET',
+    path: '/stations/{stationId}/timetables',
+    config: {
+      auth: false,
+      validate: {
+        params: {
+          stationId: schema.station.id
+        }
+      }
+    },
+    handler: function (request, reply) {
+      var stationId = request.params.stationId;
+
+      Timetable.query().eager('[fromStation, toStation]')
+        .where('fromStationId', stationId)
+        .orWhere('toStationId', stationId)
+        .then(function (timetables) {
+          reply(timetables);
+        })
+        .catch(function (reason) {
+          reply(Boom.notFound(reason));
+        });
+    }
+  });
+
+  server.route({
+    method: 'GET',
     path: '/stations/{fromStationId}/to/{toStationId}',
     config: {
+      auth: false,
       validate: {
         params: {
           fromStationId: schema.station.id,

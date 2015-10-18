@@ -2,6 +2,8 @@ var Knex = require('knex');
 var knexConfig = require('../knexfile');
 var knex = Knex(knexConfig.development);
 
+var bCrypt = require('bcrypt');
+
 var LABEL_LEFT = 90;
 var LABEL_DOWN = 180;
 var LABEL_UP = 0;
@@ -35,6 +37,15 @@ var timetable = function(stationA, stationB, hoursStart, minutesStart, hoursEnd,
     minutesEnd: minutesEnd,
     tripNumber: tripNumber,
     tripStepNumber: tripStepNumber
+  }
+};
+
+var user = function(name, email, password, role) {
+  return {
+    name: name,
+    email: email,
+    password: bCrypt.hashSync(password, bCrypt.genSaltSync(10), null),
+    role: role
   }
 };
 
@@ -127,6 +138,11 @@ var defaultTimetables = [
 
 ];
 
+var defaultUsers = [
+  user('admin', 'admin@tt.com', '123', 'inspector'),
+  user('user', 'user@tt.com', '123', 'user')
+];
+
 module.exports = {
   seed: function() {
     return knex('Station')
@@ -138,6 +154,14 @@ module.exports = {
       .then(function() {
         return knex('Timetable')
           .insert(defaultTimetables)
+      })
+      .then(function() {
+        return knex('Timetable')
+          .insert(defaultTimetables)
+      })
+      .then(function() {
+        return knex('User')
+          .insert(defaultUsers)
       })
       .then(function() {
         console.log('Initial setup complete!');

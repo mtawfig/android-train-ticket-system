@@ -7,10 +7,13 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "bcrypt": "^0.8.5",
     "bluebird": "^2.10.2",
     "boom": "^2.9.0",
     "hapi": "^10.4.1",
+    "hapi-auth-jwt2": "^5.1.2",
     "joi": "^6.9.0",
+    "jsonwebtoken": "^5.4.0",
     "knex": "^0.8.6",
     "lodash": "^3.10.1",
     "moment": "^2.10.6",
