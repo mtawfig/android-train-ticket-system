@@ -3,7 +3,6 @@
 var Hapi = require('hapi');
 var User = require('./models/User.js');
 var AuthJWT = require('hapi-auth-jwt2');
-var auth = require('./common/auth.js');
 
 var server = new Hapi.Server();
 server.connection({
@@ -25,7 +24,7 @@ server.register(AuthJWT, function (err) {
 
   server.auth.strategy('jwt', 'jwt', {
     key: process.env.JWT_SECRET,
-    validateFunc: auth.validate,
+    validateFunc: User.validate,
     verifyOptions: { algorithms: [ 'HS256' ] }
   });
 

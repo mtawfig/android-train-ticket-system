@@ -2,7 +2,7 @@ var Knex = require('knex');
 var knexConfig = require('../knexfile');
 var knex = Knex(knexConfig.development);
 
-var bCrypt = require('bcrypt');
+var bcrypt = require('bcrypt');
 
 var LABEL_LEFT = 90;
 var LABEL_DOWN = 180;
@@ -44,7 +44,7 @@ var user = function(name, email, password, role) {
   return {
     name: name,
     email: email,
-    password: bCrypt.hashSync(password, bCrypt.genSaltSync(10), null),
+    password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
     role: role
   }
 };

@@ -2,6 +2,5 @@
 
 module.exports = function (server) {
   require('./station')(server);
-  require('./auth')(server);
   require('./user')(server);
 };

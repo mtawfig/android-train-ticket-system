@@ -30,12 +30,13 @@ exports.up = function (knex) {
       table.string('email').unique();
       table.string('name');
       table.string('password');
-      table.enu('role', ['user', 'inspector'])
+      table.enu('role', ['user', 'inspector']).defaultTo('user')
     })
 };
 
 exports.down = function (knex) {
   return knex.schema
+    .dropTableIfExists('User')
     .dropTableIfExists('Timetable')
     .dropTableIfExists('Connection')
     .dropTableIfExists('Station');
