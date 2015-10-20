@@ -106,7 +106,7 @@ module.exports = function (server) {
 
   server.route({
     method: 'GET',
-    path: '/stations/{stationId}/timetables',
+    path: '/stations/{stationId}/timetable',
     config: {
       auth: false,
       validate: {
@@ -118,15 +118,42 @@ module.exports = function (server) {
     handler: function (request, reply) {
       var stationId = request.params.stationId;
 
+      Timetable.getTimetable(stationId)
+        .then(function(timetables) {
+          reply(timetables);
+        });
+      /*
+      Connection.query()
+        .where('fromStationId', stationId)
+        .eager('[fromStation, toStation]')
+        .then(function (connections) {
+          return Promise.map(connections, function(connection) {
+            return Timetable.query()
+              .where('fromStationId', stationId)
+              .orderBy('tripStepNumber')
+              .then(function (timetables) {
+                connection.timetables = timetables;
+                return _.omit(connection, ['fromStationId', 'toStationId']);
+              })
+          })
+        })
+        .then(function(connections) {
+          reply(connections);
+        })
+        .catch(function (reason) {
+          reply(Boom.notFound(reason));
+        });
+        */
+      /*
       Timetable.query().eager('[fromStation, toStation]')
         .where('fromStationId', stationId)
-        .orWhere('toStationId', stationId)
         .then(function (timetables) {
           reply(timetables);
         })
         .catch(function (reason) {
           reply(Boom.notFound(reason));
         });
+        */
     }
   });
 

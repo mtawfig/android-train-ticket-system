@@ -14,12 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
 
 public class MainActivity extends AppCompatActivity implements MapFragment.StationsMapListener, NavigationView.OnNavigationItemSelectedListener {
 
     private SwipeRefreshLayout swipeContainer;
+    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +82,9 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
 
     @Override
     public void onStationClickHandler(Station station) {
-        Toast toast;
-        if (station != null) {
-            toast = Toast.makeText(this, station.getName(), Toast.LENGTH_SHORT);
-        } else {
-            toast = Toast.makeText(this, "Didn't click any station", Toast.LENGTH_SHORT);
-        }
-        toast.show();
+        sharedData.setSelectedStation(station);
+        Intent intent = new Intent(getBaseContext(), TimetableActivity.class);
+        startActivity(intent);
     }
 
     @Override

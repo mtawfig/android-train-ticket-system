@@ -36,18 +36,23 @@
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Controllers.MainActivity"/>
+                android:value=".Controllers.MainActivity" />
         </activity>
-
         <activity
             android:name=".Controllers.ItineraryActivity"
             android:label="@string/title_activity_itinerary"
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Controllers.FromToActivity"/>
+                android:value=".Controllers.FromToActivity" />
         </activity>
-
+        <activity
+            android:name=".Controllers.TimetableActivity"
+            android:label="@string/title_activity_timetable" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -59,7 +59,6 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
                     endStationText.getText().toString(),
                     step.getEndStation().getName()));
 
-
             TextView startTimeText = (TextView) mView.findViewById(R.id.start_time);
             startTimeText.setText(String.format(
                     startTimeText.getText().toString(),

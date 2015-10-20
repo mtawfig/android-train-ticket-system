@@ -17,7 +17,7 @@ import com.google.maps.android.ui.IconGenerator;
 
 import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
-import org.feup.cmov.userticketapp.Services.ApiService;
+import org.feup.cmov.userticketapp.Services.GetStations;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +62,7 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
     }
 
     public void fetchAndDrawStations() {
-        new ApiService.GetStations(new ApiService.OnGetStationsTaskCompleted() {
+        new GetStations(new GetStations.OnGetStationsTaskCompleted() {
             @Override
             public void onTaskCompleted(List<Station> stations) {
                 drawStations(stations);

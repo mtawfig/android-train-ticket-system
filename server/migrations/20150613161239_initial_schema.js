@@ -40,5 +40,4 @@ exports.down = function (knex) {
     .dropTableIfExists('Timetable')
     .dropTableIfExists('Connection')
     .dropTableIfExists('Station');
-
 };

@@ -74,7 +74,7 @@ var defaultConnections = [
   connection(a1, a2, 'N', 'A'),
   connection(a1, c, 'S', 'A'),
 
-  connection(a2, a1, 'N', 'A'),
+  connection(a2, a1, 'S', 'A'),
 
   connection(c1, c, 'W', 'B'),
   connection(c1, c2, 'E', 'B'),
@@ -150,10 +150,6 @@ module.exports = {
       .then(function () {
         return knex('Connection')
           .insert(defaultConnections)
-      })
-      .then(function() {
-        return knex('Timetable')
-          .insert(defaultTimetables)
       })
       .then(function() {
         return knex('Timetable')

@@ -1,12 +1,14 @@
 package org.feup.cmov.userticketapp.Models;
 
 import lombok.Getter;
+import lombok.Setter;
 
 public class SharedDataFactory {
     private static SharedDataFactory ourInstance = new SharedDataFactory();
 
     @Getter private Station fromStation;
     @Getter private Station toStation;
+    @Getter @Setter private Station selectedStation;
 
     public static SharedDataFactory getInstance() {
         return ourInstance;

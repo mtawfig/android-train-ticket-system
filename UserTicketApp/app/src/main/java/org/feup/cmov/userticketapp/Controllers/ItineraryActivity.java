@@ -1,6 +1,5 @@
 package org.feup.cmov.userticketapp.Controllers;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,13 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.Itinerary;
 import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
-import org.feup.cmov.userticketapp.Services.ApiService;
+import org.feup.cmov.userticketapp.Services.GetItinerary;
+import org.feup.cmov.userticketapp.Services.GetTimetables;
 import org.feup.cmov.userticketapp.Views.DividerItemDecoration;
 
 public class ItineraryActivity extends AppCompatActivity {
@@ -48,7 +47,7 @@ public class ItineraryActivity extends AppCompatActivity {
         mAdapter = new ItineraryAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        new ApiService.GetItinerary(new ApiService.OnGetItineraryTaskCompleted() {
+        new GetItinerary(new GetItinerary.OnGetItineraryTaskCompleted() {
             @Override
             public void onTaskCompleted(Itinerary itinerary) {
                 mAdapter.setItinerary(itinerary);
