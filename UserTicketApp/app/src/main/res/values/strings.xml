@@ -23,4 +23,6 @@
     <string name="line_and_stops">Line %1$s, %2$d stops</string>
     <string name="change_platforms_and_wait">Change platforms and wait %1$d minutes</string>
     <string name="title_activity_timetable">Timetables for %1$s</string>
+    <string name="from_station">From Station:</string>
+    <string name="to_station">To Station:</string>
 </resources>

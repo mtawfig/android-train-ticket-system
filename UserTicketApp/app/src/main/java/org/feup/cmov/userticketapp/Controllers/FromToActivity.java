@@ -1,7 +1,6 @@
 package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
@@ -145,8 +145,8 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private static final int FROM_STATION = 0;
-        private static final int TO_STATION = 1;
+        public static final int FROM_STATION = 0;
+        public static final int TO_STATION = 1;
 
         HashMap<Integer, StationTextFragment> mPageReferenceMap = new HashMap<>();
 
@@ -156,7 +156,7 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
 
         @Override
         public Fragment getItem(int position) {
-            StationTextFragment fragment = StationTextFragment.newInstance();
+            StationTextFragment fragment = StationTextFragment.newInstance(position);
             mPageReferenceMap.put(position, fragment);
             return fragment;
         }
@@ -190,14 +190,18 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
 
     public static class StationTextFragment extends Fragment {
 
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
         private Station station;
         private EditText editText;
+        private TextView fromOrToStationText;
+        private int mSectionNumber;
 
-        public static StationTextFragment newInstance() {
+        public static StationTextFragment newInstance(int sectionNumber) {
             StationTextFragment fragment = new StationTextFragment();
-            // Bundle args = new Bundle();
-            // args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            // fragment.setArguments(args);
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
             return fragment;
         }
 
@@ -214,6 +218,16 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_from_to, container, false);
             editText = (EditText) rootView.findViewById(R.id.select_station_text);
+
+            Bundle args = getArguments();
+            mSectionNumber = args.getInt(ARG_SECTION_NUMBER);
+
+            fromOrToStationText = (TextView) rootView.findViewById(R.id.from_or_to_text);
+            if (mSectionNumber == SectionsPagerAdapter.FROM_STATION) {
+                fromOrToStationText.setText(getString(R.string.from_station));
+            } else {
+                fromOrToStationText.setText(getString(R.string.to_station));
+            }
             return rootView;
         }
     }

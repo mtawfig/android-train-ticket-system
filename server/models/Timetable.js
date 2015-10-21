@@ -138,10 +138,11 @@ Timetable.getTimetable = function (departingStationId) {
           return {
             line: firstOfTrip.line,
             direction: firstOfTrip.direction,
-            trips: _.chain(trips)
+            tripsByNumber: _.chain(trips)
               .groupBy(function(lineResult) {
                 return lineResult.tripNumber;
               })
+              .values()
               .value()
           }
         })

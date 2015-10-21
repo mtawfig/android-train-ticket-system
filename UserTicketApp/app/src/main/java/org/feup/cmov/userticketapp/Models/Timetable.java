@@ -8,7 +8,7 @@ import lombok.Getter;
 
 public class Timetable {
 
-    @Getter HashMap<Integer, ArrayList<Trip>> trips;
+    @Getter ArrayList<ArrayList<Trip>> tripsByNumber;
     @Getter String line;
     @Getter String direction;
 
