@@ -6,6 +6,9 @@ var bcrypt = require('bcrypt');
 var JWT = require('jsonwebtoken');
 var schema = require('../schema/index.js');
 var _ = require('lodash');
+var nconf = require('nconf');
+
+nconf.use('file', { file: 'config.json' });
 
 var loginHandler = function(request, reply) {
   User.query()
@@ -18,7 +21,7 @@ var loginHandler = function(request, reply) {
           user: user
         };
 
-        var token = JWT.sign(credentials, process.env.JWT_SECRET);
+        var token = JWT.sign(credentials, nconf.get('privateKey'));
 
         reply({
           token: token,

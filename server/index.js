@@ -3,13 +3,14 @@
 var Hapi = require('hapi');
 var User = require('./models/User.js');
 var AuthJWT = require('hapi-auth-jwt2');
+var nconf = require('nconf');
 
 var server = new Hapi.Server();
 server.connection({
   port: process.argv[3] || 8000
 });
 
-var privateServerKey = process.argv[2] || 'Drop the bass!';
+nconf.use('file', { file: 'config.json' });
 
 // DB setup
 var Knex = require('knex');
@@ -25,7 +26,7 @@ server.register(AuthJWT, function (err) {
   }
 
   server.auth.strategy('jwt', 'jwt', {
-    key: privateServerKey,
+    key: nconf.get('privateKey'),
     validateFunc: User.validate,
     verifyOptions: { algorithms: [ 'HS256' ] }
   });
