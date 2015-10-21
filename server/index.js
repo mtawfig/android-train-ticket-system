@@ -6,8 +6,10 @@ var AuthJWT = require('hapi-auth-jwt2');
 
 var server = new Hapi.Server();
 server.connection({
-  port: process.argv[2] || 8000
+  port: process.argv[3] || 8000
 });
+
+var privateServerKey = process.argv[2] || 'Drop the bass!';
 
 // DB setup
 var Knex = require('knex');
@@ -23,7 +25,7 @@ server.register(AuthJWT, function (err) {
   }
 
   server.auth.strategy('jwt', 'jwt', {
-    key: process.env.JWT_SECRET,
+    key: privateServerKey,
     validateFunc: User.validate,
     verifyOptions: { algorithms: [ 'HS256' ] }
   });
