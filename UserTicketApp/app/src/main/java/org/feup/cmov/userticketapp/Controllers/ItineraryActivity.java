@@ -30,6 +30,8 @@ public class ItineraryActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         final Station fromStation = sharedData.getFromStation();
         final Station toStation = sharedData.getToStation();
 
