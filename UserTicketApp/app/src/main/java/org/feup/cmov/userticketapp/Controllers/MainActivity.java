@@ -113,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
 
         } else if (id == R.id.sign_in) {
 
+            Intent intent = new Intent(getBaseContext(), SigninActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.sign_out) {
 
         }
