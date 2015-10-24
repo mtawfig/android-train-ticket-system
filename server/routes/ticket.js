@@ -58,30 +58,30 @@ module.exports = function(server) {
       var itinerary;
 
       queue.add(function() {
-          return Timetable.getItinerary(request.params.fromStationId, request.params.toStationId, date)
-            .then(function(createdItinerary) {
-              itinerary = createdItinerary;
-              return Ticket.createTickets(user, itinerary, arraySeatNumber, date);
-            })
-            .then(function(createdTickets) {
-              tickets = createdTickets;
-              return creditCardService.charge(
-                request.payload.cardNumber,
-                request.payload.monthExpiration,
-                request.payload.yearExpiration,
-                request.payload.cardSecurityCode,
-                itinerary.cost
-              );
-            })
-            .then(function() {
-              return Promise.map(tickets, function(ticket) {
-                return Ticket.query().insert(ticket)
-                  .then(function(insertedTicket) {
-                    return insertedTicket;
-                  });
-              });
+        return Timetable.getItinerary(request.params.fromStationId, request.params.toStationId, date)
+          .then(function(createdItinerary) {
+            itinerary = createdItinerary;
+            return Ticket.createTickets(user, itinerary, arraySeatNumber, date);
+          })
+          .then(function(createdTickets) {
+            tickets = createdTickets;
+            return creditCardService.charge(
+              request.payload.cardNumber,
+              request.payload.monthExpiration,
+              request.payload.yearExpiration,
+              request.payload.cardSecurityCode,
+              itinerary.cost
+            );
+          })
+          .then(function() {
+            return Promise.map(tickets, function(ticket) {
+              return Ticket.query().insert(ticket)
+                .then(function(insertedTicket) {
+                  return insertedTicket;
+                });
             });
-        })
+          });
+      })
         .then(function(insertedTickets) {
           reply(insertedTickets);
         })
