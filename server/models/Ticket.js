@@ -4,6 +4,11 @@ var Model = require('objection').Model;
 var Promise = require('bluebird');
 var uuid = require('node-uuid');
 var _ = require('lodash');
+var crypto = require('crypto');
+var fs = require('fs');
+
+var privateKey = fs.readFileSync(process.cwd() + '/certificates/private.key').toString('utf8');
+var publicKey = fs.readFileSync(process.cwd() + '/certificates/public.key').toString('utf8');
 
 var Knex = require('knex');
 var knexConfig = require('../knexfile');
@@ -114,7 +119,7 @@ Ticket.createTickets = function(user, itinerary, arraySeatNumber, date) {
           throw new Error('The seat is already taken for a step in the trip!')
         }
 
-        return {
+        var ticket = {
           userId: user.userId,
           date: date,
           purchaseTime: new Date(),
@@ -127,6 +132,21 @@ Ticket.createTickets = function(user, itinerary, arraySeatNumber, date) {
           seatNumber: selectedSeatNumber,
           used: false
         };
+
+        var buffer = JSON.stringify(ticket);
+        var sign = crypto.createSign('RSA-SHA1');
+        sign.update(buffer);
+        ticket.signature = sign.sign(privateKey, 'hex');
+
+        /*
+        // VERIFICATION EXAMPLE SERVER SIDE
+        var verifier = crypto.createVerify('RSA-SHA1');
+        verifier.update(buffer);
+        var success = verifier.verify(publicKey, ticket.signature, 'hex');
+        console.log(success);
+        */
+
+        return ticket;
       })
   });
 };

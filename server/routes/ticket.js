@@ -71,7 +71,7 @@ module.exports = function(server) {
                 request.payload.yearExpiration,
                 request.payload.cardSecurityCode,
                 itinerary.cost
-              )
+              );
             })
             .then(function() {
               return Promise.map(tickets, function(ticket) {
