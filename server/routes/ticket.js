@@ -51,7 +51,7 @@ module.exports = function(server) {
     },
     handler: function(request, reply) {
       var user = request.auth.credentials.user;
-      var date = request.payload.date || moment().startOf('day').toDate();
+      var date = request.payload.date || new Date();
       var arraySeatNumber = request.payload.arraySeatNumber || [];
 
       var tickets;
@@ -61,7 +61,7 @@ module.exports = function(server) {
         return Timetable.getItinerary(request.params.fromStationId, request.params.toStationId, date)
           .then(function(createdItinerary) {
             itinerary = createdItinerary;
-            return Ticket.createTickets(user, itinerary, arraySeatNumber, date);
+            return Ticket.createTickets(user, itinerary, arraySeatNumber);
           })
           .then(function(createdTickets) {
             tickets = createdTickets;
@@ -84,6 +84,49 @@ module.exports = function(server) {
       })
         .then(function(insertedTickets) {
           reply(insertedTickets);
+        })
+        .catch(function(error) {
+          reply(Boom.badRequest(error));
+        });
+    }
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/tickets',
+    config: {
+      auth: 'jwt'
+    },
+    handler: function(request, reply) {
+      var user = request.auth.credentials.user;
+
+      Ticket.getTickets(user)
+        .then(function(tickets) {
+          reply(tickets);
+        })
+        .catch(function(error) {
+          reply(Boom.badRequest(error));
+        });
+    }
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/tickets/all',
+    config: {
+      auth: 'jwt'
+    },
+    handler: function(request, reply) {
+      var user = request.auth.credentials.user;
+
+      if (user.role !== 'inspector') {
+        reply(Boom.unauthorized('You do not have inspector permissions'));
+        return;
+      }
+
+      Ticket.getAllTickets()
+        .then(function(tickets) {
+          reply(tickets);
         })
         .catch(function(error) {
           reply(Boom.badRequest(error));

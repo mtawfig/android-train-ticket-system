@@ -48,7 +48,6 @@ Ticket.relationMappings = {
 };
 
 var getNumberOfSeatsTaken = function(step, date) {
-  var numberSeatsTaken;
   return knex('Ticket')
     .count('* as numberSeatsTaken')
     .where('tripId', step.tripId)
@@ -65,6 +64,18 @@ var getTrain = function(step) {
     .first()
     .where('tripId', step.tripId)
     .innerJoin('Train', 'trip.trainId', 'train.trainId')
+};
+
+Ticket.getNumberOfFreeSeats = function(step, date) {
+  var seatsTaken;
+  return getNumberOfSeatsTaken(step, date)
+    .then(function(result) {
+      seatsTaken = result;
+      return getTrain(step);
+    })
+    .then(function(train) {
+      return train.capacity - seatsTaken;
+    });
 };
 
 var getSeatsOfTrip = function(step, date) {
@@ -87,11 +98,11 @@ var pickRandomSeat = function(filledSeats, train) {
   }
 };
 
-Ticket.createTickets = function(user, itinerary, arraySeatNumber, date) {
+Ticket.createTickets = function(user, itinerary, arraySeatNumber) {
   return Promise.map(itinerary.steps, function createTicket(step, stepIndex) {
     var numberSeatsTaken;
     var train;
-    return getNumberOfSeatsTaken(step, date)
+    return getNumberOfSeatsTaken(step, itinerary.date)
       .then(function(count) {
         numberSeatsTaken = count;
         return getTrain(step);
@@ -102,7 +113,7 @@ Ticket.createTickets = function(user, itinerary, arraySeatNumber, date) {
           throw new Error('Max capacity for this train has been reached')
         }
 
-        return getSeatsOfTrip(step, date);
+        return getSeatsOfTrip(step, itinerary.date);
       })
       .then(function(filledSeats) {
 
@@ -121,8 +132,8 @@ Ticket.createTickets = function(user, itinerary, arraySeatNumber, date) {
 
         var ticket = {
           userId: user.userId,
-          date: date,
-          purchaseTime: new Date(),
+          date: itinerary.date,
+          purchaseTime: new Date().getTime(),
           fromStationId: step.startStation.stationId,
           toStationId: step.endStation.stationId,
           uuid: uuid.v1(),
@@ -149,4 +160,27 @@ Ticket.createTickets = function(user, itinerary, arraySeatNumber, date) {
         return ticket;
       })
   });
+};
+
+Ticket.getTickets = function(user) {
+  return Ticket.query()
+    .eager('[fromStation, toStation]')
+    .where('userId', user.userId)
+    .then(function(tickets) {
+      tickets.forEach(function(ticket) {
+        ticket.used = ticket.used !== 0;
+      });
+      return tickets;
+    });
+};
+
+Ticket.getAllTickets = function() {
+  return Ticket.query()
+    .eager('[fromStation, toStation]')
+    .then(function(tickets) {
+      tickets.forEach(function(ticket) {
+        ticket.used = ticket.used !== 0;
+      });
+      return tickets;
+    });
 };

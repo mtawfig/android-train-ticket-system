@@ -61,16 +61,16 @@ module.exports = function (server) {
           toStationId: schema.station.id
         },
         query: {
-          startDate: schema.station.date.optional()
+          date: schema.station.date.optional()
         }
       }
     },
     handler: function (request, reply) {
       var fromStationId = request.params.fromStationId;
       var toStationId = request.params.toStationId;
-      var startDate = request.query.startDate ? new Date(request.query.startDate) : new Date();
+      var date = request.query.date || new Date();
 
-      Timetable.getItinerary(fromStationId, toStationId, startDate)
+      Timetable.getItinerary(fromStationId, toStationId, date)
         .then(function(itinerary) {
           reply(itinerary);
         })

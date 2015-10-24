@@ -17,7 +17,7 @@ module.exports = User;
 User.tableName = 'User';
 User.idColumn = 'userId';
 
-var TOKEN_LIMIT_HOURS = 1;
+var TOKEN_LIMIT_HOURS = 10;
 
 User.validate = function (decoded, request, callback) {
   if (moment().diff(moment(decoded.iat), 'hours') > TOKEN_LIMIT_HOURS) {

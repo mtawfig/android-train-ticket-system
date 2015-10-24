@@ -6,6 +6,7 @@ var _ = require('lodash');
 var moment = require('moment');
 var Connection = require('./Connection.js');
 var Station = require('./Station.js');
+var Ticket = require('./Ticket.js');
 
 var Knex = require('knex');
 var knexConfig = require('../knexfile');
@@ -183,7 +184,7 @@ var getDuration = function(step) {
   return moment(end, parseEnd).diff(moment(start, parseStart), 'minutes');
 };
 
-var buildItinerary = function(timetables) {
+var buildItinerary = function(timetables, date) {
 
   function createStep(timetable) {
     return {
@@ -203,7 +204,23 @@ var buildItinerary = function(timetables) {
 
   var currentStep = createStep(timetables[0]);
 
-  var itinerary = [currentStep];
+  var startingTime = new Date(
+    date.getFullYear(), date.getMonth(), date.getDate(),
+    currentStep.hoursStart, currentStep.minutesStart, 0, 0
+  );
+
+  var itineraryDate;
+
+  if (startingTime > date) {
+    itineraryDate = moment(date).startOf('day').toDate();
+  } else {
+    itineraryDate = moment(date).add(1, 'day').startOf('day').toDate();
+  }
+
+  var itinerary = {
+    date: itineraryDate,
+    steps: [currentStep]
+  };
 
   _.rest(timetables).forEach(function(timetable) {
     if (timetable.line === currentStep.line) {
@@ -220,14 +237,14 @@ var buildItinerary = function(timetables) {
       currentStep.duration = getDuration(currentStep);
 
       currentStep = createStep(timetable);
-      itinerary.push(currentStep);
+      itinerary.steps.push(currentStep);
     }
   });
 
-  var lastStep = _.last(itinerary);
+  var lastStep = _.last(itinerary.steps);
   lastStep.duration = getDuration(lastStep);
 
-  return Promise.map(itinerary, function(step) {
+  return Promise.each(itinerary.steps, function(step) {
     var stationIds = [step.startStationId, step.endStationId];
     return Station.query()
       .whereIn('stationId', stationIds)
@@ -241,13 +258,22 @@ var buildItinerary = function(timetables) {
         }
         delete step.startStationId;
         delete step.endStationId;
+      })
+      .then(function() {
+        return Ticket.getNumberOfFreeSeats(step, moment(date).startOf('day').toDate());
+      })
+      .then(function(freeSeats) {
+        step.freeSeats = freeSeats;
         return step;
       })
-  });
+  })
+    .then(function() {
+      return itinerary;
+    });
 };
 
 var calculateCost = function(itinerary) {
-  return itinerary.reduce(function(cost, step) {
+  return itinerary.steps.reduce(function(cost, step) {
     return cost + 100 + step.numberOfStops * 50;
   }, 0);
 };
@@ -258,11 +284,11 @@ Timetable.getItinerary = function(fromStationId, toStationId, date) {
       return Timetable.getTimetablesForPath(path, date);
     })
     .then(function(timetables) {
-      return buildItinerary(timetables)
+      return buildItinerary(timetables, date)
     })
     .then(function(itinerary) {
-      var firstStep = _.first(itinerary);
-      var lastStep = _.last(itinerary);
+      var firstStep = _.first(itinerary.steps);
+      var lastStep = _.last(itinerary.steps);
       var startAndEndTime = {
         hoursStart: firstStep.hoursStart,
         minutesStart: firstStep.minutesStart,
@@ -270,9 +296,10 @@ Timetable.getItinerary = function(fromStationId, toStationId, date) {
         minutesEnd: lastStep.minutesEnd
       };
       return _.extend(startAndEndTime, {
+        date: itinerary.date,
         duration: getDuration(startAndEndTime),
         cost: calculateCost(itinerary),
-        steps: itinerary
+        steps: itinerary.steps
       });
     })
 };

@@ -45,7 +45,7 @@ exports.up = function (knex) {
       table.bigincrements('ticketId').primary();
       table.biginteger('userId').unsigned().references('userId').inTable('User').onDelete('CASCADE');
       table.date('date').notNullable();
-      table.time('purchaseTime');
+      table.timestamp('purchaseTime');
       table.biginteger('fromStationId').unsigned().references('stationId').inTable('Station').onDelete('CASCADE');
       table.biginteger('toStationId').unsigned().references('stationId').inTable('Station').onDelete('CASCADE');
       table.string('uuid', 36).unique();
