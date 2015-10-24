@@ -2,5 +2,6 @@
 
 module.exports = {
   station: require('./station'),
-  user: require('./user')
+  user: require('./user'),
+  ticket: require('./ticket')
 };

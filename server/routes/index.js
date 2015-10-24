@@ -3,4 +3,5 @@
 module.exports = function (server) {
   require('./station')(server);
   require('./user')(server);
+  require('./ticket')(server)
 };

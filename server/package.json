@@ -1,7 +1,7 @@
 {
   "name": "android-ticket-system",
   "version": "0.0.1",
-  "description": "Objection.js express example",
+  "description": "Train Ticket App Server",
   "main": "app.js",
   "scripts": {
     "start": "node index.js"
@@ -19,7 +19,10 @@
     "moment": "^2.10.6",
     "nconf": "^0.8.2",
     "node-dijkstra": "^2.2.0",
+    "node-rsa": "^0.2.26",
+    "node-uuid": "^1.4.3",
     "objection": "^0.2.7",
+    "promise-queue": "^2.1.1",
     "sqlite3": "^3.1.0"
   }
 }

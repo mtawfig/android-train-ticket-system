@@ -3,6 +3,9 @@
 var Model = require('objection').Model;
 var Promise = require('bluebird');
 var _ = require('lodash');
+var moment = require('moment');
+var Connection = require('./Connection.js');
+var Station = require('./Station.js');
 
 var Knex = require('knex');
 var knexConfig = require('../knexfile');
@@ -21,6 +24,26 @@ module.exports = Timetable;
 
 Timetable.tableName = 'Timetable';
 Timetable.idColumn = 'timetableId';
+
+Timetable.relationMappings = {
+  fromStation: {
+    relation: Model.OneToOneRelation,
+    modelClass: __dirname + '/Station',
+    join: {
+      from: 'Timetable.fromStationId',
+      to: 'Station.stationId'
+    }
+  },
+  toStation: {
+    relation: Model.OneToOneRelation,
+    modelClass: __dirname + '/Station',
+    join: {
+      from: 'Timetable.toStationId',
+      to: 'Station.stationId'
+    }
+  }
+};
+
 
 Timetable.getTimetablesForPath = function (path, startTime) {
   var hours = startTime.getHours();
@@ -86,7 +109,7 @@ var buildSubObjectsAndOmitKeys = function(omitList, result) {
 
 Timetable.getTimetable = function (departingStationId) {
   return knex('Timetable')
-    .distinct('tripNumber', 'tripStepNumber')
+    .distinct('tripId', 'tripStepNumber')
     .where('Timetable.fromStationId', departingStationId)
     .then(function(distinctDepartures) {
       var query = knex.select([
@@ -96,7 +119,7 @@ Timetable.getTimetable = function (departingStationId) {
           "minutesStart",
           "hoursEnd",
           "minutesEnd",
-          "tripNumber",
+          "tripId",
           "tripStepNumber",
           "direction",
           "line",
@@ -118,11 +141,11 @@ Timetable.getTimetable = function (departingStationId) {
         })
         .innerJoin('Station AS FromStation', 'Timetable.fromStationId', 'FromStation.stationId')
         .innerJoin('Station AS ToStation', 'Timetable.toStationId', 'ToStation.stationId')
-        .orderBy('tripNumber ASC, tripStepNumber ASC');
+        .orderBy('tripId ASC, tripStepNumber ASC');
 
       return _.reduce(distinctDepartures, function(query, departure) {
         return query.orWhere(function() {
-          this.where('tripNumber', '=', departure.tripNumber)
+          this.where('tripId', '=', departure.tripId)
             .andWhere('tripStepNumber', '>=', departure.tripStepNumber)
         });
       }, query);
@@ -140,7 +163,7 @@ Timetable.getTimetable = function (departingStationId) {
             direction: firstOfTrip.direction,
             tripsByNumber: _.chain(trips)
               .groupBy(function(lineResult) {
-                return lineResult.tripNumber;
+                return lineResult.tripId;
               })
               .values()
               .value()
@@ -150,21 +173,106 @@ Timetable.getTimetable = function (departingStationId) {
     });
 };
 
-Timetable.relationMappings = {
-  fromStation: {
-    relation: Model.OneToOneRelation,
-    modelClass: __dirname + '/Station',
-    join: {
-      from: 'Timetable.fromStationId',
-      to: 'Station.stationId'
-    }
-  },
-  toStation: {
-    relation: Model.OneToOneRelation,
-    modelClass: __dirname + '/Station',
-    join: {
-      from: 'Timetable.toStationId',
-      to: 'Station.stationId'
+var getDuration = function(step) {
+  var parseStart = (step.hoursStart < 10 ? 'H' : 'HH') + ' ' + (step.minutesStart < 10 ? 'm' : 'mm');
+  var start = step.hoursStart + ' ' + step.minutesStart;
+
+  var parseEnd = (step.hoursEnd < 10 ? 'H' : 'HH') + ' ' + (step.minutesEnd < 10 ? 'm' : 'mm');
+  var end = step.hoursEnd + ' ' + step.minutesEnd;
+
+  return moment(end, parseEnd).diff(moment(start, parseStart), 'minutes');
+};
+
+var buildItinerary = function(timetables) {
+
+  function createStep(timetable) {
+    return {
+      startStationId: timetable.fromStationId,
+      endStationId: timetable.toStationId,
+      hoursStart: timetable.hoursStart,
+      minutesStart: timetable.minutesStart,
+      hoursEnd: timetable.hoursEnd,
+      minutesEnd: timetable.minutesEnd,
+      line: timetable.line,
+      numberOfStops: 1,
+      tripId: timetable.tripId,
+      fromTripStepNumber: timetable.tripStepNumber,
+      toTripStepNumber: timetable.tripStepNumber
     }
   }
+
+  var currentStep = createStep(timetables[0]);
+
+  var itinerary = [currentStep];
+
+  _.rest(timetables).forEach(function(timetable) {
+    if (timetable.line === currentStep.line) {
+      currentStep.numberOfStops += 1;
+      currentStep.endStationId = timetable.toStationId;
+      currentStep.hoursEnd = timetable.hoursEnd;
+      currentStep.minutesEnd = timetable.minutesEnd;
+      currentStep.toTripStepNumber = timetable.tripStepNumber;
+    } else {
+      currentStep.wait = getDuration({
+        hoursStart: currentStep.hoursEnd, minutesStart: currentStep.minutesEnd,
+        hoursEnd: timetable.hoursStart, minutesEnd: timetable.minutesStart
+      });
+      currentStep.duration = getDuration(currentStep);
+
+      currentStep = createStep(timetable);
+      itinerary.push(currentStep);
+    }
+  });
+
+  var lastStep = _.last(itinerary);
+  lastStep.duration = getDuration(lastStep);
+
+  return Promise.map(itinerary, function(step) {
+    var stationIds = [step.startStationId, step.endStationId];
+    return Station.query()
+      .whereIn('stationId', stationIds)
+      .then(function(stations) {
+        if (stations[0].stationId === step.startStationId) {
+          step.startStation = stations[0];
+          step.endStation = stations[1];
+        } else {
+          step.endStation = stations[0];
+          step.startStation = stations[1];
+        }
+        delete step.startStationId;
+        delete step.endStationId;
+        return step;
+      })
+  });
+};
+
+var calculateCost = function(itinerary) {
+  return itinerary.reduce(function(cost, step) {
+    return cost + 100 + step.numberOfStops * 50;
+  }, 0);
+};
+
+Timetable.getItinerary = function(fromStationId, toStationId, date) {
+  return Connection.getPath(fromStationId, toStationId)
+    .then(function(path) {
+      return Timetable.getTimetablesForPath(path, date);
+    })
+    .then(function(timetables) {
+      return buildItinerary(timetables)
+    })
+    .then(function(itinerary) {
+      var firstStep = _.first(itinerary);
+      var lastStep = _.last(itinerary);
+      var startAndEndTime = {
+        hoursStart: firstStep.hoursStart,
+        minutesStart: firstStep.minutesStart,
+        hoursEnd: lastStep.hoursEnd,
+        minutesEnd: lastStep.minutesEnd
+      };
+      return _.extend(startAndEndTime, {
+        duration: getDuration(startAndEndTime),
+        cost: calculateCost(itinerary),
+        steps: itinerary
+      });
+    })
 };

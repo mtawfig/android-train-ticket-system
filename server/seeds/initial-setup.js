@@ -27,7 +27,21 @@ var connection = function(stationA, stationB, direction, line) {
   };
 };
 
-var timetable = function(stationA, stationB, hoursStart, minutesStart, hoursEnd, minutesEnd, tripNumber, tripStepNumber) {
+var train = function(trainId, capacity) {
+  return {
+    trainId: trainId,
+    capacity: capacity
+  }
+};
+
+var trip = function(tripId, trainId) {
+  return {
+    tripId: tripId,
+    trainId: trainId
+  }
+};
+
+var timetable = function(stationA, stationB, hoursStart, minutesStart, hoursEnd, minutesEnd, tripId, tripStepNumber) {
   return {
     fromStationId: stationA.stationId,
     toStationId: stationB.stationId,
@@ -35,7 +49,7 @@ var timetable = function(stationA, stationB, hoursStart, minutesStart, hoursEnd,
     minutesStart: minutesStart,
     hoursEnd: hoursEnd,
     minutesEnd: minutesEnd,
-    tripNumber: tripNumber,
+    tripId: tripId,
     tripStepNumber: tripStepNumber
   }
 };
@@ -80,6 +94,29 @@ var defaultConnections = [
   connection(c1, c2, 'E', 'B'),
 
   connection(c2, c1, 'W', 'B')
+];
+
+var defaultTrains = [
+  train(1, 5),
+  train(2, 5),
+  train(3, 5),
+  train(4, 5)
+];
+
+var defaultTrips = [
+  trip(1, 1),
+  trip(2, 2),
+  trip(3, 1),
+  trip(4, 2),
+  trip(5, 1),
+  trip(6, 2),
+
+  trip(7, 3),
+  trip(8, 4),
+  trip(9, 3),
+  trip(10, 4),
+  trip(11, 3),
+  trip(12, 4)
 ];
 
 var defaultTimetables = [
@@ -150,6 +187,14 @@ module.exports = {
       .then(function () {
         return knex('Connection')
           .insert(defaultConnections)
+      })
+      .then(function() {
+        return knex('Train')
+          .insert(defaultTrains)
+      })
+      .then(function() {
+        return knex('Trip')
+          .insert(defaultTrips)
       })
       .then(function() {
         return knex('Timetable')
