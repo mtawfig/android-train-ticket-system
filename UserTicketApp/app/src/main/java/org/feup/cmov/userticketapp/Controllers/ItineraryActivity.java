@@ -1,5 +1,6 @@
 package org.feup.cmov.userticketapp.Controllers;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,10 +16,7 @@ import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
 import org.feup.cmov.userticketapp.Services.GetItinerary;
-import org.feup.cmov.userticketapp.Services.GetTimetables;
-import org.feup.cmov.userticketapp.Views.DividerItemDecoration;
-
-import java.text.DateFormat;
+import org.feup.cmov.userticketapp.Helpers.DividerItemDecoration;
 
 public class ItineraryActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
@@ -115,7 +113,12 @@ public class ItineraryActivity extends AppCompatActivity {
         }).execute(fromStation, toStation);
     }
 
-    public void onCalculateRouteClickHandler(View view) {
+    public void onBuyTicketsClickHandler(View view) {
+        if (!canBuyTickets) {
+            return;
+        }
 
+        Intent intent = new Intent(getBaseContext(), PaymentActivity.class);
+        startActivity(intent);
     }
 }

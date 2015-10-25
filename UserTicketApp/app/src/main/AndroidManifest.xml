@@ -62,6 +62,14 @@
             android:name=".Controllers.SigninActivity"
             android:label="@string/title_activity_signin" >
         </activity>
+        <activity
+            android:name=".Controllers.PaymentActivity"
+            android:label="@string/title_activity_credit_card" >
+        </activity>
+        <activity
+            android:name=".Controllers.CheckoutActivity"
+            android:label="@string/title_activity_checkout" >
+        </activity>
     </application>
 
 </manifest>

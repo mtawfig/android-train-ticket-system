@@ -39,4 +39,24 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+
+    <string name="action_go_to_checkout">Proceed to Checkout</string>
+
+    <string name="prompt_credit_card_number">Credit Card Number</string>
+    <string name="error_invalid_credit_card_number">This credit card number is invalid</string>
+
+    <string name="prompt_credit_card_month">Expiration Month</string>
+    <string name="error_invalid_credit_card_month">This month is invalid</string>
+
+    <string name="prompt_credit_card_year">Expiration Year</string>
+    <string name="error_invalid_credit_card_year">This year is invalid</string>
+
+    <string name="prompt_credit_card_code">Security Code</string>
+    <string name="error_invalid_credit_card_code">This security code is invalid</string>
+
+    <string name="title_activity_credit_card">Payment Method</string>
+
+    <string name="title_activity_checkout">Checkout</string>
+    <string name="visa_credit_card">Visa credit card</string>
 </resources>

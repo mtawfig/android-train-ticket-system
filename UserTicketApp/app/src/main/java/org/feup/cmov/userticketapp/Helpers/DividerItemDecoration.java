@@ -1,4 +1,4 @@
-package org.feup.cmov.userticketapp.Views;
+package org.feup.cmov.userticketapp.Helpers;
 
 /*
  * Copyright (C) 2014 The Android Open Source Project
