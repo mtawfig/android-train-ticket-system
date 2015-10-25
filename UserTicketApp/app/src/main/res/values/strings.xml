@@ -51,14 +51,18 @@
     <string name="ticket_title_text">%1$s to %2$s</string>
     <string name="ticket_date_hours">%1$s, %2$02dh%3$02d</string>
     <string name="select_seat_number">Seat number: </string>
+    <string name="title_activity_tickets">My Tickets</string>
 
     <!-- Strings related to login -->
     <string name="title_activity_signin">Hello There!</string>
+    <string name="title_activity_signup">Welcome to Train Ticket!</string>
     <string name="prompt_email">Email</string>
+    <string name="prompt_name">Display Name</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Sign up</string>
     <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_name">Invalid name</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
@@ -81,5 +85,5 @@
     <string name="drawer_menu_title_buy_tickets">Buy Tickets</string>
     <string name="drawer_menu_title_sign_in">Sign In</string>
     <string name="drawer_menu_title_sign_out">Sign Out</string>
-    <string name="title_activity_tickets">My Tickets</string>
+    <string name="drawer_menu_title_sign_up">Sign Up</string>
 </resources>

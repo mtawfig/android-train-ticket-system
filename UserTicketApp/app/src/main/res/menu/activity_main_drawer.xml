@@ -12,6 +12,8 @@
         <menu>
             <item android:id="@+id/sign_in" android:icon="@drawable/ic_login"
                 android:title="@string/drawer_menu_title_sign_in" />
+            <item android:id="@+id/sign_up" android:icon="@drawable/ic_logout"
+                android:title="@string/drawer_menu_title_sign_up" />
         </menu>
     </item>
     <item android:id="@+id/sign_out_menu" android:title="@string/drawer_menu_title_account">
