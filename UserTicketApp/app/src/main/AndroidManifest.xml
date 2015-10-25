@@ -61,6 +61,9 @@
         <activity
             android:name=".Controllers.SigninActivity"
             android:label="@string/title_activity_signin" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.MainActivity" />
         </activity>
         <activity
             android:name=".Controllers.PaymentActivity"
