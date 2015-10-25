@@ -87,7 +87,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     Integer seatNumber = (Integer) parent.getItemAtPosition(position);
-                    sharedData.getArraySeatNumber().set(ticketIndex, seatNumber);
+                    sharedData.getArraySeatNumber().set(ticketIndex, seatNumber - 1);
                 }
 
                 @Override
