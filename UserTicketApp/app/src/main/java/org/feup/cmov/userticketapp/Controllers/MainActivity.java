@@ -1,6 +1,8 @@
 package org.feup.cmov.userticketapp.Controllers;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,16 +14,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
+import org.feup.cmov.userticketapp.Models.SharedPreferencesFactory;
 
 public class MainActivity extends AppCompatActivity implements MapFragment.StationsMapListener, NavigationView.OnNavigationItemSelectedListener {
 
     private SwipeRefreshLayout swipeContainer;
     private SharedDataFactory sharedData = SharedDataFactory.getInstance();
+
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener;
+
+    private ImageView drawerImageView;
+    private TextView drawerNameTextView;
+    private TextView drawerEmailTextView;
+    private Menu drawerMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +53,27 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View navigationHeaderView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        drawerImageView = (ImageView) navigationHeaderView.findViewById(R.id.image_view);
+        drawerNameTextView = (TextView) navigationHeaderView.findViewById(R.id.nav_header_name);
+        drawerEmailTextView = (TextView) navigationHeaderView.findViewById(R.id.nav_header_email);
+
+        drawerMenu = navigationView.getMenu();
+
+        sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_identifier), Context.MODE_PRIVATE);
+        sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+                if (key.equals(getString(R.string.shared_preferences_user_sign_in))) {
+                    updateDrawer();
+                }
+            }
+        };
+        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
+
+        updateDrawer();
+
         final MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.setStationClickListener(this);
@@ -51,6 +85,33 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
                 mapFragment.fetchAndDrawStations();
             }
         });
+    }
+
+    private void updateDrawer() {
+
+        boolean userSignIn = SharedPreferencesFactory.getBooleanValueFromPreferences(getString(R.string.shared_preferences_user_sign_in), sharedPreferences);
+
+        drawerMenu.findItem(R.id.buy_ticket).setVisible(userSignIn);
+        drawerMenu.findItem(R.id.my_tickets).setVisible(userSignIn);
+        drawerMenu.findItem(R.id.sign_in_menu).setVisible(!userSignIn);
+        drawerMenu.findItem(R.id.sign_out_menu).setVisible(userSignIn);
+
+        if (userSignIn) {
+            drawerImageView.setVisibility(View.VISIBLE);
+            drawerNameTextView.setText(SharedPreferencesFactory.getStringValueFromPreferences(getString(R.string.shared_preferences_user_name_key), sharedPreferences));
+            drawerEmailTextView.setText(SharedPreferencesFactory.getStringValueFromPreferences(getString(R.string.shared_preferences_user_email_key), sharedPreferences));
+        } else {
+            drawerImageView.setVisibility(View.GONE);
+            drawerNameTextView.setText(" ");
+            drawerEmailTextView.setText(" ");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
     }
 
     @Override
@@ -117,7 +178,8 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
             startActivity(intent);
 
         } else if (id == R.id.sign_out) {
-
+            SharedPreferencesFactory.clearPreferences(sharedPreferences);
+            SharedPreferencesFactory.setBooleanValueToPreferences(getString(R.string.shared_preferences_user_sign_in), false, sharedPreferences);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

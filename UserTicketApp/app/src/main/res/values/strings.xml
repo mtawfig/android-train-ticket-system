@@ -26,21 +26,6 @@
     <string name="from_station">From Station:</string>
     <string name="to_station">To Station:</string>
 
-    <!-- Strings related to login -->
-    <string name="title_activity_signin">Hello There!</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-
-
     <string name="action_go_to_checkout">Proceed to Checkout</string>
 
     <string name="prompt_credit_card_number">Credit Card Number</string>
@@ -59,4 +44,34 @@
 
     <string name="title_activity_checkout">Checkout</string>
     <string name="visa_credit_card">Visa credit card</string>
+
+    <!-- Strings related to login -->
+    <string name="title_activity_signin">Hello There!</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <!-- Strings related to shared preferences -->
+    <string name="shared_preferences_user_sign_in">IsUserSignIn</string>
+    <string name="shared_preferences_identifier">UserTicketAppSharedPreferences</string>
+    <string name="shared_preferences_token_key">TokenKey</string>
+    <string name="shared_preferences_user_id_key">UserIdKey</string>
+    <string name="shared_preferences_user_email_key">UserEmailKey</string>
+    <string name="shared_preferences_user_name_key">UserNameKey</string>
+
+    <!-- Strings related to drawer menu -->
+    <string name="drawer_menu_title_account">Account</string>
+    <string name="drawer_menu_title_my_tickets">My Tickets</string>
+    <string name="drawer_menu_title_timetables">Timetables</string>
+    <string name="drawer_menu_title_buy_tickets">Buy Tickets</string>
+    <string name="drawer_menu_title_sign_in">Sign In</string>
+    <string name="drawer_menu_title_sign_out">Sign Out</string>
 </resources>
