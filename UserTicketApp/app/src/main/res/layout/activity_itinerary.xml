@@ -46,6 +46,15 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
+                android:id="@+id/trip_date"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:gravity="start"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
                 android:id="@+id/trip_duration_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -74,6 +83,8 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="60dp"
+            android:id="@+id/buy_tickets_button"
+            android:enabled="false"
             android:text="@string/buy_tickets"
             android:padding="0dp"
             android:layout_marginLeft="-5dip"

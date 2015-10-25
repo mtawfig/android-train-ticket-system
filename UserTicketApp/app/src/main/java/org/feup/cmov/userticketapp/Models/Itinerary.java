@@ -1,6 +1,7 @@
 package org.feup.cmov.userticketapp.Models;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,8 @@ public class Itinerary {
 
     @Getter int duration;
     @Getter int cost;
+
+    @Getter @Setter long date;
 
     @Getter ArrayList<Step> steps;
 
@@ -33,5 +36,7 @@ public class Itinerary {
 
         @Getter Station startStation;
         @Getter Station endStation;
+
+        @Getter @Setter int freeSeats;
     }
 }

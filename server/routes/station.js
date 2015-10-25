@@ -72,6 +72,7 @@ module.exports = function (server) {
 
       Timetable.getItinerary(fromStationId, toStationId, date)
         .then(function(itinerary) {
+          itinerary.date = itinerary.date.getTime();
           reply(itinerary);
         })
         .catch(function (reason) {

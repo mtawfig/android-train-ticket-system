@@ -20,9 +20,9 @@ import java.util.Map;
 
 public class ApiService {
     // private static String SERVER_ADDRESS = "http://10.62.201.202:8000";
-    // private static String SERVER_ADDRESS = "http://192.168.1.73:8000";
+    private static String SERVER_ADDRESS = "http://192.168.1.73:8000";
     //private static String SERVER_ADDRESS = "http://172.30.38.85:8000";
-    private static String SERVER_ADDRESS = "http://10.125.40.136:8000";
+    // private static String SERVER_ADDRESS = "http://10.125.40.136:8000";
     // private static String SERVER_ADDRESS = "http://172.30.44.210:8000";
 
     final static Gson gson = new Gson();

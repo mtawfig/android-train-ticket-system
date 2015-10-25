@@ -20,7 +20,7 @@
     <string name="station_name">%s</string>
     <string name="to">to</string>
     <string name="time_hh_mm">%1$02dh%2$02d</string>
-    <string name="line_and_stops">Line %1$s, %2$d stops</string>
+    <string name="line_and_stops">Line %1$s, %2$d stops\r\n%3$d seats available</string>
     <string name="change_platforms_and_wait">Change platforms and wait %1$d minutes</string>
     <string name="title_activity_timetable">Timetables for %1$s</string>
     <string name="from_station">From Station:</string>

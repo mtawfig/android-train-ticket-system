@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.feup.cmov.userticketapp.Models.Itinerary;
@@ -16,11 +18,27 @@ import org.feup.cmov.userticketapp.Services.GetItinerary;
 import org.feup.cmov.userticketapp.Services.GetTimetables;
 import org.feup.cmov.userticketapp.Views.DividerItemDecoration;
 
+import java.text.DateFormat;
+
 public class ItineraryActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ItineraryAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SharedDataFactory sharedData = SharedDataFactory.getInstance();
+    private boolean canBuyTickets = false;
+    private Button buyTicketsButton;
+
+    private void setCanBuyTickets(Itinerary itinerary) {
+        boolean isPossible = true;
+        for(Itinerary.Step step : itinerary.getSteps()) {
+            if (step.getFreeSeats() == 0) {
+                isPossible = false;
+                break;
+            }
+        }
+        canBuyTickets = isPossible;
+        buyTicketsButton.setEnabled(canBuyTickets);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +52,8 @@ public class ItineraryActivity extends AppCompatActivity {
 
         final Station fromStation = sharedData.getFromStation();
         final Station toStation = sharedData.getToStation();
+
+        buyTicketsButton = (Button) findViewById(R.id.buy_tickets_button);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.itinerary_recycler_view);
 
@@ -82,6 +102,14 @@ public class ItineraryActivity extends AppCompatActivity {
                 tripCostText.setText(String.format(
                         getString(R.string.trip_cost_text),
                         itinerary.getCost() / 100, itinerary.getCost() % 100));
+
+                TextView tripDateText = (TextView) findViewById(R.id.trip_date);
+                String text = android.text.format.DateUtils.formatDateTime(getApplicationContext(),
+                        itinerary.getDate(),
+                        DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
+                tripDateText.setText(text);
+
+                setCanBuyTickets(itinerary);
 
             }
         }).execute(fromStation, toStation);
