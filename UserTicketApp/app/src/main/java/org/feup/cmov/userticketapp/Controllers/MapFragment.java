@@ -1,8 +1,10 @@
 package org.feup.cmov.userticketapp.Controllers;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
 import android.util.Pair;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -62,9 +64,15 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
     }
 
     public void fetchAndDrawStations() {
+        final Context context = getActivity();
         new GetStations(new GetStations.OnGetStationsTaskCompleted() {
             @Override
             public void onTaskCompleted(List<Station> stations) {
+                if (stations == null) {
+                    Toast.makeText(context, "No connection to server. Please refresh later.", Toast.LENGTH_SHORT)
+                            .show();
+                    return;
+                }
                 drawStations(stations);
             }
         }).execute();

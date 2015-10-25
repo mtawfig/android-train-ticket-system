@@ -42,6 +42,7 @@ public class ApiService {
 
             try {
                 int responseCode = urlConnection.getResponseCode();
+                // TODO HANDLE ERRORS
                 if(responseCode == 200) {
 
                     InputStream in = new BufferedInputStream(urlConnection.getInputStream());

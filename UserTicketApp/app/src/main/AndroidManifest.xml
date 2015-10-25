@@ -73,6 +73,10 @@
             android:name=".Controllers.CheckoutActivity"
             android:label="@string/title_activity_checkout" >
         </activity>
+        <activity
+            android:name=".Controllers.TicketsActivity"
+            android:label="@string/title_activity_tickets" >
+        </activity>
     </application>
 
 </manifest>

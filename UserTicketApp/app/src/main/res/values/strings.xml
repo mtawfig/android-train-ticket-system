@@ -81,4 +81,5 @@
     <string name="drawer_menu_title_buy_tickets">Buy Tickets</string>
     <string name="drawer_menu_title_sign_in">Sign In</string>
     <string name="drawer_menu_title_sign_out">Sign Out</string>
+    <string name="title_activity_tickets">My Tickets</string>
 </resources>

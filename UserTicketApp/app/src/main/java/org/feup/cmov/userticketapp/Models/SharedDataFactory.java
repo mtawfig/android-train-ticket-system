@@ -1,5 +1,8 @@
 package org.feup.cmov.userticketapp.Models;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,10 +13,14 @@ public class SharedDataFactory {
     @Getter private Station toStation;
     @Getter @Setter private Station selectedStation;
 
-    @Getter @Setter private String creditCardNumber = "1111111111111111";
+    @Getter @Setter private Date selectedDate;
+
+    @Getter @Setter private String creditCardNumber = "1111111111111110";
     @Getter @Setter private String creditCardMonth = "1";
     @Getter @Setter private String creditCardYear = "16";
     @Getter @Setter private String creditCardCode = "123";
+
+    @Getter @Setter private ArrayList<Integer> arraySeatNumber = new ArrayList<>();
 
     public static SharedDataFactory getInstance() {
         return ourInstance;

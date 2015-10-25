@@ -1,5 +1,6 @@
 package org.feup.cmov.userticketapp.Controllers;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.Itinerary;
 import org.feup.cmov.userticketapp.Models.SharedDataFactory;
@@ -67,9 +69,17 @@ public class ItineraryActivity extends AppCompatActivity {
         mAdapter = new ItineraryAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
+        final Context context = this;
+
         new GetItinerary(new GetItinerary.OnGetItineraryTaskCompleted() {
             @Override
             public void onTaskCompleted(Itinerary itinerary) {
+                if (itinerary == null) {
+                    Toast.makeText(context, "No connection to server. Please refresh later.", Toast.LENGTH_SHORT)
+                            .show();
+                    return;
+                }
+
                 mAdapter.setItinerary(itinerary);
 
                 TextView tripNameText = (TextView) findViewById(R.id.trip_name_text);

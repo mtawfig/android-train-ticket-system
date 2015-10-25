@@ -93,6 +93,10 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
 
     @Override
     public void onStationClickHandler(Station station) {
+        if (station == null) {
+            return;
+        }
+
         int index = mViewPager.getCurrentItem();
         SectionsPagerAdapter adapter = ((SectionsPagerAdapter)mViewPager.getAdapter());
         StationTextFragment fragment = adapter.getFragment(index);

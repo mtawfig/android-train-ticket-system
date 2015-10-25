@@ -1,17 +1,17 @@
 package org.feup.cmov.userticketapp.Controllers;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
-import org.feup.cmov.userticketapp.Models.Itinerary;
 import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.Models.Timetable;
 import org.feup.cmov.userticketapp.R;
-import org.feup.cmov.userticketapp.Services.GetItinerary;
 import org.feup.cmov.userticketapp.Services.GetTimetables;
 
 import java.util.ArrayList;
@@ -47,9 +47,16 @@ public class TimetableActivity extends AppCompatActivity {
         mAdapter = new TimetableAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
+        final Context context = this;
+
         new GetTimetables(new GetTimetables.OnGetTimetableTaskCompleted() {
             @Override
             public void onTaskCompleted(ArrayList<Timetable> timetables) {
+                if (timetables == null) {
+                    Toast.makeText(context, "No connection to server. Please refresh later.", Toast.LENGTH_SHORT)
+                            .show();
+                    return;
+                }
                 mAdapter.setTimetable(timetables);
             }
         }).execute(selectedStation);
