@@ -97,12 +97,12 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
         drawerMenu.findItem(R.id.sign_out_menu).setVisible(userSignIn);
 
         if (userSignIn) {
-            drawerImageView.setVisibility(View.VISIBLE);
+            drawerImageView.setImageResource(R.drawable.gravatar);
             drawerNameTextView.setText(SharedPreferencesFactory.getStringValueFromPreferences(getString(R.string.shared_preferences_user_name_key), sharedPreferences));
             drawerEmailTextView.setText(SharedPreferencesFactory.getStringValueFromPreferences(getString(R.string.shared_preferences_user_email_key), sharedPreferences));
         } else {
-            drawerImageView.setVisibility(View.GONE);
-            drawerNameTextView.setText(" ");
+            drawerImageView.setImageResource(R.mipmap.ic_launcher);
+            drawerNameTextView.setText(getString(R.string.app_name));
             drawerEmailTextView.setText(" ");
         }
     }
