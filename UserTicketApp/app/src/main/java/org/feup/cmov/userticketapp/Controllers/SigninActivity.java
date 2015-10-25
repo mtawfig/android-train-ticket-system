@@ -5,8 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,7 +21,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,7 +36,7 @@ import com.google.gson.Gson;
 import org.feup.cmov.userticketapp.Models.UserToken;
 import org.feup.cmov.userticketapp.R;
 import org.feup.cmov.userticketapp.Services.ApiService;
-import org.feup.cmov.userticketapp.Services.PostSignin;
+import org.feup.cmov.userticketapp.Models.SharedPreferencesFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -289,7 +290,6 @@ public class SigninActivity extends AppCompatActivity implements LoaderCallbacks
         };
 
         int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
 
 
@@ -310,10 +310,12 @@ public class SigninActivity extends AppCompatActivity implements LoaderCallbacks
 
         private final String mEmail;
         private final String mPassword;
+        private UserToken userToken;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
+            userToken = null;
         }
 
         @Override
@@ -323,17 +325,13 @@ public class SigninActivity extends AppCompatActivity implements LoaderCallbacks
             contentValues.put("email", mEmail);
             contentValues.put("password", mPassword);
 
-            Log.d("UserLoginTask", "Trying to connect");
-
             String response = ApiService.getHttpPostResponse("/login", contentValues);
             if (response == null) {
                 return false;
             }
 
             Gson gson = new Gson();
-            UserToken userToken = gson.fromJson(response, UserToken.class);
-
-            Log.d("UserToken", userToken.getToken());
+            userToken = gson.fromJson(response, UserToken.class);
 
             return true;
         }
@@ -344,6 +342,22 @@ public class SigninActivity extends AppCompatActivity implements LoaderCallbacks
             showProgress(false);
 
             if (success) {
+
+                if (userToken != null) {
+
+                    ContentValues contentValues = new ContentValues();
+
+                    contentValues.put(getString(R.string.shared_preferences_token_key), userToken.getToken());
+
+                    contentValues.put(getString(R.string.shared_preferences_user_id_key), userToken.getUser().getUserId());
+                    contentValues.put(getString(R.string.shared_preferences_user_email_key), userToken.getUser().getEmail());
+                    contentValues.put(getString(R.string.shared_preferences_user_name_key), userToken.getUser().getName());
+
+                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_identifier), Context.MODE_PRIVATE);
+                    SharedPreferencesFactory.setValuesToPreferences(contentValues,sharedPreferences);
+                    SharedPreferencesFactory.setBooleanValueToPreferences(getString(R.string.shared_preferences_user_sign_in), true, sharedPreferences);
+                }
+
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

@@ -2,18 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/buy_ticket" android:icon="@drawable/ic_ticket"
-        android:title="Buy Tickets" />
+        android:title="@string/drawer_menu_title_buy_tickets" />
     <item android:id="@+id/timetables" android:icon="@drawable/ic_timetable"
-        android:title="Timetables" />
+        android:title="@string/drawer_menu_title_timetables" />
     <item android:id="@+id/my_tickets" android:icon="@drawable/ic_tickets"
-        android:title="My Tickets" />
+        android:title="@string/drawer_menu_title_my_tickets" />
 
-    <item android:title="Account">
+    <item android:id="@+id/sign_in_menu" android:title="@string/drawer_menu_title_account">
         <menu>
             <item android:id="@+id/sign_in" android:icon="@drawable/ic_login"
-                android:title="Sign In" />
+                android:title="@string/drawer_menu_title_sign_in" />
+        </menu>
+    </item>
+    <item android:id="@+id/sign_out_menu" android:title="@string/drawer_menu_title_account">
+        <menu>
             <item android:id="@+id/sign_out" android:icon="@drawable/ic_logout"
-                android:title="Sign Out" />
+                android:title="@string/drawer_menu_title_sign_out" />
         </menu>
     </item>
 

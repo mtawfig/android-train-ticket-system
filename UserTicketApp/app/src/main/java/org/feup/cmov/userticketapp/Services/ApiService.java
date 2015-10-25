@@ -1,7 +1,6 @@
 package org.feup.cmov.userticketapp.Services;
 
 import android.content.ContentValues;
-import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -19,11 +18,13 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 public class ApiService {
+
     // private static String SERVER_ADDRESS = "http://10.62.201.202:8000";
     private static String SERVER_ADDRESS = "http://192.168.1.73:8000";
     //private static String SERVER_ADDRESS = "http://172.30.38.85:8000";
     // private static String SERVER_ADDRESS = "http://10.125.40.136:8000";
-    // private static String SERVER_ADDRESS = "http://172.30.44.210:8000";
+
+    private final static String CHARSET = "UTF-8";
 
     final static Gson gson = new Gson();
 
@@ -70,21 +71,21 @@ public class ApiService {
             urlConnection.setDoOutput(true);
             urlConnection.setDoInput(true);
             urlConnection.setRequestMethod("POST");
-            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setRequestProperty("Accept-Charset", CHARSET);
+            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + CHARSET);
             urlConnection.setUseCaches(false);
 
             try {
 
                 OutputStream os = urlConnection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, CHARSET));
                 writer.write(getData(data));
                 writer.flush();
                 writer.close();
                 os.close();
 
                 int responseCode = urlConnection.getResponseCode();
-                Log.d("Here", "Code: " + responseCode);
-                Log.d("Here", "Data: " + getData(data));
+
                 if (responseCode == 200) {
                     InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                     BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -94,15 +95,6 @@ public class ApiService {
                         sb.append(inputLine);
                     }
                     return sb.toString();
-                } else if (responseCode == 400) {
-                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                    StringBuilder sb = new StringBuilder();
-                    String inputLine;
-                    while ((inputLine = br.readLine()) != null) {
-                        sb.append(inputLine);
-                    }
-                    Log.d("Here", "Results: " + sb.toString());
                 }
             } catch (Exception e) {
                 return  null;
@@ -126,9 +118,9 @@ public class ApiService {
             else
                 result.append("&");
 
-            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+            result.append(URLEncoder.encode(entry.getKey(), CHARSET));
             result.append("=");
-            result.append(URLEncoder.encode(entry.getValue().toString(), "UTF-8"));
+            result.append(URLEncoder.encode(entry.getValue().toString(), CHARSET));
         }
 
         return result.toString();

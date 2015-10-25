@@ -9,12 +9,12 @@ public class UserToken {
 
     @Getter String token;
 
-    @Getter ArrayList<User> steps;
+    @Getter User user;
 
     public class User {
         @Getter int userId;
 
-        @Getter String line;
+        @Getter String email;
 
         @Getter String name;
     }
