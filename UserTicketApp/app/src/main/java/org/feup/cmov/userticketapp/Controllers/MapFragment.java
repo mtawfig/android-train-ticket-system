@@ -65,7 +65,7 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
 
     public void fetchAndDrawStations() {
         final Context context = getActivity();
-        new GetStations(new GetStations.OnGetStationsTaskCompleted() {
+        new GetStations(context, new GetStations.OnGetStationsTaskCompleted() {
             @Override
             public void onTaskCompleted(List<Station> stations) {
                 if (stations == null) {

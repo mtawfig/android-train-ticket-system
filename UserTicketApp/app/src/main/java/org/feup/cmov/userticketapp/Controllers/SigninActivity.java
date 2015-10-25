@@ -195,7 +195,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(this, email, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -315,11 +315,13 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
         private final String mEmail;
         private final String mPassword;
         private UserToken userToken;
+        private Context mContext;
 
-        UserLoginTask(String email, String password) {
+        public UserLoginTask(Context context, String email, String password) {
             mEmail = email;
             mPassword = password;
             userToken = null;
+            mContext = context;
         }
 
         @Override
@@ -329,7 +331,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
             contentValues.put("email", mEmail);
             contentValues.put("password", mPassword);
 
-            String response = ApiService.getHttpPostResponse("/login", contentValues);
+            String response = ApiService.getHttpPostResponse(mContext, "/login", contentValues);
             if (response == null) {
                 return false;
             }

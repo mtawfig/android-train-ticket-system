@@ -76,7 +76,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         final Context context = this;
 
-        new GetItinerary(new GetItinerary.OnGetItineraryTaskCompleted() {
+        new GetItinerary(this, new GetItinerary.OnGetItineraryTaskCompleted() {
             @Override
             public void onTaskCompleted(Itinerary itinerary) {
                 if (itinerary == null) {
@@ -111,7 +111,7 @@ public class CheckoutActivity extends AppCompatActivity {
         options.setArraySeatNumber(sharedData.getArraySeatNumber());
 
         final Context context = this;
-        new BuyTickets(new BuyTickets.OnBuyTicketsTaskCompleted() {
+        new BuyTickets(this, new BuyTickets.OnBuyTicketsTaskCompleted() {
 
             @Override
             public void onTaskCompleted(ArrayList<Ticket> tickets) {

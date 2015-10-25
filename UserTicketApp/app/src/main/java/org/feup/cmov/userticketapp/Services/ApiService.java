@@ -1,8 +1,15 @@
 package org.feup.cmov.userticketapp.Services;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.util.Log;
 
 import com.google.gson.Gson;
+
+import org.feup.cmov.userticketapp.Models.SharedPreferencesFactory;
+import org.feup.cmov.userticketapp.R;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -28,7 +35,7 @@ public class ApiService {
 
     final static Gson gson = new Gson();
 
-    public static String getHttpResponse(String endpoint) {
+    public static String getHttpResponse(Context context, String endpoint) {
         try {
             // TODO implement cache mechanism
 
@@ -40,30 +47,62 @@ public class ApiService {
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setUseCaches(false);
 
+            String token = getAuthorizationToken(context);
+            if (token != null) {
+                urlConnection.setRequestProperty ("Authorization", token);
+            }
+
             try {
                 int responseCode = urlConnection.getResponseCode();
                 // TODO HANDLE ERRORS
-                if(responseCode == 200) {
 
-                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                    StringBuilder sb = new StringBuilder();
-                    String inputLine;
-                    while ((inputLine = br.readLine()) != null) {
-                        sb.append(inputLine);
-                    }
-                    return sb.toString();
+                InputStream in;
+                if (responseCode == 200) {
+                    in = new BufferedInputStream(urlConnection.getInputStream());
+                } else {
+                    in = new BufferedInputStream(urlConnection.getErrorStream());
                 }
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                StringBuilder sb = new StringBuilder();
+                String inputLine;
+                while ((inputLine = br.readLine()) != null) {
+                    sb.append(inputLine);
+                }
+
+                if (responseCode != 200) {
+                    Log.e("Error", sb.toString());
+                    return null;
+                }
+
+                return sb.toString();
+
             } finally {
                 urlConnection.disconnect();
             }
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static String getAuthorizationToken(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                context.getString(R.string.shared_preferences_identifier),
+                Context.MODE_PRIVATE);
+
+        boolean isUserSignedIn = SharedPreferencesFactory.getBooleanValueFromPreferences(
+                context.getString(R.string.shared_preferences_user_sign_in),
+                sharedPreferences);
+
+        if (isUserSignedIn) {
+            return SharedPreferencesFactory.getStringValueFromPreferences(
+                    context.getString(R.string.shared_preferences_token_key),
+                    sharedPreferences);
+        }
         return null;
     }
 
-    public static String getHttpPostResponse(String endpoint, ContentValues data) {
+    public static String getHttpPostResponse(Context context, String endpoint, ContentValues data) {
         try {
             URL url = new URL(SERVER_ADDRESS + endpoint);
 
@@ -76,6 +115,11 @@ public class ApiService {
             urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + CHARSET);
             urlConnection.setUseCaches(false);
 
+            String token = getAuthorizationToken(context);
+            if (token != null) {
+                urlConnection.setRequestProperty ("Authorization", token);
+            }
+
             try {
 
                 OutputStream os = urlConnection.getOutputStream();
@@ -87,16 +131,27 @@ public class ApiService {
 
                 int responseCode = urlConnection.getResponseCode();
 
+                InputStream in;
                 if (responseCode == 200) {
-                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                    StringBuilder sb = new StringBuilder();
-                    String inputLine;
-                    while ((inputLine = br.readLine()) != null) {
-                        sb.append(inputLine);
-                    }
-                    return sb.toString();
+                    in = new BufferedInputStream(urlConnection.getInputStream());
+                } else {
+                    in = new BufferedInputStream(urlConnection.getErrorStream());
                 }
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                StringBuilder sb = new StringBuilder();
+                String inputLine;
+                while ((inputLine = br.readLine()) != null) {
+                    sb.append(inputLine);
+                }
+
+                if (responseCode != 200) {
+                    Log.e("Error", sb.toString());
+                    return null;
+                }
+
+                return sb.toString();
+
             } catch (Exception e) {
                 return  null;
             } finally {
@@ -105,7 +160,6 @@ public class ApiService {
         } catch (Exception e) {
             return null;
         }
-        return null;
     }
 
     private static String getData(ContentValues data) throws UnsupportedEncodingException {

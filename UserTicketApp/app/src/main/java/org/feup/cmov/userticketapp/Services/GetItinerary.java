@@ -1,5 +1,6 @@
 package org.feup.cmov.userticketapp.Services;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import org.feup.cmov.userticketapp.Models.Itinerary;
@@ -12,9 +13,11 @@ public class GetItinerary extends AsyncTask<Station, Void, Itinerary> {
     }
 
     private OnGetItineraryTaskCompleted listener;
+    private Context mContext;
 
-    public GetItinerary(OnGetItineraryTaskCompleted listener){
+    public GetItinerary(Context context, OnGetItineraryTaskCompleted listener){
         this.listener = listener;
+        mContext = context;
     }
 
     @Override
@@ -26,7 +29,7 @@ public class GetItinerary extends AsyncTask<Station, Void, Itinerary> {
         Station fromStation = stations[0];
         Station toStation = stations[1];
 
-        String response = ApiService.getHttpResponse("/stations/" +
+        String response = ApiService.getHttpResponse(mContext, "/stations/" +
                 fromStation.getStationId() + "/to/" + toStation.getStationId());
         if (response == null) {
             return null;

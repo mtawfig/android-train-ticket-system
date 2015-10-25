@@ -57,7 +57,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private UserRegisterTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -210,7 +210,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, name, password);
+            mAuthTask = new UserRegisterTask(this, email, name, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -329,18 +329,20 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mName;
         private final String mPassword;
         private UserToken userToken;
+        private Context mContext;
 
-        UserLoginTask(String email, String name, String password) {
+        public UserRegisterTask(Context context, String email, String name, String password) {
             mEmail = email;
             mName = name;
             mPassword = password;
             userToken = null;
+            mContext = context;
         }
 
         @Override
@@ -351,7 +353,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             contentValues.put("name", mName);
             contentValues.put("password", mPassword);
 
-            String response = ApiService.getHttpPostResponse("/register", contentValues);
+            String response = ApiService.getHttpPostResponse(mContext, "/register", contentValues);
             if (response == null) {
                 return false;
             }

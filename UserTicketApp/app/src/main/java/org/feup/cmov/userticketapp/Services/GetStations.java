@@ -1,5 +1,6 @@
 package org.feup.cmov.userticketapp.Services;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.gson.reflect.TypeToken;
@@ -17,16 +18,19 @@ public class GetStations extends AsyncTask<Void, Void, List<Station>> {
     }
 
     private OnGetStationsTaskCompleted listener;
+    private Context mContext;
+
     private static Type stationListType = new TypeToken<List<Station>>() {}.getType();
 
 
-    public GetStations(OnGetStationsTaskCompleted listener){
+    public GetStations(Context context, OnGetStationsTaskCompleted listener){
         this.listener = listener;
+        mContext = context;
     }
 
     @Override
     protected List<Station> doInBackground(Void... params) {
-        String response = ApiService.getHttpResponse("/stations");
+        String response = ApiService.getHttpResponse(mContext, "/stations");
         if (response == null) {
             return new ArrayList<>();
         }

@@ -1,5 +1,6 @@
 package org.feup.cmov.userticketapp.Services;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.gson.reflect.TypeToken;
@@ -20,9 +21,11 @@ public class GetTimetables extends AsyncTask<Station, Void, ArrayList<Timetable>
     }
 
     private OnGetTimetableTaskCompleted listener;
+    private Context mContext;
 
-    public GetTimetables(OnGetTimetableTaskCompleted listener){
+    public GetTimetables(Context context, OnGetTimetableTaskCompleted listener){
         this.listener = listener;
+        mContext = context;
     }
 
     @Override
@@ -33,7 +36,7 @@ public class GetTimetables extends AsyncTask<Station, Void, ArrayList<Timetable>
 
         Station selectedStation = stations[0];
 
-        String response = ApiService.getHttpResponse("/stations/" +
+        String response = ApiService.getHttpResponse(mContext, "/stations/" +
                 selectedStation.getStationId() + "/timetable");
         if (response == null) {
             return null;

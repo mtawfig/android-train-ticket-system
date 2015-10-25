@@ -71,7 +71,7 @@ public class ItineraryActivity extends AppCompatActivity {
 
         final Context context = this;
 
-        new GetItinerary(new GetItinerary.OnGetItineraryTaskCompleted() {
+        new GetItinerary(this, new GetItinerary.OnGetItineraryTaskCompleted() {
             @Override
             public void onTaskCompleted(Itinerary itinerary) {
                 if (itinerary == null) {

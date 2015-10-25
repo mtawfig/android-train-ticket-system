@@ -49,7 +49,7 @@ public class TimetableActivity extends AppCompatActivity {
 
         final Context context = this;
 
-        new GetTimetables(new GetTimetables.OnGetTimetableTaskCompleted() {
+        new GetTimetables(this, new GetTimetables.OnGetTimetableTaskCompleted() {
             @Override
             public void onTaskCompleted(ArrayList<Timetable> timetables) {
                 if (timetables == null) {

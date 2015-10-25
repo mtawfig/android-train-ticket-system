@@ -1,6 +1,7 @@
 package org.feup.cmov.userticketapp.Services;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.gson.reflect.TypeToken;
@@ -23,9 +24,11 @@ public class BuyTickets extends AsyncTask<BuyTicketOptions, Void, ArrayList<Tick
     }
 
     private OnBuyTicketsTaskCompleted listener;
+    private Context mContext;
 
-    public BuyTickets(OnBuyTicketsTaskCompleted listener){
+    public BuyTickets(Context context, OnBuyTicketsTaskCompleted listener){
         this.listener = listener;
+        mContext = context;
     }
 
     private static Type ticketListType = new TypeToken<List<Ticket>>() {}.getType();
@@ -63,7 +66,7 @@ public class BuyTickets extends AsyncTask<BuyTicketOptions, Void, ArrayList<Tick
             contentValues.put("arraySeatNumber", sb.toString());
         }
 
-        String response = ApiService.getHttpPostResponse("/tickets/" +
+        String response = ApiService.getHttpPostResponse(mContext, "/tickets/" +
                 options.getStartStation().getStationId() + "/to/" + options.getEndStation().getStationId(), contentValues);
 
         if (response == null) {
