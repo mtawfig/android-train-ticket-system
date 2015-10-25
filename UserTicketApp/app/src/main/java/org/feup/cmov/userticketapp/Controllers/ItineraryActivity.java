@@ -29,7 +29,7 @@ public class ItineraryActivity extends AppCompatActivity {
     private void setCanBuyTickets(Itinerary itinerary) {
         boolean isPossible = true;
         for(Itinerary.Step step : itinerary.getSteps()) {
-            if (step.getFreeSeats() == 0) {
+            if (step.getFreeSeats().size() == 0) {
                 isPossible = false;
                 break;
             }

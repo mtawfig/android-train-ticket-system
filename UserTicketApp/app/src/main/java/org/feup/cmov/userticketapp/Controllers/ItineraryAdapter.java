@@ -72,7 +72,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
             TextView lineNameText = (TextView) mView.findViewById(R.id.line_and_stops);
             lineNameText.setText(String.format(
                     lineNameText.getText().toString(),
-                    step.getLine(), step.getNumberOfStops(), step.getFreeSeats()));
+                    step.getLine(), step.getNumberOfStops(), step.getFreeSeats().size()));
 
             if (step.getWait() == null) {
                 View waitView = mView.findViewById(R.id.wait_layout);

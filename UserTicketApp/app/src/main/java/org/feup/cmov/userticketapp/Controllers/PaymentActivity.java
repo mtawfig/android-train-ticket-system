@@ -9,7 +9,11 @@ import android.view.View;
 import android.widget.EditText;
 
 import org.feup.cmov.userticketapp.Helpers.CreditCardNumberChangeListener;
+import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.R;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class PaymentActivity extends AppCompatActivity {
 
@@ -18,6 +22,7 @@ public class PaymentActivity extends AppCompatActivity {
     private EditText mCreditCardYearView;
     private EditText mCreditCardCodeView;
 
+    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,11 @@ public class PaymentActivity extends AppCompatActivity {
         mCreditCardMonthView = (EditText) findViewById(R.id.credit_card_month);
         mCreditCardYearView = (EditText) findViewById(R.id.credit_card_year);
         mCreditCardCodeView = (EditText) findViewById(R.id.credit_card_code);
+
+        mCreditCardNumberView.setText(sharedData.getCreditCardNumber());
+        mCreditCardMonthView.setText(sharedData.getCreditCardMonth());
+        mCreditCardYearView.setText(sharedData.getCreditCardYear());
+        mCreditCardCodeView.setText(sharedData.getCreditCardCode());
     }
 
     public void onProceedToCheckoutClickHandler(View view) {
@@ -90,15 +100,14 @@ public class PaymentActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            goToCheckout();
+            sharedData.setCreditCardNumber(cardNumber);
+            sharedData.setCreditCardMonth(cardMonth);
+            sharedData.setCreditCardYear(cardYear);
+            sharedData.setCreditCardCode(cardCode);
+
+            Intent intent = new Intent(getBaseContext(), CheckoutActivity.class);
+            startActivity(intent);
         }
-    }
-
-
-
-    private void goToCheckout() {
-        Intent intent = new Intent(getBaseContext(), CheckoutActivity.class);
-        startActivity(intent);
     }
 
     private boolean isCreditCardNumberValid(String creditCardNumber) {
@@ -107,12 +116,13 @@ public class PaymentActivity extends AppCompatActivity {
 
     private boolean isCreditCardMonthValid(String cardMonth) {
         Integer month = Integer.parseInt(cardMonth, 10);
-        return month > 1 && month <= 12;
+        return month >= 1 && month <= 12;
     }
 
     private boolean isCreditCardYearValid(String cardYear) {
-        Integer year = Integer.parseInt(cardYear, 10);
-        return year >= 0 && year <= 50;
+        Integer year = Integer.parseInt(cardYear, 10) + 2000;
+        Integer currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        return year >= currentYear;
     }
 
     private boolean isCreditCardCodeValid(String cardCode) {

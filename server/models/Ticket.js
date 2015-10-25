@@ -66,15 +66,23 @@ var getTrain = function(step) {
     .innerJoin('Train', 'trip.trainId', 'train.trainId')
 };
 
-Ticket.getNumberOfFreeSeats = function(step, date) {
-  var seatsTaken;
-  return getNumberOfSeatsTaken(step, date)
+Ticket.getFreeSeats = function(step, date) {
+  var arraySeatsTaken;
+  return getSeatsOfTrip(step, date)
     .then(function(result) {
-      seatsTaken = result;
+      arraySeatsTaken = result;
       return getTrain(step);
     })
     .then(function(train) {
-      return train.capacity - seatsTaken;
+      var freeSeats = [];
+
+      for(var seatNumber = 0; seatNumber < train.capacity; seatNumber++) {
+        if (!_.contains(arraySeatsTaken, seatNumber)) {
+          freeSeats.push(seatNumber);
+        }
+      }
+
+      return freeSeats;
     });
 };
 

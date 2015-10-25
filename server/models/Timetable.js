@@ -260,7 +260,7 @@ var buildItinerary = function(timetables, date) {
         delete step.endStationId;
       })
       .then(function() {
-        return Ticket.getNumberOfFreeSeats(step, moment(date).startOf('day').toDate());
+        return Ticket.getFreeSeats(step, moment(date).startOf('day').toDate());
       })
       .then(function(freeSeats) {
         step.freeSeats = freeSeats;

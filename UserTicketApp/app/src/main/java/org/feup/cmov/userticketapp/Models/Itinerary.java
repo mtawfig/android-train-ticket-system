@@ -37,6 +37,6 @@ public class Itinerary {
         @Getter Station startStation;
         @Getter Station endStation;
 
-        @Getter @Setter int freeSeats;
+        @Getter @Setter ArrayList<Integer> freeSeats;
     }
 }

@@ -82,9 +82,11 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
 
     @Override
     public void onStationClickHandler(Station station) {
-        sharedData.setSelectedStation(station);
-        Intent intent = new Intent(getBaseContext(), TimetableActivity.class);
-        startActivity(intent);
+        if (station != null) {
+            sharedData.setSelectedStation(station);
+            Intent intent = new Intent(getBaseContext(), TimetableActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
