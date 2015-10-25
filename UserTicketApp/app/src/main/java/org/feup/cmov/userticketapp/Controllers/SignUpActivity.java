@@ -34,10 +34,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.feup.cmov.userticketapp.Models.SharedPreferencesFactory;
 import org.feup.cmov.userticketapp.Models.UserToken;
 import org.feup.cmov.userticketapp.R;
 import org.feup.cmov.userticketapp.Services.ApiService;
-import org.feup.cmov.userticketapp.Models.SharedPreferencesFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class SignInActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -61,6 +61,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
 
     // UI references.
     private AutoCompleteTextView mEmailView;
+    private EditText mNameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -68,7 +69,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signin);
+        setContentView(R.layout.activity_signup);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,6 +80,8 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
+
+        mNameView = (EditText) findViewById(R.id.name);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -160,10 +163,12 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
 
         // Reset errors.
         mEmailView.setError(null);
+        mNameView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
+        String name = mNameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -187,6 +192,16 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
             cancel = true;
         }
 
+        if (TextUtils.isEmpty(name)) {
+            mNameView.setError(getString(R.string.error_field_required));
+            focusView = mNameView;
+            cancel = true;
+        } else if (!isNameValid(name)) {
+            mNameView.setError(getString(R.string.error_invalid_name));
+            focusView = mNameView;
+            cancel = true;
+        }
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -195,7 +210,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(email, name, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -210,6 +225,10 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
                 "                   +\"([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\\\.([0-1]?\"\n" +
                 "                   +\"[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|\"\n" +
                 "                   +\"([a-zA-Z]+[\\\\w-]+\\\\.)+[a-zA-Z]{2,4})$");*/
+    }
+
+    private boolean isNameValid(String name) {
+        return name.length() < 25;
     }
 
     private boolean isPasswordValid(String password) {
@@ -300,7 +319,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(SignInActivity.this,
+                new ArrayAdapter<>(SignUpActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
@@ -313,11 +332,13 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
+        private final String mName;
         private final String mPassword;
         private UserToken userToken;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String email, String name, String password) {
             mEmail = email;
+            mName = name;
             mPassword = password;
             userToken = null;
         }
@@ -327,9 +348,10 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
 
             ContentValues contentValues = new ContentValues();
             contentValues.put("email", mEmail);
+            contentValues.put("name", mName);
             contentValues.put("password", mPassword);
 
-            String response = ApiService.getHttpPostResponse("/login", contentValues);
+            String response = ApiService.getHttpPostResponse("/register", contentValues);
             if (response == null) {
                 return false;
             }
@@ -361,7 +383,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
                     SharedPreferencesFactory.setValuesToPreferences(contentValues, sharedPreferences);
                     SharedPreferencesFactory.setBooleanValueToPreferences(getString(R.string.shared_preferences_user_sign_in), true, sharedPreferences);
 
-                    Toast toast = Toast.makeText(getApplicationContext(), "Welcome back, " + userToken.getUser().getName() + ".", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), "Welcome, " + userToken.getUser().getName() + ".", Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
 

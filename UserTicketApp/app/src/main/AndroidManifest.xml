@@ -59,12 +59,19 @@
                 android:value=".Controllers.MainActivity" />
         </activity>
         <activity
-            android:name=".Controllers.SigninActivity"
+            android:name=".Controllers.SignInActivity"
             android:label="@string/title_activity_signin" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controllers.MainActivity" />
         </activity>
+        <activity
+            android:name=".Controllers.SignUpActivity"
+            android:label="@string/title_activity_signup" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.MainActivity" />
+    </activity>
         <activity
             android:name=".Controllers.PaymentActivity"
             android:label="@string/title_activity_credit_card" >
