@@ -30,6 +30,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -357,14 +358,27 @@ public class SigninActivity extends AppCompatActivity implements LoaderCallbacks
                     contentValues.put(getString(R.string.shared_preferences_user_name_key), userToken.getUser().getName());
 
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_identifier), Context.MODE_PRIVATE);
-                    SharedPreferencesFactory.setValuesToPreferences(contentValues,sharedPreferences);
+                    SharedPreferencesFactory.setValuesToPreferences(contentValues, sharedPreferences);
                     SharedPreferencesFactory.setBooleanValueToPreferences(getString(R.string.shared_preferences_user_sign_in), true, sharedPreferences);
+
+                    Toast toast = Toast.makeText(getApplicationContext(), "Welcome back, " + userToken.getUser().getName() + ".", Toast.LENGTH_SHORT);
+                    toast.show();
+                } else {
+
+                    //TODO: Add more information
+                    Toast toast = Toast.makeText(getApplicationContext(), "Something went wrong. Please try again later.", Toast.LENGTH_SHORT);
+                    toast.show();
                 }
 
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+
+                //TODO: Add more information
+                Toast toast = Toast.makeText(getApplicationContext(), "No connection to server. Please try again later.", Toast.LENGTH_SHORT);
+                toast.show();
+
+                /*mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.requestFocus();*/
             }
         }
 
