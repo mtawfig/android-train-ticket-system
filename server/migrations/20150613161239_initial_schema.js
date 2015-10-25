@@ -54,6 +54,10 @@ exports.up = function (knex) {
       table.integer('fromTripStepNumber');
       table.integer('toTripStepNumber');
       table.integer('seatNumber');
+      table.integer('hoursStart');
+      table.integer('minutesStart');
+      table.integer('hoursEnd');
+      table.integer('minutesEnd');
       table.boolean('used').defaultTo('false');
     })
 };

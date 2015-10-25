@@ -140,7 +140,7 @@ Ticket.createTickets = function(user, itinerary, arraySeatNumber) {
 
         var ticket = {
           userId: user.userId,
-          date: itinerary.date,
+          date: itinerary.date.getTime(),
           purchaseTime: new Date().getTime(),
           fromStationId: step.startStation.stationId,
           toStationId: step.endStation.stationId,
@@ -149,7 +149,11 @@ Ticket.createTickets = function(user, itinerary, arraySeatNumber) {
           fromTripStepNumber: step.fromTripStepNumber,
           toTripStepNumber: step.toTripStepNumber,
           seatNumber: selectedSeatNumber,
-          used: false
+          used: false,
+          hoursStart: itinerary.hoursStart,
+          minutesStart: itinerary.minutesStart,
+          hoursEnd: itinerary.hoursEnd,
+          minutesEnd: itinerary.minutesEnd
         };
 
         var buffer = JSON.stringify(ticket);
@@ -174,6 +178,7 @@ Ticket.getTickets = function(user) {
   return Ticket.query()
     .eager('[fromStation, toStation]')
     .where('userId', user.userId)
+    .orderByRaw('date DESC, hoursStart DESC, minutesStart DESC')
     .then(function(tickets) {
       tickets.forEach(function(ticket) {
         ticket.used = ticket.used !== 0;

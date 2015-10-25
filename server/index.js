@@ -19,6 +19,9 @@ var Model = require('objection').Model;
 var knex = Knex(knexConfig.development);
 Model.knex(knex);
 
+var objection = require('objection');
+objection.QueryBuilder.prototype.orderByRaw = objection.QueryBuilder.knexQueryMethod('orderByRaw');
+
 server.register(AuthJWT, function (err) {
 
   if(err){

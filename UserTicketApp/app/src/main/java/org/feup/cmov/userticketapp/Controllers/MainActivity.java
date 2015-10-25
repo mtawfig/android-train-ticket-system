@@ -174,6 +174,9 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
 
         } else if (id == R.id.my_tickets) {
 
+            Intent intent = new Intent(getBaseContext(), TicketsActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.sign_in) {
 
             Intent intent = new Intent(getBaseContext(), SignInActivity.class);
