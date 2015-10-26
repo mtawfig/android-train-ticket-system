@@ -71,7 +71,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controllers.MainActivity" />
-    </activity>
+        </activity>
         <activity
             android:name=".Controllers.PaymentActivity"
             android:label="@string/title_activity_credit_card" >
@@ -83,6 +83,10 @@
         <activity
             android:name=".Controllers.TicketsActivity"
             android:label="@string/title_activity_tickets" >
+        </activity>
+        <activity
+            android:name=".Controllers.TicketActivity"
+            android:label="@string/title_activity_ticket" >
         </activity>
     </application>
 

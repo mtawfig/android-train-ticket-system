@@ -1,6 +1,7 @@
 package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Ticket;
 import org.feup.cmov.userticketapp.R;
 
@@ -42,14 +44,20 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.TicketsV
         }
     }
 
-    public static class VHItem extends TicketsViewHolder {
+    public static class VHItem extends TicketsViewHolder implements View.OnClickListener {
+        private static SharedDataFactory sharedData = SharedDataFactory.getInstance();
+        private Ticket mTicket;
+
         public VHItem(View v) {
             super(v);
             v.findViewById(R.id.seat_select_layout).setVisibility(View.GONE);
+            v.setOnClickListener(this);
         }
 
         @Override
         public void bindView(Ticket ticket) {
+            mTicket = ticket;
+
             TextView ticketTitleText = (TextView) mView.findViewById(R.id.ticket_title);
             ticketTitleText.setText(String.format(
                     ticketTitleText.getText().toString(),
@@ -63,6 +71,13 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.TicketsV
             ticketDateText.setText(String.format(
                     ticketDateText.getText().toString(),
                     date, ticket.getHoursStart(), ticket.getMinutesStart()));
+        }
+
+        @Override
+        public void onClick(View v) {
+            sharedData.setSelectedTicket(mTicket);
+            Intent intent = new Intent(mContext, TicketActivity.class);
+            mContext.startActivity(intent);
         }
     }
 

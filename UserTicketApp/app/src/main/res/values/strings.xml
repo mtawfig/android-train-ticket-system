@@ -86,4 +86,7 @@
     <string name="drawer_menu_title_sign_in">Sign In</string>
     <string name="drawer_menu_title_sign_out">Sign Out</string>
     <string name="drawer_menu_title_sign_up">Sign Up</string>
+
+    <string name="title_activity_ticket">Ticket Details</string>
+    <string name="seat_number_text">Seat number %1$d</string>
 </resources>

@@ -20,6 +20,8 @@ public class SharedDataFactory {
     @Getter @Setter private String creditCardYear = "16";
     @Getter @Setter private String creditCardCode = "123";
 
+    @Getter @Setter private Ticket selectedTicket;
+
     @Getter @Setter private ArrayList<Integer> arraySeatNumber = new ArrayList<>();
 
     public static SharedDataFactory getInstance() {
