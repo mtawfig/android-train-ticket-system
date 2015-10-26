@@ -53,6 +53,46 @@ module.exports = function(server) {
 
   server.route({
     method: 'POST',
+    path: '/inspector/login',
+    config: {
+      auth: false,
+      validate: {
+        payload: {
+          email: schema.user.email.required(),
+          password: schema.user.password.required()
+        }
+      }
+    },
+    handler: function(request, reply) {
+      User.query()
+        .where('email', request.payload.email)
+        .andWhere('role', 'inspector')
+        .first()
+        .then(function(user) {
+          if (user && bcrypt.compareSync(request.payload.password, user.password)) {
+            var credentials = {
+              iat: new Date().getTime(),
+              user: user
+            };
+
+            var token = JWT.sign(credentials, nconf.get('privateKey'));
+
+            reply({
+              token: token,
+              user: _.omit(user, ['password', 'role'])
+            });
+
+          }
+          else {
+            reply(Boom.badRequest('Bad user or password'));
+          }
+        })
+    }
+  });
+
+
+  server.route({
+    method: 'POST',
     path: '/register',
     config: {
       auth: false,

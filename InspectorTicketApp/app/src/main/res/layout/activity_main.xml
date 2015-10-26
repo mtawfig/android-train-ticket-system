@@ -2,24 +2,123 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
-        android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/toolbar_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
-            android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:id="@+id/showevents"
+                android:textSize="12sp"
+                android:background="@null"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:textColor="#FFF"
+                android:text="@string/log_out"
+                android:onClick="onLogOutClickHandler"/>
+
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
 
-    <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:background="@android:color/transparent"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:text="Welcome to the inspector menu"
+                android:id="@+id/section_text"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/button_download_tickets"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Download ticket data"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:onClick="onGetMeSomeWhereButtonClick" />
+
+            <Button
+            android:id="@+id/button_upload_tickets"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Upload Stored tickets"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:onClick="onGetMeSomeWhereButtonClick" />
+
+            <Button
+                android:id="@+id/button_validate_ticket_qr"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Validate a ticket (QR Code)"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:onClick="onGetMeSomeWhereButtonClick" />
+
+            <Button
+                android:id="@+id/button_validate_ticket_nfc"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Validate a ticket (NFC)"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:onClick="onGetMeSomeWhereButtonClick" />
+
+            <Button
+                android:id="@+id/button_ticket_stats"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="See ticket statistics"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:onClick="onGetMeSomeWhereButtonClick" />
+
+        </LinearLayout>
+
+
+
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>
