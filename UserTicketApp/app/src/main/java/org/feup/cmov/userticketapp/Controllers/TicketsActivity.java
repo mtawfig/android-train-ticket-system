@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.Itinerary;
 import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
@@ -52,13 +53,13 @@ public class TicketsActivity extends AppCompatActivity {
         new GetTickets(this, new GetTickets.OnGetTicketsTaskCompleted() {
             @Override
             public void onTaskCompleted(List<Ticket> tickets) {
-                if (tickets == null) {
-                    Toast.makeText(context, "No connection to server. Please refresh later.", Toast.LENGTH_SHORT)
-                            .show();
-                    return;
-                }
-
                 mAdapter.setTickets(tickets);
+            }
+
+            @Override
+            public void onTaskError(ErrorResponse error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
+                        .show();
             }
         }).execute();
     }

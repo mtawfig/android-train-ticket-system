@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.ui.IconGenerator;
 
+import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.Services.GetStations;
@@ -68,12 +69,13 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
         new GetStations(context, new GetStations.OnGetStationsTaskCompleted() {
             @Override
             public void onTaskCompleted(List<Station> stations) {
-                if (stations == null) {
-                    Toast.makeText(context, "No connection to server. Please refresh later.", Toast.LENGTH_SHORT)
-                            .show();
-                    return;
-                }
                 drawStations(stations);
+            }
+
+            @Override
+            public void onTaskError(ErrorResponse error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
+                        .show();
             }
         }).execute();
     }

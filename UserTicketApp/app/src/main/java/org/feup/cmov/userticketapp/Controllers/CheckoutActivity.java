@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Helpers.DividerItemDecoration;
 import org.feup.cmov.userticketapp.Models.BuyTicketOptions;
+import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.Itinerary;
 import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
@@ -79,12 +80,6 @@ public class CheckoutActivity extends AppCompatActivity {
         new GetItinerary(this, new GetItinerary.OnGetItineraryTaskCompleted() {
             @Override
             public void onTaskCompleted(Itinerary itinerary) {
-                if (itinerary == null) {
-                    Toast.makeText(context, "No connection to server. Please refresh later.", Toast.LENGTH_SHORT)
-                            .show();
-                    return;
-                }
-
                 mAdapter.setItinerary(itinerary);
 
                 TextView tripCostText = (TextView) findViewById(R.id.tickets_cost_text);
@@ -93,6 +88,12 @@ public class CheckoutActivity extends AppCompatActivity {
                         itinerary.getCost() / 100, itinerary.getCost() % 100));
 
                 setCanBuyTickets(itinerary);
+            }
+
+            @Override
+            public void onTaskError(ErrorResponse error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
+                        .show();
             }
         }).execute(fromStation, toStation);
 
@@ -126,6 +127,12 @@ public class CheckoutActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(getBaseContext(), TicketsActivity.class);
                 startActivity(intent);
+            }
+
+            @Override
+            public void onTaskError(ErrorResponse error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
+                        .show();
             }
         }).execute(options);
     }

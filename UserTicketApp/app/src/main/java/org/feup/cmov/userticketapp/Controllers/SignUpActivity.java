@@ -34,10 +34,12 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.SharedPreferencesFactory;
 import org.feup.cmov.userticketapp.Models.UserToken;
 import org.feup.cmov.userticketapp.R;
 import org.feup.cmov.userticketapp.Services.ApiService;
+import org.feup.cmov.userticketapp.Services.UserRegister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +59,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserRegisterTask mAuthTask = null;
+    private UserRegister mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -210,8 +212,8 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserRegisterTask(this, email, name, password);
-            mAuthTask.execute((Void) null);
+            mAuthTask = new UserRegister(this, new UserRegisterTaskListener(), email, name, password);
+            mAuthTask.execute();
         }
     }
 
@@ -325,89 +327,42 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
         mEmailView.setAdapter(adapter);
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mName;
-        private final String mPassword;
-        private UserToken userToken;
-        private Context mContext;
-
-        public UserRegisterTask(Context context, String email, String name, String password) {
-            mEmail = email;
-            mName = name;
-            mPassword = password;
-            userToken = null;
-            mContext = context;
-        }
+    private class UserRegisterTaskListener implements UserRegister.OnUserLoginTaskCompleted {
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("email", mEmail);
-            contentValues.put("name", mName);
-            contentValues.put("password", mPassword);
-
-            String response = ApiService.getHttpPostResponse(mContext, "/register", contentValues);
-            if (response == null) {
-                return false;
-            }
-
-            Gson gson = new Gson();
-            userToken = gson.fromJson(response, UserToken.class);
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
+        public void onTaskCompleted(UserToken userToken) {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
+            ContentValues contentValues = new ContentValues();
 
-                if (userToken != null) {
+            contentValues.put(getString(R.string.shared_preferences_token_key), userToken.getToken());
 
-                    ContentValues contentValues = new ContentValues();
+            contentValues.put(getString(R.string.shared_preferences_user_id_key), userToken.getUser().getUserId());
+            contentValues.put(getString(R.string.shared_preferences_user_email_key), userToken.getUser().getEmail());
+            contentValues.put(getString(R.string.shared_preferences_user_name_key), userToken.getUser().getName());
 
-                    contentValues.put(getString(R.string.shared_preferences_token_key), userToken.getToken());
+            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_identifier), Context.MODE_PRIVATE);
+            SharedPreferencesFactory.setValuesToPreferences(contentValues, sharedPreferences);
+            SharedPreferencesFactory.setBooleanValueToPreferences(getString(R.string.shared_preferences_user_sign_in), true, sharedPreferences);
 
-                    contentValues.put(getString(R.string.shared_preferences_user_id_key), userToken.getUser().getUserId());
-                    contentValues.put(getString(R.string.shared_preferences_user_email_key), userToken.getUser().getEmail());
-                    contentValues.put(getString(R.string.shared_preferences_user_name_key), userToken.getUser().getName());
+            Toast toast = Toast.makeText(getApplicationContext(), "Welcome, " + userToken.getUser().getName() + ".", Toast.LENGTH_SHORT);
+            toast.show();
 
-                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_identifier), Context.MODE_PRIVATE);
-                    SharedPreferencesFactory.setValuesToPreferences(contentValues, sharedPreferences);
-                    SharedPreferencesFactory.setBooleanValueToPreferences(getString(R.string.shared_preferences_user_sign_in), true, sharedPreferences);
-
-                    Toast toast = Toast.makeText(getApplicationContext(), "Welcome, " + userToken.getUser().getName() + ".", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else {
-
-                    //TODO: Add more information
-                    Toast toast = Toast.makeText(getApplicationContext(), "Something went wrong. Please try again later.", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-
-                finish();
-            } else {
-
-                //TODO: Add more information
-                Toast toast = Toast.makeText(getApplicationContext(), "No connection to server. Please try again later.", Toast.LENGTH_SHORT);
-                toast.show();
-
-                /*mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();*/
-            }
+            finish();
         }
 
         @Override
-        protected void onCancelled() {
+        public void onTaskError(ErrorResponse error) {
+            mAuthTask = null;
+            showProgress(false);
+
+            Toast toast = Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+        @Override
+        public void onTaskCanceled() {
             mAuthTask = null;
             showProgress(false);
         }

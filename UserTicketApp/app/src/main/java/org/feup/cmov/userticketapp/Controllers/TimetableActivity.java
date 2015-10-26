@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.SharedDataFactory;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.Models.Timetable;
@@ -52,12 +53,13 @@ public class TimetableActivity extends AppCompatActivity {
         new GetTimetables(this, new GetTimetables.OnGetTimetableTaskCompleted() {
             @Override
             public void onTaskCompleted(ArrayList<Timetable> timetables) {
-                if (timetables == null) {
-                    Toast.makeText(context, "No connection to server. Please refresh later.", Toast.LENGTH_SHORT)
-                            .show();
-                    return;
-                }
                 mAdapter.setTimetable(timetables);
+            }
+
+            @Override
+            public void onTaskError(ErrorResponse error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
+                        .show();
             }
         }).execute(selectedStation);
     }

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import org.feup.cmov.userticketapp.Models.HttpResponse;
 import org.feup.cmov.userticketapp.Models.SharedPreferencesFactory;
 import org.feup.cmov.userticketapp.R;
 
@@ -24,6 +25,10 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 public class ApiService {
 
     // private static String SERVER_ADDRESS = "http://localhost:8000";
@@ -35,7 +40,9 @@ public class ApiService {
 
     final static Gson gson = new Gson();
 
-    public static String getHttpResponse(Context context, String endpoint) {
+    final static String noConnectionErrorJson = "{\"statusCode\": 204, \"error\": \"No connection\", \"message\": \"No connection to the server. Please try again later\"}";
+
+    public static HttpResponse getHttpResponse(Context context, String endpoint) {
         try {
             // TODO implement cache mechanism
 
@@ -54,7 +61,6 @@ public class ApiService {
 
             try {
                 int responseCode = urlConnection.getResponseCode();
-                // TODO HANDLE ERRORS
 
                 InputStream in;
                 if (responseCode == 200) {
@@ -71,17 +77,16 @@ public class ApiService {
                 }
 
                 if (responseCode != 200) {
-                    Log.e("Error", sb.toString());
-                    return null;
+                    return new HttpResponse(true, sb.toString());
                 }
 
-                return sb.toString();
-
-            } finally {
+                return new HttpResponse(false, sb.toString());
+            }
+            finally {
                 urlConnection.disconnect();
             }
         } catch (Exception e) {
-            return null;
+            return new HttpResponse(true, noConnectionErrorJson);
         }
     }
 
@@ -102,7 +107,7 @@ public class ApiService {
         return null;
     }
 
-    public static String getHttpPostResponse(Context context, String endpoint, ContentValues data) {
+    public static HttpResponse getHttpPostResponse(Context context, String endpoint, ContentValues data) {
         try {
             URL url = new URL(SERVER_ADDRESS + endpoint);
 
@@ -121,7 +126,6 @@ public class ApiService {
             }
 
             try {
-
                 OutputStream os = urlConnection.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, CHARSET));
                 writer.write(getData(data));
@@ -146,19 +150,16 @@ public class ApiService {
                 }
 
                 if (responseCode != 200) {
-                    Log.e("Error", sb.toString());
-                    return null;
+                    return new HttpResponse(true, sb.toString());
                 }
 
-                return sb.toString();
-
-            } catch (Exception e) {
-                return  null;
-            } finally {
+                return new HttpResponse(false, sb.toString());
+            }
+            finally {
                 urlConnection.disconnect();
             }
         } catch (Exception e) {
-            return null;
+            return new HttpResponse(true, noConnectionErrorJson);
         }
     }
 

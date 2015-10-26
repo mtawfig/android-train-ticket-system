@@ -5,16 +5,19 @@ import android.os.AsyncTask;
 
 import com.google.gson.reflect.TypeToken;
 
+import org.feup.cmov.userticketapp.Models.ErrorResponse;
+import org.feup.cmov.userticketapp.Models.HttpResponse;
 import org.feup.cmov.userticketapp.Models.Station;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetStations extends AsyncTask<Void, Void, List<Station>> {
+public class GetStations extends AsyncTask<Void, Void, HttpResponse> {
 
     public interface OnGetStationsTaskCompleted {
         void onTaskCompleted(List<Station> stations);
+        void onTaskError(ErrorResponse error);
     }
 
     private OnGetStationsTaskCompleted listener;
@@ -29,16 +32,18 @@ public class GetStations extends AsyncTask<Void, Void, List<Station>> {
     }
 
     @Override
-    protected List<Station> doInBackground(Void... params) {
-        String response = ApiService.getHttpResponse(mContext, "/stations");
-        if (response == null) {
-            return new ArrayList<>();
-        }
-        return ApiService.gson.fromJson(response, stationListType);
+    protected HttpResponse doInBackground(Void... params) {
+        return ApiService.getHttpResponse(mContext, "/stations");
     }
 
     @Override
-    protected void onPostExecute(List<Station> stations){
-        listener.onTaskCompleted(stations);
+    protected void onPostExecute(HttpResponse response){
+        if (response.isError()) {
+            ErrorResponse error = ApiService.gson.fromJson(response.getContent(), ErrorResponse.class);
+            listener.onTaskError(error);
+        } else {
+            ArrayList<Station> stations = ApiService.gson.fromJson(response.getContent(), stationListType);
+            listener.onTaskCompleted(stations);
+        }
     }
 }
