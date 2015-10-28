@@ -30,6 +30,8 @@ public class TicketActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mTicket = sharedData.getSelectedTicket();
 
         TextView ticketTitleText = (TextView) findViewById(R.id.ticket_title);
