@@ -83,10 +83,16 @@
         <activity
             android:name=".Controllers.TicketsActivity"
             android:label="@string/title_activity_tickets" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.MainActivity" />
         </activity>
         <activity
             android:name=".Controllers.TicketActivity"
             android:label="@string/title_activity_ticket" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.TicketsActivity" />
         </activity>
     </application>
 
