@@ -172,6 +172,9 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
             // Handle the camera action
         } else if (id == R.id.timetables) {
 
+            Toast toast = Toast.makeText(getApplicationContext(), "Select the desired station to be provided a timetable", Toast.LENGTH_SHORT);
+            toast.show();
+
         } else if (id == R.id.my_tickets) {
 
             Intent intent = new Intent(getBaseContext(), TicketsActivity.class);
