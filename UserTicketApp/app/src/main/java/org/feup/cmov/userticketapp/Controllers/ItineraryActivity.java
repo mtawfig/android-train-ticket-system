@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.Itinerary;
-import org.feup.cmov.userticketapp.Models.SharedDataFactory;
+import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
 import org.feup.cmov.userticketapp.Services.GetItinerary;
@@ -25,7 +25,7 @@ public class ItineraryActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ItineraryAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
+    private SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
     private boolean canBuyTickets = false;
     private Button buyTicketsButton;
 

@@ -27,4 +27,15 @@
     <string name="shared_preferences_user_email_key">UserEmailKey</string>
     <string name="shared_preferences_user_name_key">UserNameKey</string>
     <string name="log_out">Log out</string>
+    <string name="welcome_inspector">Welcome to the inspector menu</string>
+    <string name="download_tickets">Download ticket data</string>
+    <string name="upload_tickets">Upload Stored tickets</string>
+    <string name="validate_ticket_qr">Validate a ticket (QR Code)</string>
+    <string name="validate_ticket_nfc">Validate a ticket (NFC)</string>
+    <string name="see_ticket_stats">See ticket statistics</string>
+    <string name="title_activity_scanned_ticket">Scanned Ticket</string>
+
+    <string name="ticket_title_text">%1$s to %2$s</string>
+    <string name="ticket_date_hours">%1$s, %2$02dh%3$02d</string>
+    <string name="seat_number_text">Seat number %1$d</string>
 </resources>

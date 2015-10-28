@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.feup.cmov.userticketapp.Models.SharedDataFactory;
+import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
 import org.feup.cmov.userticketapp.Models.SharedPreferencesFactory;
@@ -26,7 +26,7 @@ import org.feup.cmov.userticketapp.Models.SharedPreferencesFactory;
 public class MainActivity extends AppCompatActivity implements MapFragment.StationsMapListener, NavigationView.OnNavigationItemSelectedListener {
 
     private SwipeRefreshLayout swipeContainer;
-    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
+    private SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener;

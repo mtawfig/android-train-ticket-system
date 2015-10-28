@@ -6,8 +6,8 @@ import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 
-public class SharedDataFactory {
-    private static SharedDataFactory ourInstance = new SharedDataFactory();
+public class SharedDataSingleton {
+    private static SharedDataSingleton ourInstance = new SharedDataSingleton();
 
     @Getter private Station fromStation;
     @Getter private Station toStation;
@@ -24,11 +24,11 @@ public class SharedDataFactory {
 
     @Getter @Setter private ArrayList<Integer> arraySeatNumber = new ArrayList<>();
 
-    public static SharedDataFactory getInstance() {
+    public static SharedDataSingleton getInstance() {
         return ourInstance;
     }
 
-    private SharedDataFactory() {}
+    private SharedDataSingleton() {}
 
     public boolean setFromStation(Station station) {
         if (station != null && station != toStation && station != fromStation) {

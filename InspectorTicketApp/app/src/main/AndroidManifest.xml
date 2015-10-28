@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.feup.cmov.inspectorticketapp" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -27,6 +27,14 @@
         <activity
             android:name=".Controllers.SignInActivity"
             android:label="@string/title_activity_signin" >
+        </activity>
+        <activity
+            android:name=".Controllers.TicketQRScannerActivity"
+            android:label="@string/title_activity_signin" >
+        </activity>
+        <activity
+            android:name=".Controllers.ScannedTicketActivity"
+            android:label="@string/title_activity_scanned_ticket" >
         </activity>
     </application>
 

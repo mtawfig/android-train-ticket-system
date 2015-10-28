@@ -12,7 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.feup.cmov.userticketapp.Models.Itinerary;
-import org.feup.cmov.userticketapp.Models.SharedDataFactory;
+import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.R;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.CheckoutViewHolder> {
     private static Itinerary mItinerary;
     private static Context mContext;
-    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
+    private SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
@@ -48,7 +48,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
     }
 
     public static class VHItem extends CheckoutViewHolder {
-        private SharedDataFactory sharedData = SharedDataFactory.getInstance();
+        private SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
 
         public VHItem(View v) {
             super(v);

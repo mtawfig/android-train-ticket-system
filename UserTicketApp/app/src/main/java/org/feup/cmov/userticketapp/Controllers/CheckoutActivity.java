@@ -3,37 +3,32 @@ package org.feup.cmov.userticketapp.Controllers;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.feup.cmov.userticketapp.Helpers.DividerItemDecoration;
 import org.feup.cmov.userticketapp.Models.BuyTicketOptions;
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.Itinerary;
-import org.feup.cmov.userticketapp.Models.SharedDataFactory;
+import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.Models.Ticket;
 import org.feup.cmov.userticketapp.R;
 import org.feup.cmov.userticketapp.Services.BuyTickets;
 import org.feup.cmov.userticketapp.Services.GetItinerary;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class CheckoutActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private CheckoutAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
+    private SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
 
     private boolean canBuyTickets = false;
     private Button buyTicketsButton;

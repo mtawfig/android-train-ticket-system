@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
-import org.feup.cmov.userticketapp.Models.SharedDataFactory;
+import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.Models.Timetable;
 import org.feup.cmov.userticketapp.R;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class TimetableActivity extends AppCompatActivity {
 
-    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
+    private SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
     private RecyclerView mRecyclerView;
     private TimetableAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
