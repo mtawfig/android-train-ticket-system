@@ -2,22 +2,15 @@ package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
-import org.feup.cmov.userticketapp.Models.Itinerary;
-import org.feup.cmov.userticketapp.Models.SharedDataFactory;
-import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.Models.Ticket;
 import org.feup.cmov.userticketapp.R;
-import org.feup.cmov.userticketapp.Services.GetItinerary;
 import org.feup.cmov.userticketapp.Services.GetTickets;
 
 import java.util.List;

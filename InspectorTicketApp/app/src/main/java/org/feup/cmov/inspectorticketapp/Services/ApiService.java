@@ -3,6 +3,8 @@ package org.feup.cmov.inspectorticketapp.Services;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import com.google.gson.Gson;
 
@@ -27,14 +29,16 @@ public class ApiService {
 
     // private static String SERVER_ADDRESS = "http://localhost:8000";
     private static String SERVER_ADDRESS = "http://192.168.1.73:8000";
-    //private static String SERVER_ADDRESS = "http://172.30.38.85:8000";
+    // private static String SERVER_ADDRESS = "http://172.30.55.237:8000";
     // private static String SERVER_ADDRESS = "http://10.125.40.136:8000";
 
     private final static String CHARSET = "UTF-8";
 
     final static Gson gson = new Gson();
 
-    final static String noConnectionErrorJson = "{\"statusCode\": 204, \"error\": \"No connection\", \"message\": \"No connection to the server. Please try again later\"}";
+    static String getErrorJson(String message) {
+        return "{\"statusCode\": 204, \"error\": \"No connection\", \"message\": \"" + message + "\"}";
+    }
 
     public static HttpResponse getHttpResponse(Context context, String endpoint) {
         try {
@@ -80,7 +84,7 @@ public class ApiService {
                 urlConnection.disconnect();
             }
         } catch (Exception e) {
-            return new HttpResponse(true, noConnectionErrorJson);
+            return new HttpResponse(true, getErrorJson(e.getMessage()));
         }
     }
 
@@ -160,7 +164,7 @@ public class ApiService {
                 urlConnection.disconnect();
             }
         } catch (Exception e) {
-            return new HttpResponse(true, noConnectionErrorJson);
+            return new HttpResponse(true, getErrorJson(e.getMessage()));
         }
     }
 

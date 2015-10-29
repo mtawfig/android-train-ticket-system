@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.feup.cmov.userticketapp.Models.SharedDataFactory;
+import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.Models.Ticket;
 import org.feup.cmov.userticketapp.R;
 
@@ -45,7 +45,7 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.TicketsV
     }
 
     public static class VHItem extends TicketsViewHolder implements View.OnClickListener {
-        private static SharedDataFactory sharedData = SharedDataFactory.getInstance();
+        private static SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
         private Ticket mTicket;
 
         public VHItem(View v) {

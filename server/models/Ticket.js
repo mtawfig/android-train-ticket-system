@@ -44,6 +44,14 @@ Ticket.relationMappings = {
       from: 'Ticket.toStationId',
       to: 'Station.stationId'
     }
+  },
+  user: {
+    relation: Model.OneToOneRelation,
+    modelClass: __dirname + '/User',
+    join: {
+      from: 'Ticket.userId',
+      to: 'User.userId'
+    }
   }
 };
 
@@ -189,10 +197,11 @@ Ticket.getTickets = function(user) {
 
 Ticket.getAllTickets = function() {
   return Ticket.query()
-    .eager('[fromStation, toStation]')
+    .eager('[fromStation, toStation, user]')
     .then(function(tickets) {
       tickets.forEach(function(ticket) {
         ticket.used = ticket.used !== 0;
+        delete ticket.user.password;
       });
       return tickets;
     });

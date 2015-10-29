@@ -20,7 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.feup.cmov.userticketapp.Models.SharedDataFactory;
+import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
 
@@ -34,7 +34,7 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
     private Button calculateRouteButton;
     private Boolean hasSelectedFromStation = false;
 
-    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
+    private SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

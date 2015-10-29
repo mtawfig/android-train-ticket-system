@@ -61,7 +61,7 @@
                 android:background="@android:color/transparent"
                 android:textSize="16sp"
                 android:textAlignment="center"
-                android:text="Welcome to the inspector menu"
+                android:text="@string/welcome_inspector"
                 android:id="@+id/section_text"
                 android:textStyle="bold" />
 
@@ -69,17 +69,17 @@
                 android:id="@+id/button_download_tickets"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Download ticket data"
+                android:text="@string/download_tickets"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:onClick="onGetMeSomeWhereButtonClick" />
+                android:onClick="onDownloadTicketDataClickHandler" />
 
             <Button
             android:id="@+id/button_upload_tickets"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Upload Stored tickets"
+            android:text="@string/upload_tickets"
             android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
@@ -89,17 +89,17 @@
                 android:id="@+id/button_validate_ticket_qr"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Validate a ticket (QR Code)"
+                android:text="@string/validate_ticket_qr"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:onClick="onGetMeSomeWhereButtonClick" />
+                android:onClick="onValidateTicketQRClickHandler" />
 
             <Button
                 android:id="@+id/button_validate_ticket_nfc"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Validate a ticket (NFC)"
+                android:text="@string/validate_ticket_nfc"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
@@ -109,7 +109,7 @@
                 android:id="@+id/button_ticket_stats"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="See ticket statistics"
+                android:text="@string/see_ticket_stats"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"

@@ -1,28 +1,25 @@
 package org.feup.cmov.userticketapp.Controllers;
 
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.onbarcode.barcode.android.AndroidColor;
 import com.onbarcode.barcode.android.IBarcode;
 import com.onbarcode.barcode.android.QRCode;
 
-import org.feup.cmov.userticketapp.Models.SharedDataFactory;
+import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.Models.Ticket;
 import org.feup.cmov.userticketapp.R;
 
 public class TicketActivity extends AppCompatActivity {
-    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
+    private SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
     private Ticket mTicket;
 
     @Override

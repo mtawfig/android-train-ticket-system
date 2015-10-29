@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import org.feup.cmov.userticketapp.Helpers.CreditCardNumberChangeListener;
-import org.feup.cmov.userticketapp.Models.SharedDataFactory;
+import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.R;
 
 import java.util.Calendar;
@@ -22,7 +22,7 @@ public class PaymentActivity extends AppCompatActivity {
     private EditText mCreditCardYearView;
     private EditText mCreditCardCodeView;
 
-    private SharedDataFactory sharedData = SharedDataFactory.getInstance();
+    private SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
