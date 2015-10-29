@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,9 +23,7 @@ import org.feup.cmov.userticketapp.Services.GetItinerary;
 import org.feup.cmov.userticketapp.Helpers.DividerItemDecoration;
 
 public class ItineraryActivity extends AppCompatActivity {
-    private RecyclerView mRecyclerView;
     private ItineraryAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private SharedDataFactory sharedData = SharedDataFactory.getInstance();
     private boolean canBuyTickets = false;
     private Button buyTicketsButton;
@@ -56,11 +55,11 @@ public class ItineraryActivity extends AppCompatActivity {
 
         buyTicketsButton = (Button) findViewById(R.id.buy_tickets_button);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.itinerary_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.itinerary_recycler_view);
 
         mRecyclerView.setHasFixedSize(false);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         RecyclerView.ItemDecoration itemDecoration =
@@ -123,6 +122,18 @@ public class ItineraryActivity extends AppCompatActivity {
                         .show();
             }
         }).execute(fromStation, toStation);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void onBuyTicketsClickHandler(View view) {
