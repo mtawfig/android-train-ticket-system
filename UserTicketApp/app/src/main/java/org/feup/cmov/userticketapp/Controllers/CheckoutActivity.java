@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,12 +26,11 @@ import org.feup.cmov.userticketapp.Services.GetItinerary;
 import java.util.ArrayList;
 
 public class CheckoutActivity extends AppCompatActivity {
-    private RecyclerView mRecyclerView;
+
     private CheckoutAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+
     private SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
 
-    private boolean canBuyTickets = false;
     private Button buyTicketsButton;
 
     private void setCanBuyTickets(Itinerary itinerary) {
@@ -41,7 +41,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 break;
             }
         }
-        canBuyTickets = isPossible;
+        boolean canBuyTickets = isPossible;
         buyTicketsButton.setEnabled(canBuyTickets);
     }
 
@@ -60,11 +60,11 @@ public class CheckoutActivity extends AppCompatActivity {
 
         buyTicketsButton = (Button) findViewById(R.id.confirm_buy_tickets_button);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.checkout_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.checkout_recycler_view);
 
         mRecyclerView.setHasFixedSize(false);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new CheckoutAdapter(this);
@@ -92,6 +92,18 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         }).execute(fromStation, toStation);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void onConfirmBuyTicketsClickHandler(View view) {
@@ -131,5 +143,4 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         }).execute(options);
     }
-
 }

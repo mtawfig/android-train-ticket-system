@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -31,6 +32,8 @@ public class PaymentActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mCreditCardNumberView = (EditText) findViewById(R.id.credit_card_number);
         mCreditCardNumberView.addTextChangedListener(new CreditCardNumberChangeListener());
 
@@ -42,6 +45,18 @@ public class PaymentActivity extends AppCompatActivity {
         mCreditCardMonthView.setText(sharedData.getCreditCardMonth());
         mCreditCardYearView.setText(sharedData.getCreditCardYear());
         mCreditCardCodeView.setText(sharedData.getCreditCardCode());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void onProceedToCheckoutClickHandler(View view) {

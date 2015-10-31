@@ -48,9 +48,6 @@
             android:name=".Controllers.ItineraryActivity"
             android:label="@string/title_activity_itinerary"
             android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Controllers.FromToActivity" />
         </activity>
         <activity
             android:name=".Controllers.TimetableActivity"
