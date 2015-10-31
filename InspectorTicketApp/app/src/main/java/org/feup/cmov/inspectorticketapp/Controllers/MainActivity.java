@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +28,9 @@ import org.feup.cmov.inspectorticketapp.R;
 import org.feup.cmov.inspectorticketapp.Services.ApiService;
 import org.feup.cmov.inspectorticketapp.Services.GetTickets;
 
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {

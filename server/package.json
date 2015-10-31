@@ -13,6 +13,7 @@
     "hapi": "^10.4.1",
     "hapi-auth-jwt2": "^5.1.2",
     "joi": "^6.9.0",
+    "json-stable-stringify": "^1.0.0",
     "jsonwebtoken": "^5.4.0",
     "knex": "^0.8.6",
     "lodash": "^3.10.1",

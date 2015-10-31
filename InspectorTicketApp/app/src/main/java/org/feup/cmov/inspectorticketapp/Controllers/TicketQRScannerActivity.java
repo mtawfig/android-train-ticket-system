@@ -1,23 +1,18 @@
 package org.feup.cmov.inspectorticketapp.Controllers;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.google.zxing.Result;
 
 import org.feup.cmov.inspectorticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.inspectorticketapp.Models.Ticket;
-import org.feup.cmov.inspectorticketapp.Models.TicketContract;
 import org.feup.cmov.inspectorticketapp.Models.TicketDbHelper;
-import org.feup.cmov.inspectorticketapp.Models.TicketEntry;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -25,6 +20,7 @@ public class TicketQRScannerActivity extends Activity implements ZXingScannerVie
     private ZXingScannerView mScannerView;
     private SharedDataSingleton mSharedDataSingleton = SharedDataSingleton.getInstance();
     private TicketDbHelper mDbHelper;
+    private Gson gson = new Gson();
 
     @Override
     public void onCreate(Bundle state) {
@@ -50,21 +46,20 @@ public class TicketQRScannerActivity extends Activity implements ZXingScannerVie
     @Override
     public void handleResult(Result rawResult) {
 
-        Intent intent;
+        Intent intent = null;
 
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        Ticket matchedTicket = TicketDbHelper.getTicketWithSignature(db, rawResult.getText());
-
-        if (matchedTicket == null) {
-            Toast.makeText(this, "Ticket not found in local database. Please download tickets from server.", Toast.LENGTH_SHORT)
+        Ticket scannedTicket = null;
+        try {
+            scannedTicket = gson.fromJson(rawResult.getText(), Ticket.class);
+        } catch(JsonParseException e) {
+            Toast.makeText(this, "QR code did not transmit ticket data", Toast.LENGTH_SHORT)
                     .show();
 
             intent = new Intent(this, MainActivity.class);
         }
 
-        else {
-            mSharedDataSingleton.setScannedTicket(matchedTicket);
+        if (scannedTicket != null) {
+            mSharedDataSingleton.setScannedTicket(scannedTicket);
             intent = new Intent(this, ScannedTicketActivity.class);
         }
 

@@ -6,6 +6,7 @@ var uuid = require('node-uuid');
 var _ = require('lodash');
 var crypto = require('crypto');
 var fs = require('fs');
+var stringify = require('json-stable-stringify')
 
 var privateKey = fs.readFileSync(process.cwd() + '/certificates/private.key').toString('utf8');
 var publicKey = fs.readFileSync(process.cwd() + '/certificates/public.key').toString('utf8');
@@ -157,22 +158,23 @@ Ticket.createTickets = function(user, itinerary, arraySeatNumber) {
           fromTripStepNumber: step.fromTripStepNumber,
           toTripStepNumber: step.toTripStepNumber,
           seatNumber: selectedSeatNumber,
-          used: false,
           hoursStart: itinerary.hoursStart,
           minutesStart: itinerary.minutesStart,
           hoursEnd: itinerary.hoursEnd,
           minutesEnd: itinerary.minutesEnd
         };
 
-        var buffer = JSON.stringify(ticket);
+        var buffer = new Buffer(stringify(ticket));
+        var encodedString = buffer.toString('utf8');
         var sign = crypto.createSign('RSA-SHA1');
-        sign.update(buffer);
+        sign.update(encodedString);
         ticket.signature = sign.sign(privateKey, 'hex');
+        ticket.used = false;
 
         /*
         // VERIFICATION EXAMPLE SERVER SIDE
         var verifier = crypto.createVerify('RSA-SHA1');
-        verifier.update(buffer);
+        verifier.update(encodedString);
         var success = verifier.verify(publicKey, ticket.signature, 'hex');
         console.log(success);
         */

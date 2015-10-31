@@ -38,4 +38,7 @@
     <string name="ticket_title_text">%1$s to %2$s</string>
     <string name="ticket_date_hours">%1$s, %2$02dh%3$02d</string>
     <string name="seat_number_text">Seat number %1$d</string>
+
+    <string name="public_key">MEowDQYJKoZIhvcNAQEBBQADOQAwNgIvAM+yrP3EdnJEj/oyPvGEloubmv7HkHZq
+EM4OyRRS6OT7CaxDPnkZoessO3Zb1FcCAwEAAQ==</string>
 </resources>
