@@ -89,4 +89,6 @@
 
     <string name="title_activity_ticket">Ticket Details</string>
     <string name="seat_number_text">Seat number %1$d</string>
+    <string name="ticket_not_used">Ticket has not yet been used</string>
+    <string name="ticket_used">Ticket is used</string>
 </resources>

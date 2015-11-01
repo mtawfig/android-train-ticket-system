@@ -48,7 +48,7 @@ exports.up = function (knex) {
       table.timestamp('purchaseTime');
       table.biginteger('fromStationId').unsigned().references('stationId').inTable('Station').onDelete('CASCADE');
       table.biginteger('toStationId').unsigned().references('stationId').inTable('Station').onDelete('CASCADE');
-      table.string('uuid', 36).unique();
+      table.string('uuid', 36).unique().index();
       table.string('signature');
       table.integer('tripId').references('tripId').inTable('Trip').onDelete('CASCADE');
       table.integer('fromTripStepNumber');

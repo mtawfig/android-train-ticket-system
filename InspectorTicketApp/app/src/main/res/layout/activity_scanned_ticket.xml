@@ -62,9 +62,59 @@
             android:paddingStart="@dimen/activity_horizontal_margin"
             android:paddingEnd="@dimen/activity_horizontal_margin"
             android:gravity="start"
+            android:paddingBottom="10dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             />
 
+        <TextView
+            android:id="@+id/user_name_text"
+            android:text="@string/ticket_user_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:gravity="start"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+
+        <TextView
+            android:id="@+id/user_email_text"
+            android:text="@string/ticket_user_email"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:gravity="start"
+            android:paddingBottom="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+
+        <TextView
+            android:id="@+id/ticket_used_text"
+            android:text="@string/ticket_marked_used"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:gravity="start"
+            android:paddingBottom="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimaryDark"
+            android:background="@android:color/transparent"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:id="@+id/ticket_validation_message"
+            android:textStyle="bold"
+            android:paddingTop="20dp"
+            />
 
     </LinearLayout>
 

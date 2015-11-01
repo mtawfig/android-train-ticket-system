@@ -29,7 +29,7 @@ public class ApiService {
 
     // private static String SERVER_ADDRESS = "http://localhost:8000";
     private static String SERVER_ADDRESS = "http://192.168.1.73:8000";
-    // private static String SERVER_ADDRESS = "http://172.30.55.237:8000";
+    // private static String SERVER_ADDRESS = "http://169.254.84.152:8000";
     // private static String SERVER_ADDRESS = "http://10.125.40.136:8000";
 
     private final static String CHARSET = "UTF-8";
@@ -112,7 +112,7 @@ public class ApiService {
                 sharedPreferences);
     }
 
-    public static HttpResponse getHttpPostResponse(Context context, String endpoint, ContentValues data) {
+    public static HttpResponse getHttpResponse(Context context, String requestMethod, String endpoint, ContentValues data) {
         try {
             URL url = new URL(SERVER_ADDRESS + endpoint);
 
@@ -120,7 +120,7 @@ public class ApiService {
 
             urlConnection.setDoOutput(true);
             urlConnection.setDoInput(true);
-            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestMethod(requestMethod);
             urlConnection.setRequestProperty("Accept-Charset", CHARSET);
             urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + CHARSET);
             urlConnection.setUseCaches(false);
@@ -166,6 +166,14 @@ public class ApiService {
         } catch (Exception e) {
             return new HttpResponse(true, getErrorJson(e.getMessage()));
         }
+    }
+
+    public static HttpResponse getHttpPostResponse(Context context, String endpoint, ContentValues data){
+        return getHttpResponse(context, "POST", endpoint, data);
+    }
+
+    public static HttpResponse getHttpPutResponse(Context context, String endpoint, ContentValues data){
+        return getHttpResponse(context, "PUT", endpoint, data);
     }
 
     private static String getData(ContentValues data) throws UnsupportedEncodingException {

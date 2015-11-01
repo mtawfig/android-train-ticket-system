@@ -1,36 +1,24 @@
 package org.feup.cmov.inspectorticketapp.Controllers;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.feup.cmov.inspectorticketapp.Models.ErrorResponse;
 import org.feup.cmov.inspectorticketapp.Models.SharedPreferencesFactory;
-import org.feup.cmov.inspectorticketapp.Models.Station;
 import org.feup.cmov.inspectorticketapp.Models.Ticket;
-import org.feup.cmov.inspectorticketapp.Models.TicketContract;
 import org.feup.cmov.inspectorticketapp.Models.TicketDbHelper;
-import org.feup.cmov.inspectorticketapp.Models.TicketEntry;
-import org.feup.cmov.inspectorticketapp.Models.User;
 import org.feup.cmov.inspectorticketapp.R;
 import org.feup.cmov.inspectorticketapp.Services.ApiService;
 import org.feup.cmov.inspectorticketapp.Services.GetTickets;
+import org.feup.cmov.inspectorticketapp.Services.PutTickets;
 
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -81,32 +69,66 @@ public class MainActivity extends AppCompatActivity {
     private Context context = this;
 
     public void onDownloadTicketDataClickHandler(View view) {
-        new GetTickets(this, new GetTickets.OnGetTicketsTaskCompleted() {
+        uploadTicketsToServer(new PutTickets.OnPutTicketsTaskCompleted() {
             @Override
-            public void onTaskCompleted(List<Ticket> tickets) {
+            public void onTaskCompleted(String message) {
+                new GetTickets(context, new GetTickets.OnGetTicketsTaskCompleted() {
+                    @Override
+                    public void onTaskCompleted(final List<Ticket> tickets) {
+                        SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-                SQLiteDatabase db = mDbHelper.getWritableDatabase();
-                db.execSQL("delete from " + TicketEntry.TABLE_NAME);
+                        TicketDbHelper.deleteAllTickets(db);
 
-                for(Ticket ticket : tickets) {
-                    ContentValues values = ticket.toDatabaseValues();
-                    db.insert(TicketEntry.TABLE_NAME, "null", values);
-                }
+                        for (Ticket ticket : tickets) {
+                            TicketDbHelper.insertTicket(db, ticket);
+                        }
 
-                Toast.makeText(context, "Tickets have been stored in local storage", Toast.LENGTH_SHORT)
-                        .show();
+                        Toast.makeText(context, "Tickets have been stored in local storage", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+
+                    @Override
+                    public void onTaskError(ErrorResponse error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                }).execute();
             }
 
             @Override
             public void onTaskError(ErrorResponse error) {
-                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG)
                         .show();
             }
-        }).execute();
+        });
     }
 
     public void onValidateTicketQRClickHandler(View view) {
         Intent intent = new Intent(this, TicketQRScannerActivity.class);
         startActivity(intent);
+    }
+
+    public void onUploadTicketDataClickHandler(View view) {
+        uploadTicketsToServer(new PutTickets.OnPutTicketsTaskCompleted() {
+            @Override
+            public void onTaskCompleted(String message) {
+                Toast.makeText(context, message, Toast.LENGTH_LONG)
+                        .show();
+            }
+
+            @Override
+            public void onTaskError(ErrorResponse error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
+    }
+
+    public void uploadTicketsToServer(PutTickets.OnPutTicketsTaskCompleted handler) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        Ticket[] tickets = TicketDbHelper.getAllTickets(db);
+
+        new PutTickets(this, handler).execute(tickets);
     }
 }

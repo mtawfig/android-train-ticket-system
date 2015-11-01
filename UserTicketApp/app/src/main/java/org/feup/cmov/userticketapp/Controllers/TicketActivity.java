@@ -1,6 +1,9 @@
 package org.feup.cmov.userticketapp.Controllers;
 
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +57,14 @@ public class TicketActivity extends AppCompatActivity {
                 seatNumberTextView.getText().toString(),
                 mTicket.getSeatNumber() + 1));
 
+        TextView ticketUsedTextView = (TextView) findViewById(R.id.ticket_used_text);
+        if (mTicket.getUsed()) {
+            ticketUsedTextView.setText(getString(R.string.ticket_used));
+        }
+        else {
+            ticketUsedTextView.setText(getString(R.string.ticket_not_used));
+        }
+
         SurfaceView surface = (SurfaceView) findViewById(R.id.surface);
         surface.getHolder().addCallback(new SurfaceHolder.Callback() {
 
@@ -75,12 +86,10 @@ public class TicketActivity extends AppCompatActivity {
         });
     }
 
-    private Gson gson = new Gson();
-
     private void drawQRCode(Canvas canvas) {
         QRCode barcode = new QRCode();
 
-        barcode.setData(gson.toJson(mTicket));
+        barcode.setData(mTicket.toTransmittableString());
         barcode.setDataMode(QRCode.M_AUTO);
         barcode.setVersion(1);
         barcode.setEcl(QRCode.ECL_L);
@@ -88,15 +97,17 @@ public class TicketActivity extends AppCompatActivity {
         barcode.setFnc1Mode(IBarcode.FNC1_NONE);
         barcode.setProcessTilde(false);
         barcode.setUom(IBarcode.UOM_PIXEL);
-        barcode.setX(canvas.getWidth() * 12 / 1020);
+        barcode.setX(canvas.getWidth() * 21 / 1020);
         barcode.setResolution(72);
-
-        barcode.setForeColor(AndroidColor.black);
-        barcode.setBackColor(AndroidColor.white);
-
-        RectF bounds = new RectF(0, 0, canvas.getWidth(), canvas.getHeight());
+        RectF bounds = new RectF(0, 0, 0, 0);
 
         try {
+            TypedArray array = getTheme().obtainStyledAttributes(new int[] {
+                    android.R.attr.colorBackground,
+                    android.R.attr.textColorPrimary,
+            });
+            int backgroundColor = array.getColor(0, 0xFF00FF);
+            canvas.drawColor(backgroundColor);
             barcode.drawBarcode(canvas, bounds);
         } catch (Exception e) {
             e.printStackTrace();

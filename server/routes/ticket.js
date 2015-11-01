@@ -133,4 +133,39 @@ module.exports = function(server) {
         });
     }
   });
+
+  server.route({
+    method: 'PUT',
+    path: '/tickets',
+    config: {
+      auth: 'jwt',
+      validate: {
+        payload: {
+          tickets: schema.ticket.updatedTickets.required()
+        }
+      }
+    },
+    handler: function(request, reply) {
+      var user = request.auth.credentials.user;
+
+      if (user.role !== 'inspector') {
+        reply(Boom.unauthorized('You do not have inspector permissions'));
+        return;
+      }
+
+      var updatedTickets = request.payload.tickets;
+      console.log(updatedTickets);
+
+      Promise
+         .each(updatedTickets, function (ticket) {
+           return Ticket.query().update({used: ticket.used}).where('uuid', ticket.uuid);
+         })
+         .then(function () {
+           reply({message: 'Tickets have been updated'});
+         })
+         .catch(function (error) {
+           reply(Boom.badRequest(error));
+         });
+    }
+  });
 };

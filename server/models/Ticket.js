@@ -191,7 +191,7 @@ Ticket.getTickets = function(user) {
     .orderByRaw('date DESC, hoursStart DESC, minutesStart DESC')
     .then(function(tickets) {
       tickets.forEach(function(ticket) {
-        ticket.used = ticket.used !== 0;
+        ticket.used = !!ticket.used;
       });
       return tickets;
     });
@@ -202,7 +202,7 @@ Ticket.getAllTickets = function() {
     .eager('[fromStation, toStation, user]')
     .then(function(tickets) {
       tickets.forEach(function(ticket) {
-        ticket.used = ticket.used !== 0;
+        ticket.used = !!ticket.used;
         delete ticket.user.password;
       });
       return tickets;

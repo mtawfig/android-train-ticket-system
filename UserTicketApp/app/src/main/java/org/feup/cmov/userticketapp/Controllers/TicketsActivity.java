@@ -2,6 +2,7 @@ package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ public class TicketsActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private TicketsAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,18 +43,32 @@ public class TicketsActivity extends AppCompatActivity {
         mAdapter = new TicketsAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        final Context context = this;
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getTickets();
+            }
+        });
 
+        getTickets();
+    }
+
+    private final Context context = this;
+
+    public void getTickets() {
         new GetTickets(this, new GetTickets.OnGetTicketsTaskCompleted() {
             @Override
             public void onTaskCompleted(List<Ticket> tickets) {
                 mAdapter.setTickets(tickets);
+                swipeContainer.setRefreshing(false);
             }
 
             @Override
             public void onTaskError(ErrorResponse error) {
                 Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
                         .show();
+                swipeContainer.setRefreshing(false);
             }
         }).execute();
     }

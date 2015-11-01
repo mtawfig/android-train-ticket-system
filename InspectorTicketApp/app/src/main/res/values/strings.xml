@@ -41,4 +41,12 @@
 
     <string name="public_key">MEowDQYJKoZIhvcNAQEBBQADOQAwNgIvAM+yrP3EdnJEj/oyPvGEloubmv7HkHZq
 EM4OyRRS6OT7CaxDPnkZoessO3Zb1FcCAwEAAQ==</string>
+
+    <string name="invalid_ticket">Warning: Invalid ticket</string>
+    <string name="valid_ticket">Ticket is signed and valid</string>
+    <string name="ticket_user_name">Ticket signed to %1$s</string>
+    <string name="ticket_user_email">Email: %1$s</string>
+    <string name="ticket_no_details">Download details from server</string>
+    <string name="ticket_marked_used">Ticket has been marked as used</string>
+
 </resources>

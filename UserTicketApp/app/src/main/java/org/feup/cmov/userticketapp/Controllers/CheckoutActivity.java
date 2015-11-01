@@ -123,12 +123,6 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void onTaskCompleted(ArrayList<Ticket> tickets) {
-                if (tickets == null) {
-                    Toast.makeText(context, "Server returned error. Please try later.", Toast.LENGTH_SHORT)
-                            .show();
-                    return;
-                }
-
                 Toast.makeText(context, "Tickets bough successfully", Toast.LENGTH_SHORT)
                         .show();
 
