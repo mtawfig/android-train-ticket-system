@@ -46,7 +46,7 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.TicketsV
 
             ticketTitleText.setText(String.format(
                     ticketTitleText.getText().toString(),
-                    ticket.getTicketId(), ticket.getToStation().getName()));
+                    ticket.getFromStation().getName(), ticket.getToStation().getName()));
 
             String date = android.text.format.DateUtils.formatDateTime(mContext,
                     ticket.getDate(),

@@ -154,7 +154,6 @@ module.exports = function(server) {
       }
 
       var updatedTickets = request.payload.tickets;
-      console.log(updatedTickets);
 
       Promise
          .each(updatedTickets, function (ticket) {

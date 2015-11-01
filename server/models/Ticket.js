@@ -158,10 +158,10 @@ Ticket.createTickets = function(user, itinerary, arraySeatNumber) {
           fromTripStepNumber: step.fromTripStepNumber,
           toTripStepNumber: step.toTripStepNumber,
           seatNumber: selectedSeatNumber,
-          hoursStart: itinerary.hoursStart,
-          minutesStart: itinerary.minutesStart,
-          hoursEnd: itinerary.hoursEnd,
-          minutesEnd: itinerary.minutesEnd
+          hoursStart: step.hoursStart,
+          minutesStart: step.minutesStart,
+          hoursEnd: step.hoursEnd,
+          minutesEnd: step.minutesEnd
         };
 
         var buffer = new Buffer(stringify(ticket));
