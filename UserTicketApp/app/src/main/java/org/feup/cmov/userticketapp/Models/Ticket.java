@@ -48,7 +48,13 @@ public class Ticket {
         }
     }
 
+    transient private String transmittableString;
+
     public String toTransmittableString() {
+        if (transmittableString != null) {
+            return transmittableString;
+        }
+
         StringBuilder builder = new StringBuilder();
         for(Field field: transmittableFields) {
             try {
@@ -58,7 +64,8 @@ public class Ticket {
             }
             builder.append(",");
         }
-        return builder.toString();
+        transmittableString = builder.toString();
+        return transmittableString;
     }
 
     transient static Gson gson = new Gson();

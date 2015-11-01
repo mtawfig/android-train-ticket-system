@@ -108,6 +108,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onValidateTicketNFCClickHandler(View view) {
+        Intent intent = new Intent(this, TicketNFCScannerActivity.class);
+        startActivity(intent);
+    }
+
     public void onUploadTicketDataClickHandler(View view) {
         uploadTicketsToServer(new PutTickets.OnPutTicketsTaskCompleted() {
             @Override
