@@ -50,9 +50,18 @@
             android:label="@string/title_activity_ticket_nfcscanner" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="application/org.feup.cmov.userticketapp.type1" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".Controllers.StatisticsActivity"
+            android:label="@string/title_activity_statistics" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.MainActivity" />
         </activity>
     </application>
 

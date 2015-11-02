@@ -208,3 +208,30 @@ Ticket.getAllTickets = function() {
       return tickets;
     });
 };
+
+Ticket.getStatistics = function() {
+  var data = {
+    history: {},
+    count: {}
+  };
+  return knex
+      .raw('select total, used, t1.day from' +
+          ' (select count(*) as total, ' +
+          '    strftime(\'%Y-%m-%d\', date / 1000, \'unixepoch\') as day ' +
+          '    from ticket group by day order by day DESC) t1' +
+          ' left join' +
+          ' (select count(*) as used, ' +
+          '    strftime(\'%Y-%m-%d\', date / 1000, \'unixepoch\') as day ' +
+          '    from ticket where used = 1 group by day order by day DESC) t2' +
+          ' on t1.day = t2.day;')
+      .then(function (history) {
+        data.history = history;
+        return knex.raw('select count(*) as verified, ' +
+            ' (select count(*) from ticket where used = 0) as unverified ' +
+            ' from ticket where used = 1;')
+      })
+      .then(function(count) {
+        data.count = count[0];
+        return data;
+      });
+};

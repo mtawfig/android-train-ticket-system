@@ -113,6 +113,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onSeeStatisticsClickHandler(View view) {
+        Intent intent = new Intent(this, StatisticsActivity.class);
+        startActivity(intent);
+    }
+
     public void onUploadTicketDataClickHandler(View view) {
         uploadTicketsToServer(new PutTickets.OnPutTicketsTaskCompleted() {
             @Override

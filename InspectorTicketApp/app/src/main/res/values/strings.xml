@@ -49,5 +49,5 @@ EM4OyRRS6OT7CaxDPnkZoessO3Zb1FcCAwEAAQ==</string>
     <string name="ticket_no_details">Download details from server</string>
     <string name="ticket_marked_used">Ticket has been marked as used</string>
     <string name="title_activity_ticket_nfcscanner">Scan NFC Ticket</string>
-
+    <string name="title_activity_statistics">Statistics</string>
 </resources>

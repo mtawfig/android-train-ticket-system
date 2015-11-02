@@ -167,4 +167,28 @@ module.exports = function(server) {
          });
     }
   });
+
+  server.route({
+    method: 'GET',
+    path: '/tickets/stats',
+    config: {
+      auth: 'jwt'
+    },
+    handler: function(request, reply) {
+      var user = request.auth.credentials.user;
+
+      if (user.role !== 'inspector') {
+        reply(Boom.unauthorized('You do not have inspector permissions'));
+        return;
+      }
+
+      Ticket.getStatistics()
+          .then(function(stats) {
+            reply(stats);
+          })
+          .catch(function(error) {
+            reply(Boom.badRequest(error));
+          });
+    }
+  });
 };
