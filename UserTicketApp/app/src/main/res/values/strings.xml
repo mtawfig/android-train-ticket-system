@@ -26,6 +26,8 @@
     <string name="from_station">From Station:</string>
     <string name="to_station">To Station:</string>
 
+    <string name="selected_date">Start date:\n</string>
+
     <string name="action_go_to_checkout">Proceed to Checkout</string>
 
     <string name="prompt_credit_card_number">Credit Card Number</string>
@@ -60,7 +62,7 @@
     <string name="prompt_name">Display Name</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_up">Sign up</string>
+    <string name="action_sign_up">Register</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_name">Invalid name</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -91,4 +93,7 @@
     <string name="seat_number_text">Seat number %1$d</string>
     <string name="ticket_not_used">Ticket has not yet been used</string>
     <string name="ticket_used">Ticket is used</string>
+    <string name="login_or_register">Login or Register</string>
+    <string name="see_my_tickets">See My Tickets</string>
+    <string name="click_station_for_timetables">Click on a station for timetables</string>
 </resources>

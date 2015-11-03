@@ -154,9 +154,15 @@ public class ItineraryActivity extends AppCompatActivity implements DatePickerDi
                         itinerary.getCost() / 100, itinerary.getCost() % 100));
 
                 TextView tripDateText = (TextView) findViewById(R.id.trip_date);
-                String text = android.text.format.DateUtils.formatDateTime(getApplicationContext(),
-                        itinerary.getDate(),
-                        DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
+                Date selectedDate = sharedData.getSelectedDate();
+                if (selectedDate == null) {
+                    selectedDate = new Date();
+                }
+
+                String text = getString(R.string.selected_date) +
+                        android.text.format.DateUtils.formatDateTime(getApplicationContext(),
+                        selectedDate.getTime(),
+                        DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_TIME);
                 tripDateText.setText(text);
 
                 setCanBuyTickets(itinerary);

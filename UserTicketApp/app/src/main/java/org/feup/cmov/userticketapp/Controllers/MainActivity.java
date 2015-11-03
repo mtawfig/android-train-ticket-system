@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.Models.Station;
 import org.feup.cmov.userticketapp.R;
 import org.feup.cmov.userticketapp.Models.SharedPreferencesFactory;
+import org.feup.cmov.userticketapp.Services.ApiService;
 
 public class MainActivity extends AppCompatActivity implements MapFragment.StationsMapListener, NavigationView.OnNavigationItemSelectedListener {
 
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
     private TextView drawerNameTextView;
     private TextView drawerEmailTextView;
     private Menu drawerMenu;
+
+    private Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,12 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
         };
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
+        loginButton = (Button) findViewById(R.id.login_button);
+
+        if (ApiService.isUserSignedIn(this)) {
+            loginButton.setVisibility(View.GONE);
+        }
+
         updateDrawer();
 
         final MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
@@ -89,14 +99,14 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
 
     private void updateDrawer() {
 
-        boolean userSignIn = SharedPreferencesFactory.getBooleanValueFromPreferences(getString(R.string.shared_preferences_user_sign_in), sharedPreferences);
+        boolean isUserSignedIn = SharedPreferencesFactory.getBooleanValueFromPreferences(getString(R.string.shared_preferences_user_sign_in), sharedPreferences);
 
-        drawerMenu.findItem(R.id.buy_ticket).setVisible(userSignIn);
-        drawerMenu.findItem(R.id.my_tickets).setVisible(userSignIn);
-        drawerMenu.findItem(R.id.sign_in_menu).setVisible(!userSignIn);
-        drawerMenu.findItem(R.id.sign_out_menu).setVisible(userSignIn);
+        drawerMenu.findItem(R.id.buy_ticket).setVisible(isUserSignedIn);
+        drawerMenu.findItem(R.id.my_tickets).setVisible(isUserSignedIn);
+        drawerMenu.findItem(R.id.sign_in_menu).setVisible(!isUserSignedIn);
+        drawerMenu.findItem(R.id.sign_out_menu).setVisible(isUserSignedIn);
 
-        if (userSignIn) {
+        if (isUserSignedIn) {
             drawerImageView.setImageResource(R.drawable.gravatar);
             drawerNameTextView.setText(SharedPreferencesFactory.getStringValueFromPreferences(getString(R.string.shared_preferences_user_name_key), sharedPreferences));
             drawerEmailTextView.setText(SharedPreferencesFactory.getStringValueFromPreferences(getString(R.string.shared_preferences_user_email_key), sharedPreferences));
@@ -104,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
             drawerImageView.setImageResource(R.mipmap.ic_launcher);
             drawerNameTextView.setText(getString(R.string.app_name));
             drawerEmailTextView.setText(" ");
+            loginButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -141,6 +152,16 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
         startActivity(intent);
     }
 
+    public void onSeeMyTicketsButtonClick(View view) {
+        Intent intent = new Intent(getBaseContext(), TicketsActivity.class);
+        startActivity(intent);
+    }
+
+    public void onLoginOrRegisterButtonClick(View view) {
+        Intent intent = new Intent(getBaseContext(), SignInActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onStationClickHandler(Station station) {
         if (station != null) {
@@ -170,11 +191,6 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
 
         if (id == R.id.buy_ticket) {
             // Handle the camera action
-        } else if (id == R.id.timetables) {
-
-            Toast toast = Toast.makeText(getApplicationContext(), "Select the desired station to be provided a timetable", Toast.LENGTH_SHORT);
-            toast.show();
-
         } else if (id == R.id.my_tickets) {
 
             Intent intent = new Intent(getBaseContext(), TicketsActivity.class);

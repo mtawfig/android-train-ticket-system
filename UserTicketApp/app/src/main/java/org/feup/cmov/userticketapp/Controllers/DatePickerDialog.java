@@ -40,12 +40,27 @@ public class DatePickerDialog extends AppCompatDialogFragment {
 
         final DialogFragment fragment = this;
 
+        final DatePicker datePicker = (DatePicker) view.findViewById(R.id.date_picker_date_picker);
+        final TimePicker timePicker = (TimePicker) view.findViewById(R.id.date_picker_time_picker);
+
+        Date selectedDate = sharedData.getSelectedDate();
+        if (selectedDate != null) {
+            Calendar cal=Calendar.getInstance();
+            cal.setTime(selectedDate);
+
+            datePicker.updateDate(
+                    cal.get(Calendar.YEAR),
+                    cal.get(Calendar.MONTH),
+                    cal.get(Calendar.DAY_OF_MONTH));
+
+            timePicker.setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
+            timePicker.setCurrentMinute(cal.get(Calendar.MINUTE));
+        }
+
         builder.setView(view)
                 .setPositiveButton("Pick Date", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        DatePicker datePicker = (DatePicker) view.findViewById(R.id.date_picker_date_picker);
-                        TimePicker timePicker = (TimePicker) view.findViewById(R.id.date_picker_time_picker);
 
                         Calendar cal = Calendar.getInstance();
                         cal.set(Calendar.YEAR, datePicker.getYear());

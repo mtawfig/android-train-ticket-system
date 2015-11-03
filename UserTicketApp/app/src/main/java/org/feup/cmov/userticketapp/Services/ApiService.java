@@ -107,6 +107,16 @@ public class ApiService {
         return null;
     }
 
+    public static boolean isUserSignedIn(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                context.getString(R.string.shared_preferences_identifier),
+                Context.MODE_PRIVATE);
+
+        return SharedPreferencesFactory.getBooleanValueFromPreferences(
+                context.getString(R.string.shared_preferences_user_sign_in),
+                sharedPreferences);
+    }
+
     public static HttpResponse getHttpPostResponse(Context context, String endpoint, ContentValues data) {
         try {
             URL url = new URL(SERVER_ADDRESS + endpoint);

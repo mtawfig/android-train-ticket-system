@@ -3,8 +3,6 @@
 
     <item android:id="@+id/buy_ticket" android:icon="@drawable/ic_ticket"
         android:title="@string/drawer_menu_title_buy_tickets" />
-    <item android:id="@+id/timetables" android:icon="@drawable/ic_timetable"
-        android:title="@string/drawer_menu_title_timetables" />
     <item android:id="@+id/my_tickets" android:icon="@drawable/ic_tickets"
         android:title="@string/drawer_menu_title_my_tickets" />
 

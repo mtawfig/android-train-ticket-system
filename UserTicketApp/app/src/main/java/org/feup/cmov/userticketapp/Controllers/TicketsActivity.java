@@ -1,6 +1,7 @@
 package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,9 +12,12 @@ import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.Ticket;
+import org.feup.cmov.userticketapp.Models.TicketDbHelper;
 import org.feup.cmov.userticketapp.R;
 import org.feup.cmov.userticketapp.Services.GetTickets;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TicketsActivity extends AppCompatActivity {
@@ -22,6 +26,7 @@ public class TicketsActivity extends AppCompatActivity {
     private TicketsAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeContainer;
+    private TicketDbHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,8 @@ public class TicketsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
+        mDbHelper = new TicketDbHelper(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.tickets_recycler_view);
 
@@ -51,6 +58,9 @@ public class TicketsActivity extends AppCompatActivity {
             }
         });
 
+        ArrayList<Ticket> storedTickets = getTicketsFromDatabase();
+        mAdapter.setTickets(storedTickets);
+
         getTickets();
     }
 
@@ -62,6 +72,8 @@ public class TicketsActivity extends AppCompatActivity {
             public void onTaskCompleted(List<Ticket> tickets) {
                 mAdapter.setTickets(tickets);
                 swipeContainer.setRefreshing(false);
+
+                saveTicketsToDatabase(tickets);
             }
 
             @Override
@@ -71,5 +83,22 @@ public class TicketsActivity extends AppCompatActivity {
                 swipeContainer.setRefreshing(false);
             }
         }).execute();
+    }
+
+    public void saveTicketsToDatabase(List<Ticket> tickets) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        TicketDbHelper.deleteAllTickets(db);
+
+        for (Ticket ticket : tickets) {
+            TicketDbHelper.insertTicket(db, ticket);
+        }
+    }
+
+    public ArrayList<Ticket> getTicketsFromDatabase() {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        Ticket[] tickets = TicketDbHelper.getAllTickets(db);
+        return new ArrayList<>(Arrays.asList(tickets));
     }
 }

@@ -43,6 +43,18 @@
                     android:layout_height="320dp"
                     layout="@layout/map_fragment"/>
 
+                <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:background="@android:color/transparent"
+                    android:textSize="16sp"
+                    android:text="@string/click_station_for_timetables"
+                    android:id="@+id/section_text"
+                    android:textStyle="bold" />
+
                 <Button
                     android:id="@+id/button"
                     android:layout_width="fill_parent"
@@ -53,6 +65,28 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
                     android:onClick="onGetMeSomeWhereButtonClick" />
+
+                <Button
+                    android:id="@+id/tickets_button"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/see_my_tickets"
+                    android:drawableStart="@drawable/ic_directions_railway_24dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="onSeeMyTicketsButtonClick" />
+
+                <Button
+                    android:id="@+id/login_button"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_or_register"
+                    android:drawableStart="@drawable/ic_input_black_24dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="onLoginOrRegisterButtonClick" />
             </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>

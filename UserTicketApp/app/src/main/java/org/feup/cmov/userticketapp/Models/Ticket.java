@@ -1,5 +1,7 @@
 package org.feup.cmov.userticketapp.Models;
 
+import android.content.ContentValues;
+
 import com.google.gson.Gson;
 
 import java.lang.reflect.Field;
@@ -29,6 +31,13 @@ public class Ticket {
     @Getter int minutesStart;
     @Getter int hoursEnd;
     @Getter int minutesEnd;
+
+    public ContentValues toDatabaseValues() {
+        ContentValues values = new ContentValues();
+        values.put(TicketEntry.COLUMN_NAME_UUID, uuid);
+        values.put(TicketEntry.COLUMN_NAME_JSON, gson.toJson(this));
+        return values;
+    }
 
     transient static Field[] transmittableFields;
 
