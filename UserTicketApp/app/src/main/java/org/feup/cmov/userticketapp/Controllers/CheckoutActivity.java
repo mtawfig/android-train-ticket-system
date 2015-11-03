@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.BuyTicketOptions;
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
+import org.feup.cmov.userticketapp.Models.GetItineraryOptions;
 import org.feup.cmov.userticketapp.Models.Itinerary;
 import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.Models.Station;
@@ -24,6 +25,7 @@ import org.feup.cmov.userticketapp.Services.BuyTickets;
 import org.feup.cmov.userticketapp.Services.GetItinerary;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CheckoutActivity extends AppCompatActivity {
 
@@ -57,6 +59,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         final Station fromStation = sharedData.getFromStation();
         final Station toStation = sharedData.getToStation();
+        Date selectedDate = sharedData.getSelectedDate();
 
         buyTicketsButton = (Button) findViewById(R.id.confirm_buy_tickets_button);
 
@@ -90,7 +93,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
                         .show();
             }
-        }).execute(fromStation, toStation);
+        }).execute(new GetItineraryOptions(fromStation, toStation, selectedDate));
 
     }
 

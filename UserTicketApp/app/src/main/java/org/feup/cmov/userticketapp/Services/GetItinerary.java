@@ -4,11 +4,18 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
+import org.feup.cmov.userticketapp.Models.GetItineraryOptions;
 import org.feup.cmov.userticketapp.Models.HttpResponse;
 import org.feup.cmov.userticketapp.Models.Itinerary;
 import org.feup.cmov.userticketapp.Models.Station;
 
-public class GetItinerary extends AsyncTask<Station, Void, HttpResponse> {
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
+public class GetItinerary extends AsyncTask<GetItineraryOptions, Void, HttpResponse> {
 
     public interface OnGetItineraryTaskCompleted {
         void onTaskCompleted(Itinerary itinerary);
@@ -24,16 +31,25 @@ public class GetItinerary extends AsyncTask<Station, Void, HttpResponse> {
     }
 
     @Override
-    protected final HttpResponse doInBackground(Station... stations) {
-        if (stations.length != 2) {
+    protected final HttpResponse doInBackground(GetItineraryOptions... optionsList) {
+        if (optionsList.length != 1) {
             return null;
         }
 
-        Station fromStation = stations[0];
-        Station toStation = stations[1];
+        GetItineraryOptions options = optionsList[0];
 
-        return ApiService.getHttpResponse(mContext, "/stations/" +
-                fromStation.getStationId() + "/to/" + toStation.getStationId());
+        String url = "/stations/" +
+                options.getFromStation().getStationId() +
+                "/to/" + options.getToStation().getStationId();
+
+        Date selectedDate = options.getSelectedDate();
+        if (selectedDate != null) {
+            String isoDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.UK)
+                    .format(selectedDate);
+            url += "?date=" + isoDate;
+        }
+
+        return ApiService.getHttpResponse(mContext, url);
     }
 
     @Override

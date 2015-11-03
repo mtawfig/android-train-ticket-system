@@ -3,6 +3,7 @@ package org.feup.cmov.userticketapp.Controllers;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
+import org.feup.cmov.userticketapp.Models.GetItineraryOptions;
 import org.feup.cmov.userticketapp.Models.Itinerary;
 import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.Models.Station;
@@ -22,7 +24,9 @@ import org.feup.cmov.userticketapp.R;
 import org.feup.cmov.userticketapp.Services.GetItinerary;
 import org.feup.cmov.userticketapp.Helpers.DividerItemDecoration;
 
-public class ItineraryActivity extends AppCompatActivity {
+import java.util.Date;
+
+public class ItineraryActivity extends AppCompatActivity implements DatePickerDialog.DatePickerDialogListener {
 
     private ItineraryAdapter mAdapter;
 
@@ -53,9 +57,6 @@ public class ItineraryActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final Station fromStation = sharedData.getFromStation();
-        final Station toStation = sharedData.getToStation();
-
         buyTicketsButton = (Button) findViewById(R.id.buy_tickets_button);
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.itinerary_recycler_view);
@@ -72,7 +73,50 @@ public class ItineraryActivity extends AppCompatActivity {
         mAdapter = new ItineraryAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
+        getItinerary();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void onBuyTicketsClickHandler(View view) {
+        if (!canBuyTickets) {
+            return;
+        }
+
+        Intent intent = new Intent(getBaseContext(), PaymentActivity.class);
+        startActivity(intent);
+    }
+
+    public void onSelectDateClickHandler(View view) {
+        DatePickerDialog dialog = new DatePickerDialog();
+        dialog.show(getSupportFragmentManager(), "Dialog");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        getItinerary();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
+    }
+
+    private void getItinerary() {
         final Context context = this;
+        final Station fromStation = sharedData.getFromStation();
+        final Station toStation = sharedData.getToStation();
+        final Date selectedDate = sharedData.getSelectedDate();
 
         new GetItinerary(this, new GetItinerary.OnGetItineraryTaskCompleted() {
             @Override
@@ -124,27 +168,7 @@ public class ItineraryActivity extends AppCompatActivity {
                 Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
                         .show();
             }
-        }).execute(fromStation, toStation);
-    }
+        }).execute(new GetItineraryOptions(fromStation, toStation, selectedDate));
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void onBuyTicketsClickHandler(View view) {
-        if (!canBuyTickets) {
-            return;
-        }
-
-        Intent intent = new Intent(getBaseContext(), PaymentActivity.class);
-        startActivity(intent);
     }
 }
