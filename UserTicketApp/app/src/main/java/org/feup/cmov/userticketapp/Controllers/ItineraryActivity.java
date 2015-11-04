@@ -162,7 +162,7 @@ public class ItineraryActivity extends AppCompatActivity implements DatePickerDi
                 String text = getString(R.string.selected_date) +
                         android.text.format.DateUtils.formatDateTime(getApplicationContext(),
                         selectedDate.getTime(),
-                        DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_TIME);
+                        DateUtils.FORMAT_24HOUR | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_TIME);
                 tripDateText.setText(text);
 
                 setCanBuyTickets(itinerary);

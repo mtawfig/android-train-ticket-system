@@ -42,6 +42,7 @@ public class DatePickerDialog extends AppCompatDialogFragment {
 
         final DatePicker datePicker = (DatePicker) view.findViewById(R.id.date_picker_date_picker);
         final TimePicker timePicker = (TimePicker) view.findViewById(R.id.date_picker_time_picker);
+        timePicker.setIs24HourView(true);
 
         Date selectedDate = sharedData.getSelectedDate();
         if (selectedDate != null) {
@@ -66,9 +67,8 @@ public class DatePickerDialog extends AppCompatDialogFragment {
                         cal.set(Calendar.YEAR, datePicker.getYear());
                         cal.set(Calendar.MONTH, datePicker.getMonth());
                         cal.set(Calendar.DAY_OF_MONTH,  datePicker.getDayOfMonth());
-                        cal.set(Calendar.HOUR,  timePicker.getCurrentHour());
+                        cal.set(Calendar.HOUR_OF_DAY,  timePicker.getCurrentHour());
                         cal.set(Calendar.MINUTE, timePicker.getCurrentMinute());
-                        cal.set(Calendar.AM_PM, timePicker.getCurrentHour() < 12 ? Calendar.AM : Calendar.PM);
                         Date dateRepresentation = cal.getTime();
 
                         sharedData.setSelectedDate(dateRepresentation);
