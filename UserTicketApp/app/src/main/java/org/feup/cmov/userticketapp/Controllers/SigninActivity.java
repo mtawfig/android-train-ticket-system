@@ -326,6 +326,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
             SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_identifier), Context.MODE_PRIVATE);
             SharedPreferencesFactory.setValuesToPreferences(contentValues, sharedPreferences);
             SharedPreferencesFactory.setBooleanValueToPreferences(getString(R.string.shared_preferences_user_sign_in), true, sharedPreferences);
+            SharedPreferencesFactory.setLongValueToPreferences(getString(R.string.shared_preferences_token_expire_date), userToken.getExpireDate(), sharedPreferences);
 
             Toast toast = Toast.makeText(getApplicationContext(), "Welcome back, " + userToken.getUser().getName() + ".", Toast.LENGTH_SHORT);
             toast.show();

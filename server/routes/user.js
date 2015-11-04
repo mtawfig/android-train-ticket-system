@@ -7,8 +7,11 @@ var JWT = require('jsonwebtoken');
 var schema = require('../schema/index.js');
 var _ = require('lodash');
 var nconf = require('nconf');
+var moment = require('moment');
 
 nconf.use('file', { file: 'config.json' });
+
+var TOKEN_LIMIT_HOURS = 10;
 
 var loginHandler = function(request, reply) {
   User.query()
@@ -17,13 +20,14 @@ var loginHandler = function(request, reply) {
     .then(function(user) {
       if (user && bcrypt.compareSync(request.payload.password, user.password)) {
         var credentials = {
-          iat: new Date().getTime(),
+          iat: moment().add(TOKEN_LIMIT_HOURS, 'hours').unix(),
           user: user
         };
 
         var token = JWT.sign(credentials, nconf.get('privateKey'));
 
         reply({
+          expireDate: credentials.iat,
           token: token,
           user: _.omit(user, ['password', 'role'])
         });

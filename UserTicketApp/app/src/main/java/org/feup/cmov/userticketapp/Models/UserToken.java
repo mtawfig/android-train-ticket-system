@@ -8,7 +8,7 @@ import lombok.Setter;
 public class UserToken {
 
     @Getter String token;
-
+    @Getter Long expireDate;
     @Getter User user;
 
     public class User {

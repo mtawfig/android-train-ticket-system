@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -23,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.Map;
 
 import lombok.AccessLevel;
@@ -112,9 +114,36 @@ public class ApiService {
                 context.getString(R.string.shared_preferences_identifier),
                 Context.MODE_PRIVATE);
 
+        Long expireDate = SharedPreferencesFactory.getLongValueFromPreferences(
+                context.getString(R.string.shared_preferences_token_expire_date),
+                sharedPreferences);
+
+        Long currentTime = new Date().getTime() / 1000;
+
+        if (expireDate != null && currentTime > expireDate) {
+            signOut(context);
+        }
+
         return SharedPreferencesFactory.getBooleanValueFromPreferences(
                 context.getString(R.string.shared_preferences_user_sign_in),
                 sharedPreferences);
+    }
+
+    public static void signOut(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                context.getString(R.string.shared_preferences_identifier),
+                Context.MODE_PRIVATE);
+
+        SharedPreferencesFactory.clearPreferences(sharedPreferences);
+        SharedPreferencesFactory.setBooleanValueToPreferences(
+                context.getString(R.string.shared_preferences_user_sign_in), false, sharedPreferences);
+
+        Toast toast = Toast.makeText(context,
+                SharedPreferencesFactory.getStringValueFromPreferences(
+                        context.getString(R.string.shared_preferences_user_name_key), sharedPreferences)
+                        + " signed out",
+                Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     public static HttpResponse getHttpPostResponse(Context context, String endpoint, ContentValues data) {

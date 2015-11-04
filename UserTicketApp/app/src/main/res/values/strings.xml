@@ -79,6 +79,7 @@
     <string name="shared_preferences_user_id_key">UserIdKey</string>
     <string name="shared_preferences_user_email_key">UserEmailKey</string>
     <string name="shared_preferences_user_name_key">UserNameKey</string>
+    <string name="shared_preferences_token_expire_date">TokenExpireDate</string>
 
     <!-- Strings related to drawer menu -->
     <string name="drawer_menu_title_account">Account</string>

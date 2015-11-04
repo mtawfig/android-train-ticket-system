@@ -1,7 +1,6 @@
 'use strict';
 
 var Model = require('objection').Model;
-var moment = require('moment');
 
 /**
  * @extends Model
@@ -17,10 +16,8 @@ module.exports = User;
 User.tableName = 'User';
 User.idColumn = 'userId';
 
-var TOKEN_LIMIT_HOURS = 10;
-
 User.validate = function (decoded, request, callback) {
-  if (moment().diff(moment(decoded.iat), 'hours') > TOKEN_LIMIT_HOURS) {
+  if (new Date().getTime() > decoded.iat) {
     return callback(null, false);
   }
 

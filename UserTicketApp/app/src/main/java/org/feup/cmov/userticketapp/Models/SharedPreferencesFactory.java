@@ -40,6 +40,14 @@ public abstract class SharedPreferencesFactory {
             return null;
     }
 
+    public static Long getLongValueFromPreferences(String key, SharedPreferences sharedPreferences) {
+
+        if (sharedPreferences.contains(key))
+            return sharedPreferences.getLong(key, 0L);
+        else
+            return null;
+    }
+
     public static boolean getBooleanValueFromPreferences(String key, SharedPreferences sharedPreferences) {
         return sharedPreferences.contains(key) && sharedPreferences.getBoolean(key, false);
     }
@@ -49,5 +57,11 @@ public abstract class SharedPreferencesFactory {
         SharedPreferences.Editor edit = sharedPreferences.edit();
         edit.clear();
         edit.apply();
+    }
+
+    public static void setLongValueToPreferences(String key, Long value, SharedPreferences sharedPreferences) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(key, value);
+        editor.apply();
     }
 }
