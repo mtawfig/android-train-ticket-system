@@ -13,7 +13,7 @@
         android:textStyle="bold"
         android:text="@string/from_station"
         android:layout_height="fill_parent"
-        android:padding="10dp"
+        android:paddingStart="10dp"
         android:paddingEnd="5dp"/>
 
 
@@ -22,6 +22,6 @@
         android:layout_height="fill_parent"
         android:id="@+id/select_station_text"
         android:hint="@string/select_station"
-        android:focusable="false"
-        />
+        android:inputType="textNoSuggestions"
+        android:focusable="false" />
 </LinearLayout>
