@@ -44,17 +44,29 @@
             android:layout_weight="1"
             layout="@layout/map_fragment"/>
 
-        <Button
+       <!-- <Button
             android:layout_width="fill_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:text="@string/calculate_route"
             android:id="@+id/button_calculate_route"
-            android:padding="0dp"
-            android:layout_marginLeft="-5dip"
-            android:layout_marginRight="-5dip"
-            android:layout_marginTop="-5dip"
-            android:layout_marginBottom="-5dip"
-            android:drawableEnd="@drawable/ic_forward_black_24dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorWhite"
+            android:onClick="onCalculateRouteClickHandler" />
+        -->
+        <Button
+            android:id="@+id/button_calculate_route"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/calculate_route"
+            android:textColor="@color/colorWhite"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:onClick="onCalculateRouteClickHandler" />
 
     </LinearLayout>

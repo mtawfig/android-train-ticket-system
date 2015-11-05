@@ -53,7 +53,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
         </LinearLayout>
 
-        <Button
+        <!--<Button
             android:layout_width="fill_parent"
             android:layout_height="60dp"
             android:id="@+id/confirm_buy_tickets_button"
@@ -65,6 +65,19 @@
             android:layout_marginTop="-5dip"
             android:layout_marginBottom="-5dip"
             android:drawableEnd="@drawable/ic_forward_black_24dp"
+            android:onClick="onConfirmBuyTicketsClickHandler" /> -->
+
+        <Button
+            android:id="@+id/confirm_buy_tickets_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm_buy_tickets"
+            android:textColor="@color/colorWhite"
+            android:enabled="false"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:onClick="onConfirmBuyTicketsClickHandler" />
 
     </LinearLayout>

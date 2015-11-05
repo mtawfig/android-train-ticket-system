@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -130,13 +131,18 @@ public class CheckoutActivity extends AppCompatActivity {
                         .show();
 
                 Intent intent = new Intent(getBaseContext(), TicketsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
 
             @Override
             public void onTaskError(ErrorResponse error) {
+                
                 Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
                         .show();
+
+                Intent intent = new Intent(getBaseContext(), SignInActivity.class);
+                startActivity(intent);
             }
         }).execute(options);
     }

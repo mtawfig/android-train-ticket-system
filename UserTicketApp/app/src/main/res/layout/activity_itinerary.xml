@@ -25,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginRight="5dp"
             android:id="@+id/showevents"
             android:textSize="12sp"
             android:background="@null"
@@ -94,7 +95,7 @@
             android:layout_weight="1"
             android:layout_height="0dp"/>
 
-        <Button
+        <!--<Button
             android:layout_width="fill_parent"
             android:layout_height="60dp"
             android:id="@+id/buy_tickets_button"
@@ -106,8 +107,20 @@
             android:layout_marginTop="-5dip"
             android:layout_marginBottom="-5dip"
             android:drawableEnd="@drawable/ic_forward_black_24dp"
-            android:onClick="onBuyTicketsClickHandler" />
+            android:onClick="onBuyTicketsClickHandler" /> -->
 
+        <Button
+            android:id="@+id/buy_tickets_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/buy_tickets"
+            android:textColor="@color/colorWhite"
+            android:enabled="false"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:onClick="onBuyTicketsClickHandler" />
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
