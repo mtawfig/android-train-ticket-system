@@ -41,6 +41,7 @@ public class DatePickerDialog extends AppCompatDialogFragment {
         final DialogFragment fragment = this;
 
         final DatePicker datePicker = (DatePicker) view.findViewById(R.id.date_picker_date_picker);
+        datePicker.setMinDate(Calendar.getInstance().getTimeInMillis());
         final TimePicker timePicker = (TimePicker) view.findViewById(R.id.date_picker_time_picker);
         timePicker.setIs24HourView(true);
 
