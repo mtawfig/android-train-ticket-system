@@ -135,14 +135,4 @@ module.exports = function(server) {
         })
     }
   });
-
-  server.route({
-    method: 'GET',
-    path: '/restricted',
-    config: { auth: 'jwt' },
-    handler: function(request, reply) {
-      reply({text: 'You used a Token!'})
-        .header("Authorization", request.headers.authorization);
-    }
-  });
 };

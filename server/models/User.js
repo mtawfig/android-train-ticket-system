@@ -1,6 +1,7 @@
 'use strict';
 
 var Model = require('objection').Model;
+var moment = require('moment');
 
 /**
  * @extends Model
@@ -17,7 +18,7 @@ User.tableName = 'User';
 User.idColumn = 'userId';
 
 User.validate = function (decoded, request, callback) {
-  if (new Date().getTime() > decoded.iat) {
+  if (moment().unix() > decoded.iat) {
     return callback(null, false);
   }
 
