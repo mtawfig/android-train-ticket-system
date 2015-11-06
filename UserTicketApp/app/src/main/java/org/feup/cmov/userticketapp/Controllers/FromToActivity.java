@@ -1,8 +1,10 @@
 package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -62,6 +64,15 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
 
         calculateRouteButton = (Button) findViewById(R.id.button_calculate_route);
         calculateRouteButton.setEnabled(false);
+        calculateRouteButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.common_signin_btn_light_text_disabled));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        
+        sharedData.setToStation(null);
+        sharedData.setFromStation(null);
     }
 
 
@@ -118,8 +129,10 @@ public class FromToActivity extends AppCompatActivity implements MapFragment.Sta
 
         if (mapFragment.isFromAndToStationSet()) {
             calculateRouteButton.setEnabled(true);
+            calculateRouteButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
         } else {
             calculateRouteButton.setEnabled(false);
+            calculateRouteButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.common_signin_btn_light_text_disabled));
         }
     }
 
