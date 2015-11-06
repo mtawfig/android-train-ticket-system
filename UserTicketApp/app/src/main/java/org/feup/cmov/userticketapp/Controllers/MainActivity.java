@@ -191,7 +191,10 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
         int id = item.getItemId();
 
         if (id == R.id.buy_ticket) {
-            // Handle the camera action
+
+            Intent intent = new Intent(getBaseContext(), FromToActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.my_tickets) {
 
             Intent intent = new Intent(getBaseContext(), TicketsActivity.class);
