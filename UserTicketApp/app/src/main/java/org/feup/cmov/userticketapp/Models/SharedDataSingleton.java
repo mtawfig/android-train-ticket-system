@@ -31,7 +31,7 @@ public class SharedDataSingleton {
     private SharedDataSingleton() {}
 
     public boolean setFromStation(Station station) {
-        if (station != null && station != toStation && station != fromStation) {
+        if (station != toStation && station != fromStation) {
             fromStation = station;
             return true;
         }
@@ -39,7 +39,7 @@ public class SharedDataSingleton {
     }
 
     public boolean setToStation(Station station) {
-        if (station != null && station != toStation && station != fromStation) {
+        if (station != toStation && station != fromStation) {
             toStation = station;
             return true;
         }
