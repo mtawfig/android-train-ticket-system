@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.feup.cmov.inspectorticketapp.Models.SharedDataSingleton;
+import org.feup.cmov.inspectorticketapp.Models.Station;
 import org.feup.cmov.inspectorticketapp.Models.Ticket;
 import org.feup.cmov.inspectorticketapp.Models.TicketDbHelper;
 import org.feup.cmov.inspectorticketapp.Models.User;
@@ -65,14 +66,21 @@ public class ScannedTicketActivity extends AppCompatActivity {
 
     public void drawTicketDetails(Ticket storedTicket) {
         TextView ticketTitleText = (TextView) findViewById(R.id.ticket_title);
+
+        String fromStationName, toStationName;
+
         if (storedTicket.getFromStation() != null && storedTicket.getToStation() != null) {
-            ticketTitleText.setText(String.format(
-                    ticketTitleText.getText().toString(),
-                    storedTicket.getFromStation().getName(), storedTicket.getToStation().getName()));
+            fromStationName = storedTicket.getFromStation().getName();
+            toStationName = storedTicket.getToStation().getName();
         }
         else {
-            ticketTitleText.setText(getString(R.string.ticket_no_details));
+            fromStationName = Station.names.get(storedTicket.getFromStationId());
+            toStationName = Station.names.get(storedTicket.getToStationId());
         }
+
+        ticketTitleText.setText(String.format(
+                ticketTitleText.getText().toString(),
+                fromStationName, toStationName));
 
         String date = android.text.format.DateUtils.formatDateTime(this,
                 storedTicket.getDate(),

@@ -12,10 +12,12 @@ import android.widget.Toast;
 
 import org.feup.cmov.inspectorticketapp.Models.ErrorResponse;
 import org.feup.cmov.inspectorticketapp.Models.SharedPreferencesFactory;
+import org.feup.cmov.inspectorticketapp.Models.Station;
 import org.feup.cmov.inspectorticketapp.Models.Ticket;
 import org.feup.cmov.inspectorticketapp.Models.TicketDbHelper;
 import org.feup.cmov.inspectorticketapp.R;
 import org.feup.cmov.inspectorticketapp.Services.ApiService;
+import org.feup.cmov.inspectorticketapp.Services.GetStations;
 import org.feup.cmov.inspectorticketapp.Services.GetTickets;
 import org.feup.cmov.inspectorticketapp.Services.PutTickets;
 
@@ -41,6 +43,25 @@ public class MainActivity extends AppCompatActivity {
         if (!ApiService.isUserSignedIn(this)) {
             goToLogin();
         }
+
+        fetchStationNames();
+    }
+
+    public void fetchStationNames() {
+        new GetStations(context, new GetStations.OnGetStationsTaskCompleted() {
+            @Override
+            public void onTaskCompleted(List<Station> stations) {
+                for(Station station : stations) {
+                    Station.names.put(station.getStationId(), station.getName());
+                }
+            }
+
+            @Override
+            public void onTaskError(ErrorResponse error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }).execute();
     }
 
     public void onLogOutClickHandler(View view) {
