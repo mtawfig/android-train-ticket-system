@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.places.Place;
+
 import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.R;
 
@@ -39,6 +41,8 @@ public class SeatPickerActivity extends AppCompatActivity {
     static Integer carriageCapacity;
     static Integer halfCarriageCapacity;
 
+    static List<PlaceholderFragment> fragments;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,11 +60,13 @@ public class SeatPickerActivity extends AppCompatActivity {
         carriageCapacity = 20;
         halfCarriageCapacity = carriageCapacity/2;
 
+        fragments = new ArrayList<>();
+
         // Set up the ViewPager with the sections adapter.
         /*
       The {@link ViewPager} that will host the section contents.
      */
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.container_view_pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
@@ -72,7 +78,12 @@ public class SeatPickerActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position + 1);
+
+            PlaceholderFragment fragment = PlaceholderFragment.newInstance(position + 1);
+
+            fragments.add(position, fragment);
+
+            return fragment;
         }
 
         @Override
@@ -95,6 +106,11 @@ public class SeatPickerActivity extends AppCompatActivity {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_SECTION_TITLE = "section_title";
 
+        private Integer section;
+
+        private GridView gridView, gridView2;
+        private static Integer selectedPosition = -1;
+
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -104,15 +120,55 @@ public class SeatPickerActivity extends AppCompatActivity {
             return fragment;
         }
 
+        public void updateGridViews(int position) {
+
+            if (gridView != null && selectedPosition < gridView.getChildCount()) {
+
+                ImageView imageView = (ImageView) gridView.getChildAt(selectedPosition);
+
+                if ((int)imageView.getTag() == R.drawable.train_seat_picked) {
+
+                    imageView.setImageResource(R.drawable.train_seat_normal);
+                    imageView.setTag(R.drawable.train_seat_normal);
+
+                } else if ((int)imageView.getTag() == R.drawable.train_seat_picked_180) {
+
+                    imageView.setImageResource(R.drawable.train_seat_normal_180);
+                    imageView.setTag(R.drawable.train_seat_normal_180);
+                }
+
+                if (gridView2 != null && selectedPosition < gridView2.getChildCount()) {
+
+                    ImageView imageView2 = (ImageView) gridView2.getChildAt(selectedPosition);
+
+                    if ((int)imageView2.getTag() == R.drawable.train_seat_picked) {
+
+                        imageView2.setImageResource(R.drawable.train_seat_normal);
+                        imageView2.setTag(R.drawable.train_seat_normal);
+
+                    } else if ((int)imageView2.getTag() == R.drawable.train_seat_picked_180) {
+
+                        imageView2.setImageResource(R.drawable.train_seat_normal_180);
+                        imageView2.setTag(R.drawable.train_seat_normal_180);
+                    }
+                }
+
+                selectedPosition = position;
+            }
+        }
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_seat_picker, container, false);
+
             TextView sectionLabel = (TextView) rootView.findViewById(R.id.section_label);
             sectionLabel.setText(getArguments().getString(ARG_SECTION_TITLE));
 
+            section = getArguments().getInt(ARG_SECTION_NUMBER);
+
             TextView sectionSubLabel = (TextView) rootView.findViewById(R.id.section_sub_label);
-            sectionSubLabel.setText(getString(R.string.carriage_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            sectionSubLabel.setText(getString(R.string.carriage_format, section));
 
             Button nextButton = (Button) rootView.findViewById(R.id.next_carriage_button);
             nextButton.setOnClickListener(new View.OnClickListener() {
@@ -130,28 +186,27 @@ public class SeatPickerActivity extends AppCompatActivity {
                 }
             });
 
-            if (getArguments().getInt(ARG_SECTION_NUMBER) == (int)Math.ceil(((trainCapacity / (float)halfCarriageCapacity) - 1) / 2 + 1)) {
+            if (section == (int)Math.ceil(((trainCapacity / (float)halfCarriageCapacity) - 1) / 2 + 1)) {
                 nextButton.setVisibility(View.GONE);
-            } else if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
+            } else if (section == 1) {
                 backButton.setVisibility(View.GONE);
             }
 
-            final Integer current = calculateCurrent(getArguments().getInt(ARG_SECTION_NUMBER));
+            final Integer current = calculateCurrent(section);
 
-            GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
-            gridview.setAdapter(new ImageAdapter(rootView.getContext(), current));
-            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            gridView = (GridView) rootView.findViewById(R.id.gridview);
+            gridView.setAdapter(new ImageAdapter(rootView.getContext(), current));
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id) {
-
-                    Integer image = (Integer) parent.getItemAtPosition(position);
 
                     Integer seatPosition = (current + position);
 
                     ImageView imageView = (ImageView) v;
-                    Integer currentItem = mViewPager.getCurrentItem();
 
-                    switch (image) {
+                    PlaceholderFragment fragment = fragments.get(calculatePosition(sharedData.getArraySeatNumber().get(ticketIndex))-1);
+
+                    switch ((int)imageView.getTag()) {
                         case R.drawable.train_seat_disabled:
                             Toast.makeText(rootView.getContext(), "The seat is already taken",
                                     Toast.LENGTH_SHORT).show();
@@ -162,41 +217,43 @@ public class SeatPickerActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             break;
                         case R.drawable.train_seat_normal:
-                            Toast.makeText(rootView.getContext(), "The seat " + seatPosition + " is free",
-                                    Toast.LENGTH_SHORT).show();
                             imageView.setImageResource(R.drawable.train_seat_picked);
+                            imageView.setTag(R.drawable.train_seat_picked);
+
                             sharedData.getArraySeatNumber().set(ticketIndex, seatPosition);
 
+                            fragment.updateGridViews(position);
                             break;
                         case R.drawable.train_seat_normal_180:
-                            Toast.makeText(rootView.getContext(), "The seat " + seatPosition + " is free",
-                                    Toast.LENGTH_SHORT).show();
                             imageView.setImageResource(R.drawable.train_seat_picked_180);
+                            imageView.setTag(R.drawable.train_seat_picked_180);
+
                             sharedData.getArraySeatNumber().set(ticketIndex, seatPosition);
 
+                            fragment.updateGridViews(position);
                             break;
                     }
                 }
             });
 
-            if (getArguments().getInt(ARG_SECTION_NUMBER) != 1 && ((current + halfCarriageCapacity) < trainCapacity)) {
+            if (section != 1 && ((current + halfCarriageCapacity) < trainCapacity)) {
 
                 View line = rootView.findViewById(R.id.train_split_line);
                 line.setVisibility(View.VISIBLE);
 
-                GridView gridview2 = (GridView) rootView.findViewById(R.id.gridview2);
-                gridview2.setAdapter(new ImageAdapter(rootView.getContext(), current + halfCarriageCapacity));
-                gridview2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                gridView2 = (GridView) rootView.findViewById(R.id.gridview2);
+                gridView2.setAdapter(new ImageAdapter(rootView.getContext(), current + halfCarriageCapacity));
+                gridView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View v,
                                             int position, long id) {
-
-                        Integer image = (Integer) parent.getItemAtPosition(position);
 
                         Integer seatPosition = (current + halfCarriageCapacity + position);
 
                         ImageView imageView = (ImageView) v;
 
-                        switch (image) {
+                        PlaceholderFragment fragment = fragments.get(calculatePosition(sharedData.getArraySeatNumber().get(ticketIndex))-1);
+
+                        switch ((int)imageView.getTag()) {
                             case R.drawable.train_seat_disabled:
                                 Toast.makeText(rootView.getContext(), "The seat is already taken",
                                         Toast.LENGTH_SHORT).show();
@@ -208,17 +265,24 @@ public class SeatPickerActivity extends AppCompatActivity {
                                 break;
                             case R.drawable.train_seat_normal:
                                 imageView.setImageResource(R.drawable.train_seat_picked);
+                                imageView.setTag(R.drawable.train_seat_picked);
 
                                 sharedData.getArraySeatNumber().set(ticketIndex, seatPosition);
+
+                                fragment.updateGridViews(position);
                                 break;
                             case R.drawable.train_seat_normal_180:
                                 imageView.setImageResource(R.drawable.train_seat_picked_180);
+                                imageView.setTag(R.drawable.train_seat_picked_180);
+
                                 sharedData.getArraySeatNumber().set(ticketIndex, seatPosition);
+
+                                fragment.updateGridViews(position);
                                 break;
                         }
                     }
                 });
-                gridview2.setVisibility(View.VISIBLE);
+                gridView2.setVisibility(View.VISIBLE);
             }
 
             return rootView;
@@ -232,6 +296,14 @@ public class SeatPickerActivity extends AppCompatActivity {
                 return -(halfCarriageCapacity + carriageCapacity) + carriageCapacity * position;
         }
 
+        public int calculatePosition(int current) {
+
+            if (current >= 0 && current < 10)
+                return 1;
+
+            return ((halfCarriageCapacity + carriageCapacity) + current) / carriageCapacity;
+        }
+
         public class ImageAdapter extends BaseAdapter {
 
             private Context mContext;
@@ -239,32 +311,40 @@ public class SeatPickerActivity extends AppCompatActivity {
             // references to our images
             private List<Integer> mThumbIds;
 
+            private boolean seatsBoolean(int i) {
+                return (i == 0 || i == 2 || i == 5 || i == 7);
+            }
+
             public ImageAdapter(Context c, Integer current) {
                 mContext = c;
                 mThumbIds = new ArrayList<>();
 
+                int index = 0;
                 for (int i = current; i < (((current + halfCarriageCapacity) > trainCapacity) ? trainCapacity : (current + halfCarriageCapacity)); i++) {
 
                     if (sharedData.getArraySeatNumber().get(ticketIndex) == i) {
-                        if (i % 2 == 0) {
+                        if (seatsBoolean(index)) {
                             mThumbIds.add(R.drawable.train_seat_picked);
                         } else {
                             mThumbIds.add(R.drawable.train_seat_picked_180);
                         }
+                        index++;
+                        selectedPosition = mThumbIds.size()-1;
                         continue;
                     }
 
                     if (sharedData.getFreeSeats().get(ticketIndex).contains(i)) {
-                        if (i % 2 == 0)
+                        if (seatsBoolean(index))
                             mThumbIds.add(R.drawable.train_seat_normal);
                         else
                             mThumbIds.add(R.drawable.train_seat_normal_180);
                     } else {
-                        if (i % 2 == 0)
+                        if (seatsBoolean(index))
                             mThumbIds.add(R.drawable.train_seat_disabled);
                         else
                             mThumbIds.add(R.drawable.train_seat_disabled_180);
                     }
+                    index++;
                 }
             }
 
@@ -294,6 +374,7 @@ public class SeatPickerActivity extends AppCompatActivity {
                 }
 
                 imageView.setImageResource(mThumbIds.get(position));
+                imageView.setTag(mThumbIds.get(position));
                 return imageView;
             }
         }
