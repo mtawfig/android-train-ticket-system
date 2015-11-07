@@ -75,7 +75,7 @@ var getTrain = function(step) {
     .innerJoin('Train', 'trip.trainId', 'train.trainId')
 };
 
-Ticket.getFreeSeats = function(step, date) {
+Ticket.getFreeSeatsDetails = function(step, date) {
   var arraySeatsTaken;
   return getSeatsOfTrip(step, date)
     .then(function(result) {
@@ -91,7 +91,10 @@ Ticket.getFreeSeats = function(step, date) {
         }
       }
 
-      return freeSeats;
+      return {
+        freeSeats: freeSeats,
+        train: train
+      };
     });
 };
 
