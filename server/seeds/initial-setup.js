@@ -97,10 +97,10 @@ var defaultConnections = [
 ];
 
 var defaultTrains = [
-  train(1, 5),
-  train(2, 5),
-  train(3, 5),
-  train(4, 5)
+  train(1, 50),
+  train(2, 50),
+  train(3, 50),
+  train(4, 50)
 ];
 
 var defaultTrips = [
