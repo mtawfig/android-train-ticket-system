@@ -77,8 +77,6 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
                 freeSeats.set(i, freeSeats.get(i) + 1);
             }
 
-            sharedData.getArraySeatNumber().set(ticketIndex, freeSeats.get(0));
-
             ArrayAdapter<Integer> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, freeSeats);
             spinner.setAdapter(adapter);
 
@@ -119,7 +117,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
         ArrayList<Integer> arraySeatNumber = sharedData.getArraySeatNumber();
         arraySeatNumber.clear();
         for(Itinerary.Step step : itinerary.getSteps()) {
-            arraySeatNumber.add(null);
+            arraySeatNumber.add(step.getFreeSeats().get(0));
         }
     }
 
