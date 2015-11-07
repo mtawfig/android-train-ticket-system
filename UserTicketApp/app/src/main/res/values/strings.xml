@@ -4,6 +4,7 @@
     <string name="title_activity_stations">Stations</string>
     <string name="title_activity_from_to">Select Itinerary</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="carriage_format">Carriage: %1$d</string>
     <string name="get_me_somewhere">Get me somewhere</string>
     <string name="calculate_route">Calculate Route</string>
     <string name="select_station">Select station…</string>
@@ -97,4 +98,10 @@
     <string name="login_or_register">Login or Register</string>
     <string name="see_my_tickets">See My Tickets</string>
     <string name="click_station_for_timetables">Click on a station for timetables</string>
+    <string name="pick_seat_button_text">Pick Seat</string>
+    <string name="back_carriage_btn">Back carriage</string>
+    <string name="next_carriage_btn">Next carriage</string>
+    <string name="free_seat">Free seat</string>
+    <string name="taken_seat">Taken seat</string>
+    <string name="picked_seat">Picked seat</string>
 </resources>

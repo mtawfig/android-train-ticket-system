@@ -1,13 +1,16 @@
 package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -70,12 +73,26 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
                     ticketDateText.getText().toString(),
                     date, step.getHoursStart(), step.getMinutesStart()));
 
+            Button seatNumberButton = (Button) mView.findViewById(R.id.seat_number_btn);
+            seatNumberButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(mView.getContext(), SeatPickerActivity.class);
+                    intent.putExtra("ticketIndex", ticketIndex);
+                    mView.getContext().startActivity(intent);
+                }
+            });
+
             Spinner spinner = (Spinner) mView.findViewById(R.id.seat_number_spinner);
 
             ArrayList<Integer> freeSeats = new ArrayList<>(step.getFreeSeats());
             for (int i = 0; i < freeSeats.size(); i++) {
                 freeSeats.set(i, freeSeats.get(i) + 1);
             }
+
+            sharedData.getFreeSeats().put(ticketIndex, step.getFreeSeats());
+            sharedData.getTrainCapacity().put(ticketIndex, step.getTrain().getCapacity());
 
             ArrayAdapter<Integer> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, freeSeats);
             spinner.setAdapter(adapter);

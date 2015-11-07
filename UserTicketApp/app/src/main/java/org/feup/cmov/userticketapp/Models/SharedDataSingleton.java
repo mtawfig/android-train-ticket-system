@@ -1,7 +1,11 @@
 package org.feup.cmov.userticketapp.Models;
 
+import android.widget.ArrayAdapter;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +27,9 @@ public class SharedDataSingleton {
     @Getter @Setter private Ticket selectedTicket;
 
     @Getter @Setter private ArrayList<Integer> arraySeatNumber = new ArrayList<>();
+
+    @Getter @Setter private Map<Integer, ArrayList<Integer>> freeSeats = new HashMap<>();
+    @Getter @Setter private Map<Integer, Integer> trainCapacity = new HashMap<>();
 
     public static SharedDataSingleton getInstance() {
         return ourInstance;

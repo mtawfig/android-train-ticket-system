@@ -68,11 +68,21 @@
                 <Spinner
                     android:id="@+id/seat_number_spinner"
                     android:layout_weight="1"
-                    android:layout_width="0dp"
+                    android:layout_width="20dp"
                     android:layout_height="wrap_content"
+                    android:padding="0dp"
                     />
             </LinearLayout>
 
+            <Button
+                android:id="@+id/seat_number_btn"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorWhite"
+                android:text="@string/pick_seat_button_text"
+                />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

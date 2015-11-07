@@ -94,6 +94,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controllers.TicketsActivity" />
         </activity>
+        <activity
+            android:name=".Controllers.SeatPickerActivity"
+            android:label="Pick a seat" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.CheckoutActivity" />
+        </activity>
     </application>
 
 </manifest>

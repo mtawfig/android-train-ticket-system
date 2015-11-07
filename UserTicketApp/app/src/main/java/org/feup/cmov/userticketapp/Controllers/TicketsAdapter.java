@@ -34,6 +34,7 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.TicketsV
             super(v);
             mView = v;
             v.findViewById(R.id.seat_select_layout).setVisibility(View.GONE);
+            v.findViewById(R.id.seat_number_btn).setVisibility(View.GONE);
             v.setOnClickListener(this);
             ticketTitleText = (TextView) mView.findViewById(R.id.ticket_title);
             ticketDateText = (TextView) mView.findViewById(R.id.ticket_date_hours);
