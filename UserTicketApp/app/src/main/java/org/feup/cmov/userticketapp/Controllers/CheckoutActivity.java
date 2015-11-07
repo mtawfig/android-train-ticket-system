@@ -131,7 +131,7 @@ public class CheckoutActivity extends AppCompatActivity {
                         .show();
 
                 Intent intent = new Intent(getBaseContext(), TicketsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
 
