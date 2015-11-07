@@ -21,6 +21,11 @@ public class Itinerary {
 
     @Getter ArrayList<Step> steps;
 
+    public class Train {
+        @Getter int trainId;
+        @Getter int capacity;
+    }
+
     public class Step {
         @Getter int hoursStart;
         @Getter int minutesStart;
@@ -38,6 +43,8 @@ public class Itinerary {
         @Getter Station endStation;
 
         @Getter @Setter ArrayList<Integer> freeSeats;
+
+        @Getter Train train;
 
         public long getStepId() {
             return Long.valueOf(String.format("%d%d%d%d%d%d%d%d", hoursStart, hoursEnd,
