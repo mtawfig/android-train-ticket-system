@@ -8,21 +8,25 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.gson.Gson;
 
-public class TicketDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 4;
+public class DatabaseHelper extends SQLiteOpenHelper {
+    public static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "ticket.db";
     public final static Gson gson = new Gson();
+    private static Context context;
 
-    public TicketDbHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        DatabaseHelper.context = context;
     }
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(TicketContract.SQL_CREATE_ENTRIES);
+        db.execSQL(CreditCardContract.SQL_CREATE_ENTRIES);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(TicketContract.SQL_DELETE_ENTRIES);
+        db.execSQL(CreditCardContract.SQL_DELETE_ENTRIES);
         onCreate(db);
     }
 
@@ -72,6 +76,13 @@ public class TicketDbHelper extends SQLiteOpenHelper {
                 TicketEntry.TABLE_NAME,
                 null,
                 ticket.toDatabaseValues());
+    }
+
+    public static long insertCreditCard(SQLiteDatabase db, CreditCard creditCard) {
+        return db.insert(
+                CreditCardEntry.TABLE_NAME,
+                null,
+                creditCard.toDatabaseValues(context));
     }
 
     public static void deleteAllTickets(SQLiteDatabase db) {

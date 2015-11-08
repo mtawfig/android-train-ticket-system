@@ -19,10 +19,7 @@ public class SharedDataSingleton {
 
     @Getter @Setter private Date selectedDate;
 
-    @Getter @Setter private String creditCardNumber = "1111111111111110";
-    @Getter @Setter private String creditCardMonth = "1";
-    @Getter @Setter private String creditCardYear = "16";
-    @Getter @Setter private String creditCardCode = "123";
+    @Getter @Setter private CreditCard creditCard;
 
     @Getter @Setter private Ticket selectedTicket;
 

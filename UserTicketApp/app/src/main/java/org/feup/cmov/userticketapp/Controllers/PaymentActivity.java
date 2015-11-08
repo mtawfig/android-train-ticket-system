@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import org.feup.cmov.userticketapp.Helpers.CreditCardNumberChangeListener;
+import org.feup.cmov.userticketapp.Models.CreditCard;
 import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.R;
 
@@ -41,10 +42,13 @@ public class PaymentActivity extends AppCompatActivity {
         mCreditCardYearView = (EditText) findViewById(R.id.credit_card_year);
         mCreditCardCodeView = (EditText) findViewById(R.id.credit_card_code);
 
-        mCreditCardNumberView.setText(sharedData.getCreditCardNumber());
-        mCreditCardMonthView.setText(sharedData.getCreditCardMonth());
-        mCreditCardYearView.setText(sharedData.getCreditCardYear());
-        mCreditCardCodeView.setText(sharedData.getCreditCardCode());
+        CreditCard card = sharedData.getCreditCard();
+        if (card != null) {
+            mCreditCardNumberView.setText(String.valueOf(card.getNumber()));
+            mCreditCardMonthView.setText(String.valueOf(card.getMonth()));
+            mCreditCardYearView.setText(String.valueOf(card.getYear()));
+            mCreditCardCodeView.setText(String.valueOf(card.getCode()));
+        }
     }
 
     @Override
@@ -114,10 +118,13 @@ public class PaymentActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            sharedData.setCreditCardNumber(cardNumber);
-            sharedData.setCreditCardMonth(cardMonth);
-            sharedData.setCreditCardYear(cardYear);
-            sharedData.setCreditCardCode(cardCode);
+            CreditCard card = new CreditCard(
+                    Long.parseLong(cardNumber.replaceAll("\\D", "")),
+                    Integer.parseInt(cardMonth),
+                    Integer.parseInt(cardYear),
+                    Integer.parseInt(cardCode)
+            );
+            sharedData.setCreditCard(card);
 
             Intent intent = new Intent(getBaseContext(), CheckoutActivity.class);
             startActivity(intent);

@@ -10,11 +10,7 @@ public class BuyTicketOptions {
     @Getter @Setter Station startStation;
     @Getter @Setter Station endStation;
 
-    @Getter @Setter String creditCardNumber;
-    @Getter @Setter String creditCardMonth ;
-    @Getter @Setter String creditCardYear  ;
-    @Getter @Setter String creditCardCode  ;
-
+    @Getter @Setter CreditCard creditCard;
     @Getter @Setter Date date;
 
     @Getter @Setter ArrayList<Integer> arraySeatNumber;

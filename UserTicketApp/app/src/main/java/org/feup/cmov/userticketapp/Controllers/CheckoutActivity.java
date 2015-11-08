@@ -2,6 +2,7 @@ package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.feup.cmov.userticketapp.Models.BuyTicketOptions;
+import org.feup.cmov.userticketapp.Models.CreditCard;
+import org.feup.cmov.userticketapp.Models.DatabaseHelper;
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.GetItineraryOptions;
 import org.feup.cmov.userticketapp.Models.Itinerary;
@@ -114,10 +117,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         options.setStartStation(sharedData.getFromStation());
         options.setEndStation(sharedData.getToStation());
-        options.setCreditCardNumber(sharedData.getCreditCardNumber());
-        options.setCreditCardMonth(sharedData.getCreditCardMonth());
-        options.setCreditCardYear(sharedData.getCreditCardYear());
-        options.setCreditCardCode(sharedData.getCreditCardCode());
+        options.setCreditCard(sharedData.getCreditCard());
         options.setDate(sharedData.getSelectedDate());
         options.setArraySeatNumber(sharedData.getArraySeatNumber());
 
@@ -128,6 +128,10 @@ public class CheckoutActivity extends AppCompatActivity {
             public void onTaskCompleted(ArrayList<Ticket> tickets) {
                 Toast.makeText(context, "Tickets bough successfully", Toast.LENGTH_SHORT)
                         .show();
+
+                DatabaseHelper dbHelper = new DatabaseHelper(context);
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                DatabaseHelper.insertCreditCard(db, sharedData.getCreditCard());
 
                 Intent intent = new Intent(getBaseContext(), TicketsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

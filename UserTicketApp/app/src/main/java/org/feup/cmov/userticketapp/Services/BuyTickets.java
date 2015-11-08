@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import com.google.gson.reflect.TypeToken;
 
 import org.feup.cmov.userticketapp.Models.BuyTicketOptions;
+import org.feup.cmov.userticketapp.Models.CreditCard;
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.HttpResponse;
 import org.feup.cmov.userticketapp.Models.Station;
@@ -45,10 +46,11 @@ public class BuyTickets extends AsyncTask<BuyTicketOptions, Void, HttpResponse> 
         BuyTicketOptions options = optionsList[0];
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put("cardNumber", options.getCreditCardNumber().replaceAll("\\D", ""));
-        contentValues.put("monthExpiration", options.getCreditCardMonth());
-        contentValues.put("yearExpiration", options.getCreditCardYear());
-        contentValues.put("cardSecurityCode", options.getCreditCardCode());
+        CreditCard card = options.getCreditCard();
+        contentValues.put("cardNumber", card.getNumber());
+        contentValues.put("monthExpiration", card.getMonth());
+        contentValues.put("yearExpiration", card.getYear());
+        contentValues.put("cardSecurityCode", card.getCode());
 
         if (options.getDate() != null) {
             String dateString = new SimpleDateFormat("yyyy-MM-dd", Locale.UK).format(options.getDate());

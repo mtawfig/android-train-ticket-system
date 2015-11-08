@@ -11,11 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.Api;
-
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.Ticket;
-import org.feup.cmov.userticketapp.Models.TicketDbHelper;
+import org.feup.cmov.userticketapp.Models.DatabaseHelper;
 import org.feup.cmov.userticketapp.R;
 import org.feup.cmov.userticketapp.Services.ApiService;
 import org.feup.cmov.userticketapp.Services.GetTickets;
@@ -30,7 +28,7 @@ public class TicketsActivity extends AppCompatActivity {
     private TicketsAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeContainer;
-    private TicketDbHelper mDbHelper;
+    private DatabaseHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +45,7 @@ public class TicketsActivity extends AppCompatActivity {
             return;
         }
         
-        mDbHelper = new TicketDbHelper(this);
+        mDbHelper = new DatabaseHelper(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.tickets_recycler_view);
 
@@ -106,17 +104,17 @@ public class TicketsActivity extends AppCompatActivity {
     public void saveTicketsToDatabase(List<Ticket> tickets) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        TicketDbHelper.deleteAllTickets(db);
+        DatabaseHelper.deleteAllTickets(db);
 
         for (Ticket ticket : tickets) {
-            TicketDbHelper.insertTicket(db, ticket);
+            DatabaseHelper.insertTicket(db, ticket);
         }
     }
 
     public ArrayList<Ticket> getTicketsFromDatabase() {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        Ticket[] tickets = TicketDbHelper.getAllTickets(db);
+        Ticket[] tickets = DatabaseHelper.getAllTickets(db);
         return new ArrayList<>(Arrays.asList(tickets));
     }
 }
