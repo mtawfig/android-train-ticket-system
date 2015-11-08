@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
         drawerMenu.findItem(R.id.sign_out_menu).setVisible(isUserSignedIn);
 
         if (isUserSignedIn) {
-            drawerImageView.setImageResource(R.drawable.gravatar);
+            drawerImageView.setImageResource(R.drawable.ic_users_user_icon);
             drawerNameTextView.setText(SharedPreferencesFactory.getStringValueFromPreferences(getString(R.string.shared_preferences_user_name_key), sharedPreferences));
             drawerEmailTextView.setText(SharedPreferencesFactory.getStringValueFromPreferences(getString(R.string.shared_preferences_user_email_key), sharedPreferences));
             loginButton.setVisibility(View.GONE);
