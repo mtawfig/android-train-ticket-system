@@ -2,11 +2,14 @@ package org.feup.cmov.userticketapp.Models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.gson.Gson;
+
+import org.feup.cmov.userticketapp.R;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 5;
@@ -113,5 +116,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return tickets;
+    }
+
+    public static CreditCard[] getAllCreditCards(SQLiteDatabase db) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                context.getString(R.string.shared_preferences_identifier),
+                Context.MODE_PRIVATE);
+        String userId = sharedPreferences.getString(
+                                context.getString(R.string.shared_preferences_user_id_key), "0");
+
+        String[] projection = {
+                CreditCardEntry.COLUMN_NAME_NUMBER,
+                CreditCardEntry.COLUMN_NAME_CODE,
+                CreditCardEntry.COLUMN_NAME_MONTH,
+                CreditCardEntry.COLUMN_NAME_YEAR,
+        };
+        String selection = CreditCardEntry.COLUMN_NAME_USER_ID + " = ?";
+        String[] selectionArgs = { userId };
+
+        Cursor cursor = db.query(
+                CreditCardEntry.TABLE_NAME,  // The table to query
+                projection,              // The columns to return
+                selection,               // The columns for the WHERE clause
+                selectionArgs,           // The values for the WHERE clause
+                null,                    // don't group the rows
+                null,                    // don't filter by row groups
+                null                     // The sort order
+        );
+
+        CreditCard[] creditCards = new CreditCard[cursor.getCount()];
+        int i = 0;
+        while (cursor.moveToNext()) {
+            CreditCard card = new CreditCard(
+                    cursor.getLong(cursor.getColumnIndexOrThrow(CreditCardEntry.COLUMN_NAME_NUMBER)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(CreditCardEntry.COLUMN_NAME_MONTH)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(CreditCardEntry.COLUMN_NAME_YEAR)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(CreditCardEntry.COLUMN_NAME_CODE))
+            );
+            creditCards[i] = card;
+            i++;
+        }
+        cursor.close();
+
+        return creditCards;
     }
 }

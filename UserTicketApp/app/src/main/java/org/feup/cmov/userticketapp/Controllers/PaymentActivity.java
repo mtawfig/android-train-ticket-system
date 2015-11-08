@@ -1,20 +1,28 @@
 package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import org.feup.cmov.userticketapp.Helpers.CreditCardNumberChangeListener;
 import org.feup.cmov.userticketapp.Models.CreditCard;
+import org.feup.cmov.userticketapp.Models.DatabaseHelper;
 import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.R;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
 
 public class PaymentActivity extends AppCompatActivity {
 
@@ -42,12 +50,42 @@ public class PaymentActivity extends AppCompatActivity {
         mCreditCardYearView = (EditText) findViewById(R.id.credit_card_year);
         mCreditCardCodeView = (EditText) findViewById(R.id.credit_card_code);
 
-        CreditCard card = sharedData.getCreditCard();
-        if (card != null) {
-            mCreditCardNumberView.setText(String.valueOf(card.getNumber()));
-            mCreditCardMonthView.setText(String.valueOf(card.getMonth()));
-            mCreditCardYearView.setText(String.valueOf(card.getYear()));
-            mCreditCardCodeView.setText(String.valueOf(card.getCode()));
+        Spinner spinner = (Spinner) findViewById(R.id.credit_card_spinner);
+
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final CreditCard[] creditCards = DatabaseHelper.getAllCreditCards(db);
+
+        if (creditCards.length > 0) {
+
+            ArrayList<String> creditCardNumbers = new ArrayList<>();
+            for (CreditCard creditCard : creditCards) {
+                creditCardNumbers.add(String.valueOf(creditCard.getNumber()));
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, creditCardNumbers);
+            spinner.setAdapter(adapter);
+
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    CreditCard selectedCard = creditCards[position];
+                    mCreditCardNumberView.setText(String.valueOf(selectedCard.getNumber()));
+                    mCreditCardMonthView.setText(String.valueOf(selectedCard.getMonth()));
+                    mCreditCardYearView.setText(String.valueOf(selectedCard.getYear()));
+                    mCreditCardCodeView.setText(String.valueOf(selectedCard.getCode()));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
+        else {
+            LinearLayout previousCardsLayout = (LinearLayout) findViewById(R.id.previous_cards_layout);
+            previousCardsLayout.setVisibility(View.GONE);
         }
     }
 
