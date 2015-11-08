@@ -124,12 +124,21 @@ public class SeatPickerActivity extends AppCompatActivity {
         return ((halfCarriageCapacity + carriageCapacity) + current) / carriageCapacity;
     }
 
+    private static void updateFragments() {
+
+        for (PlaceholderFragment fragment : fragments) {
+            fragment.updateTextView();
+        }
+    }
+
     public static class PlaceholderFragment extends Fragment {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_SECTION_TITLE = "section_title";
 
         private Integer section;
+
+        private TextView selectedSeatTextView;
 
         private GridView gridView, gridView2;
         private static Integer selectedPosition = -1;
@@ -180,6 +189,10 @@ public class SeatPickerActivity extends AppCompatActivity {
             }
         }
 
+        public void updateTextView() {
+            selectedSeatTextView.setText(getResources().getString(R.string.selected_seat, (sharedData.getArraySeatNumber().get(ticketIndex)+1), calculatePosition(sharedData.getArraySeatNumber().get(ticketIndex))));
+        }
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -215,6 +228,9 @@ public class SeatPickerActivity extends AppCompatActivity {
                 backButton.setVisibility(View.GONE);
             }
 
+            selectedSeatTextView = (TextView) rootView.findViewById(R.id.section_seat);
+            selectedSeatTextView.setText(getResources().getString(R.string.selected_seat, (sharedData.getArraySeatNumber().get(ticketIndex)+1), calculatePosition(sharedData.getArraySeatNumber().get(ticketIndex))));
+
             final Integer current = calculateCurrent(section);
 
             gridView = (GridView) rootView.findViewById(R.id.gridview);
@@ -246,6 +262,7 @@ public class SeatPickerActivity extends AppCompatActivity {
                             sharedData.getArraySeatNumber().set(ticketIndex, seatPosition);
 
                             fragment.updateGridViews(position);
+                            updateFragments();
                             break;
                         case R.drawable.train_seat_normal_180:
                             imageView.setImageResource(R.drawable.train_seat_picked_180);
@@ -254,6 +271,7 @@ public class SeatPickerActivity extends AppCompatActivity {
                             sharedData.getArraySeatNumber().set(ticketIndex, seatPosition);
 
                             fragment.updateGridViews(position);
+                            updateFragments();
                             break;
                     }
                 }
@@ -293,6 +311,7 @@ public class SeatPickerActivity extends AppCompatActivity {
                                 sharedData.getArraySeatNumber().set(ticketIndex, seatPosition);
 
                                 fragment.updateGridViews(position);
+                                updateFragments();
                                 break;
                             case R.drawable.train_seat_normal_180:
                                 imageView.setImageResource(R.drawable.train_seat_picked_180);
@@ -301,6 +320,7 @@ public class SeatPickerActivity extends AppCompatActivity {
                                 sharedData.getArraySeatNumber().set(ticketIndex, seatPosition);
 
                                 fragment.updateGridViews(position);
+                                updateFragments();
                                 break;
                         }
                     }

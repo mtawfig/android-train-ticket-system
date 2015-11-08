@@ -105,4 +105,5 @@
     <string name="taken_seat">Taken seat</string>
     <string name="picked_seat">Picked seat</string>
     <string name="register_account_instead">Register an account instead</string>
+    <string name="selected_seat">Seat: %1$d &#160;&#160;&#160; Carriage: %2$d</string>
 </resources>

@@ -27,6 +27,18 @@
         android:background="@android:color/transparent"
         android:textSize="14sp" />
 
+    <TextView
+        android:id="@+id/section_seat"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/colorAccent"
+        android:background="@android:color/transparent"
+        android:textSize="14sp"
+        android:text="@string/selected_seat"
+        android:textStyle="bold"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
