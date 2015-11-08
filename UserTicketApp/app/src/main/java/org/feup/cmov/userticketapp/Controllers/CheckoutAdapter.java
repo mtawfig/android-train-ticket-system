@@ -122,17 +122,6 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
 
     public CheckoutAdapter(Context context) {
         mContext = context;
-        setHasStableIds(true);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        if (position == 0) {
-            return 0L;
-        } else {
-            Itinerary.Step step = mItinerary.getSteps().get(position - 1);
-            return step.getStepId();
-        }
     }
 
     public void setItinerary(Itinerary itinerary) {
@@ -143,6 +132,16 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
         for(Itinerary.Step step : itinerary.getSteps()) {
             arraySeatNumber.add(step.getFreeSeats().get(0));
         }
+
+
+        recycler.removeAllViews();
+        notifyItemRangeRemoved(0, itinerary.getSteps().size() + 1);
+        notifyItemRangeInserted(0, itinerary.getSteps().size() + 1);
+    }
+
+    private RecyclerView recycler;
+    public void onAttachedToRecyclerView(RecyclerView view) {
+        recycler = view;
     }
 
     @Override

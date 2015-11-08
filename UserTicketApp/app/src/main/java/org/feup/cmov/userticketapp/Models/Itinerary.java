@@ -45,12 +45,5 @@ public class Itinerary {
         @Getter @Setter ArrayList<Integer> freeSeats;
 
         @Getter Train train;
-
-        public long getStepId() {
-            return Long.valueOf(String.format("%d%d%d%d%d%d%d%d", hoursStart, hoursEnd,
-                    minutesStart, minutesEnd,
-                    numberOfStops, duration,
-                    startStation.getStationId(), endStation.getStationId()));
-        }
     }
 }

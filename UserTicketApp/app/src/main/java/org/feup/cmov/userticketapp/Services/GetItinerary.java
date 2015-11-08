@@ -2,6 +2,7 @@ package org.feup.cmov.userticketapp.Services;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.GetItineraryOptions;
