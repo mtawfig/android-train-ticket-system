@@ -53,6 +53,7 @@
     <string name="tickets_details">Tickets Details</string>
     <string name="ticket_title_text">%1$s to %2$s</string>
     <string name="ticket_date_hours">%1$s, %2$02dh%3$02d</string>
+    <string name="ticket_date_hours_and_seat">%1$s, %2$02dh%3$02d, Seat %4$d</string>
     <string name="select_seat_number">Seat number: </string>
     <string name="title_activity_tickets">My Tickets</string>
 

@@ -53,8 +53,8 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.TicketsV
                     DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
 
             ticketDateText.setText(String.format(
-                    ticketDateText.getText().toString(),
-                    date, ticket.getHoursStart(), ticket.getMinutesStart()));
+                    mContext.getString(R.string.ticket_date_hours_and_seat),
+                    date, ticket.getHoursStart(), ticket.getMinutesStart(), ticket.getSeatNumber() + 1));
 
             if (ticket.getUsed()) {
                 cardView.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.colorItemUsed));
