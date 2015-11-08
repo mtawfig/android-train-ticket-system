@@ -82,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
 
         if (ApiService.isUserSignedIn(this)) {
             loginButton.setVisibility(View.GONE);
+            seeMyTicketsButton.setVisibility(View.VISIBLE);
+        } else {
+            seeMyTicketsButton.setVisibility(View.GONE);
         }
 
         updateDrawer();
