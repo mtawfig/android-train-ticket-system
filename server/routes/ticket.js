@@ -13,7 +13,7 @@ var Queue = require('promise-queue');
 var creditCardService = {
   charge: function(cardNumber, month, year, securityCode, amount) {
     return new Promise(function (resolve, reject) {
-      if (cardNumber % 2 === 0) {
+      if (cardNumber % 10 === 9) {
         resolve();
       } else {
         reject(new Error('Invalid credit card'));
