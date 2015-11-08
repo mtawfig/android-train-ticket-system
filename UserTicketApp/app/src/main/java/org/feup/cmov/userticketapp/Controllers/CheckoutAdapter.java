@@ -19,6 +19,7 @@ import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.R;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.CheckoutViewHolder> {
     private static Itinerary mItinerary;
@@ -97,8 +98,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
             spinner.setAdapter(adapter);
 
             if (ticketIndex < sharedData.getArraySeatNumber().size()) {
-                System.out.println("SEAT: " + sharedData.getArraySeatNumber().get(ticketIndex));
-                spinner.setSelection(sharedData.getArraySeatNumber().get(ticketIndex));
+                spinner.setSelection(adapter.getPosition(sharedData.getArraySeatNumber().get(ticketIndex)+1));
             }
 
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -106,7 +106,10 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     Integer seatNumber = (Integer) parent.getItemAtPosition(position);
-                    sharedData.getArraySeatNumber().set(ticketIndex, seatNumber - 1);
+
+                    if (!Objects.equals(seatNumber, sharedData.getArraySeatNumber().get(ticketIndex))) {
+                        sharedData.getArraySeatNumber().set(ticketIndex, seatNumber - 1);
+                    }
                 }
 
                 @Override

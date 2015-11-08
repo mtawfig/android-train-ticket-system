@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -133,6 +132,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 Intent intent = new Intent(getBaseContext(), TicketsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();
             }
 
             @Override
@@ -145,5 +145,12 @@ public class CheckoutActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }).execute(options);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mAdapter.notifyDataSetChanged();
     }
 }

@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,8 +19,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.location.places.Place;
 
 import org.feup.cmov.userticketapp.Models.SharedDataSingleton;
 import org.feup.cmov.userticketapp.R;
@@ -62,12 +61,20 @@ public class SeatPickerActivity extends AppCompatActivity {
 
         fragments = new ArrayList<>();
 
-        // Set up the ViewPager with the sections adapter.
-        /*
-      The {@link ViewPager} that will host the section contents.
-     */
         mViewPager = (ViewPager) findViewById(R.id.container_view_pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -99,6 +106,22 @@ public class SeatPickerActivity extends AppCompatActivity {
                 return "Tourist - 2nd Class";
             }
         }
+    }
+
+    private static int calculateCurrent(int position) {
+
+        if (position == 1)
+            return 0;
+        else
+            return -(halfCarriageCapacity + carriageCapacity) + carriageCapacity * position;
+    }
+
+    private static int calculatePosition(int current) {
+
+        if (current >= 0 && current < 10)
+            return 1;
+
+        return ((halfCarriageCapacity + carriageCapacity) + current) / carriageCapacity;
     }
 
     public static class PlaceholderFragment extends Fragment {
@@ -286,22 +309,6 @@ public class SeatPickerActivity extends AppCompatActivity {
             }
 
             return rootView;
-        }
-
-        public int calculateCurrent(int position) {
-
-            if (position == 1)
-                return 0;
-            else
-                return -(halfCarriageCapacity + carriageCapacity) + carriageCapacity * position;
-        }
-
-        public int calculatePosition(int current) {
-
-            if (current >= 0 && current < 10)
-                return 1;
-
-            return ((halfCarriageCapacity + carriageCapacity) + current) / carriageCapacity;
         }
 
         public class ImageAdapter extends BaseAdapter {

@@ -1,6 +1,7 @@
 package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -62,6 +63,15 @@ public class TicketsActivity extends AppCompatActivity {
         mAdapter.setTickets(storedTickets);
 
         getTickets();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
     private final Context context = this;
