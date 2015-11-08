@@ -2,6 +2,7 @@ package org.feup.cmov.userticketapp.Controllers;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,43 +43,50 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
 
     public static class VHItem extends ItineraryViewHolder {
         public View mView;
+        TextView startStationText;
+        TextView endStationText;
+        TextView startTimeText;
+        TextView endTimeText;
+        TextView lineNameText;
+        View waitView;
+        TextView waitText;
         public VHItem(View v) {
             super(v);
             mView = v;
+            startStationText = (TextView) mView.findViewById(R.id.start_station_name);
+            endStationText = (TextView) mView.findViewById(R.id.end_station_name);
+            startTimeText = (TextView) mView.findViewById(R.id.start_time);
+            endTimeText = (TextView) mView.findViewById(R.id.end_time);
+            lineNameText = (TextView) mView.findViewById(R.id.line_and_stops);
+            waitView = mView.findViewById(R.id.wait_layout);
+            waitText = (TextView) mView.findViewById(R.id.wait_text);
         }
 
         @Override
         public void bindView(Itinerary.Step step) {
-            TextView startStationText = (TextView) mView.findViewById(R.id.start_station_name);
             startStationText.setText(String.format(
                     startStationText.getText().toString(),
                     step.getStartStation().getName()));
 
-            TextView endStationText = (TextView) mView.findViewById(R.id.end_station_name);
             endStationText.setText(String.format(
                     endStationText.getText().toString(),
                     step.getEndStation().getName()));
 
-            TextView startTimeText = (TextView) mView.findViewById(R.id.start_time);
             startTimeText.setText(String.format(
                     startTimeText.getText().toString(),
                     step.getHoursStart(), step.getMinutesStart()));
 
-            TextView endTimeText = (TextView) mView.findViewById(R.id.end_time);
             endTimeText.setText(String.format(
                     endTimeText.getText().toString(),
                     step.getHoursEnd(), step.getMinutesEnd()));
 
-            TextView lineNameText = (TextView) mView.findViewById(R.id.line_and_stops);
             lineNameText.setText(String.format(
                     lineNameText.getText().toString(),
                     step.getLine(), step.getNumberOfStops(), step.getFreeSeats().size()));
 
             if (step.getWait() == null) {
-                View waitView = mView.findViewById(R.id.wait_layout);
                 waitView.setVisibility(View.GONE);
             } else {
-                TextView waitText = (TextView) mView.findViewById(R.id.wait_text);
                 waitText.setText(String.format(
                         waitText.getText().toString(),
                         step.getWait()));
@@ -88,22 +96,18 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
 
     public ItineraryAdapter(Context context) {
         mContext = context;
-        setHasStableIds(true);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        if (position == 0) {
-            return 0L;
-        } else {
-            Itinerary.Step step = mItinerary.getSteps().get(position - 1);
-            return step.getStepId();
-        }
     }
 
     public void setItinerary(Itinerary itinerary) {
         mItinerary = itinerary;
-        this.notifyDataSetChanged();
+        recycler.removeAllViews();
+        notifyItemRangeRemoved(0, itinerary.getSteps().size() + 1);
+        notifyItemRangeInserted(0, itinerary.getSteps().size() + 1);
+    }
+
+    private RecyclerView recycler;
+    public void onAttachedToRecyclerView(RecyclerView view) {
+        recycler = view;
     }
 
     @Override

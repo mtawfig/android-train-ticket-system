@@ -82,6 +82,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public static long insertCreditCard(SQLiteDatabase db, CreditCard creditCard) {
+        db.execSQL("delete from " + CreditCardEntry.TABLE_NAME +
+                " where " + CreditCardEntry.COLUMN_NAME_NUMBER + " = " + creditCard.getNumber());
+
         return db.insert(
                 CreditCardEntry.TABLE_NAME,
                 null,
@@ -123,7 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 context.getString(R.string.shared_preferences_identifier),
                 Context.MODE_PRIVATE);
         String userId = sharedPreferences.getString(
-                                context.getString(R.string.shared_preferences_user_id_key), "0");
+                context.getString(R.string.shared_preferences_user_id_key), "0");
 
         String[] projection = {
                 CreditCardEntry.COLUMN_NAME_NUMBER,
