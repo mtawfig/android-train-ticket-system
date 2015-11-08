@@ -145,8 +145,15 @@ public class CheckoutActivity extends AppCompatActivity {
                 Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT)
                         .show();
 
-                Intent intent = new Intent(getBaseContext(), SignInActivity.class);
-                startActivity(intent);
+                if (error.getMessage().equals("Error: Invalid credit card")) {
+                    Intent intent = new Intent(CheckoutActivity.this, PaymentActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(getBaseContext(), SignInActivity.class);
+                    startActivity(intent);
+                }
             }
         }).execute(options);
     }
