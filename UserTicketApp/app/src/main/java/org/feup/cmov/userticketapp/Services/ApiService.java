@@ -134,15 +134,16 @@ public class ApiService {
                 context.getString(R.string.shared_preferences_identifier),
                 Context.MODE_PRIVATE);
 
-        SharedPreferencesFactory.clearPreferences(sharedPreferences);
-        SharedPreferencesFactory.setBooleanValueToPreferences(
-                context.getString(R.string.shared_preferences_user_sign_in), false, sharedPreferences);
-
         Toast toast = Toast.makeText(context,
                 SharedPreferencesFactory.getStringValueFromPreferences(
                         context.getString(R.string.shared_preferences_user_name_key), sharedPreferences)
                         + " signed out",
                 Toast.LENGTH_SHORT);
+
+        SharedPreferencesFactory.clearPreferences(sharedPreferences);
+        SharedPreferencesFactory.setBooleanValueToPreferences(
+                context.getString(R.string.shared_preferences_user_sign_in), false, sharedPreferences);
+
         toast.show();
     }
 
