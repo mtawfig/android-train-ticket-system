@@ -32,6 +32,8 @@ public class ScannedTicketActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Ticket scannedTicket = sharedData.getScannedTicket();
         drawTicketValidation(scannedTicket);
 
