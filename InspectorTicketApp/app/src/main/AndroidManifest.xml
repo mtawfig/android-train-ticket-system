@@ -55,6 +55,9 @@
 
                 <data android:mimeType="application/org.feup.cmov.userticketapp.type1" />
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.MainActivity" />
         </activity>
         <activity
             android:name=".Controllers.StatisticsActivity"

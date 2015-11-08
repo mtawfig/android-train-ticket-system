@@ -23,6 +23,8 @@ public class TicketNFCScannerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ticket_nfcscanner);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
