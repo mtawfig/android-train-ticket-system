@@ -393,8 +393,8 @@ public class SeatPickerActivity extends AppCompatActivity {
                 if (convertView == null) {
                     // if it's not recycled, initialize some attributes
                     imageView = new ImageView(mContext);
-                    imageView.setLayoutParams(new GridView.LayoutParams(140, 140));
-                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    imageView.setLayoutParams(new GridView.LayoutParams(90, 90));
+                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     imageView.setPadding(4, 4, 4, 4);
                 } else {
                     imageView = (ImageView) convertView;
