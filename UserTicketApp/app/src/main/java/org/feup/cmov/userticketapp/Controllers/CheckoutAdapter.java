@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.CheckoutViewHolder> {
     private static Itinerary mItinerary;
     private static Context mContext;
-    private SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
+    private static SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
@@ -51,7 +51,6 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
     }
 
     public static class VHItem extends CheckoutViewHolder {
-        private SharedDataSingleton sharedData = SharedDataSingleton.getInstance();
 
         public VHItem(View v) {
             super(v);
@@ -96,6 +95,11 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
 
             ArrayAdapter<Integer> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, freeSeats);
             spinner.setAdapter(adapter);
+
+            if (ticketIndex < sharedData.getArraySeatNumber().size()) {
+                System.out.println("SEAT: " + sharedData.getArraySeatNumber().get(ticketIndex));
+                spinner.setSelection(sharedData.getArraySeatNumber().get(ticketIndex));
+            }
 
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
