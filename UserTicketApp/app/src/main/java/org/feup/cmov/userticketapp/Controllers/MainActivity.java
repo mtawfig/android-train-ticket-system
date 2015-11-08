@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
     private Menu drawerMenu;
 
     private Button loginButton;
+    private Button seeMyTicketsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
         loginButton = (Button) findViewById(R.id.login_button);
+        seeMyTicketsButton = (Button) findViewById(R.id.tickets_button);
 
         if (ApiService.isUserSignedIn(this)) {
             loginButton.setVisibility(View.GONE);
@@ -111,11 +113,13 @@ public class MainActivity extends AppCompatActivity implements MapFragment.Stati
             drawerNameTextView.setText(SharedPreferencesFactory.getStringValueFromPreferences(getString(R.string.shared_preferences_user_name_key), sharedPreferences));
             drawerEmailTextView.setText(SharedPreferencesFactory.getStringValueFromPreferences(getString(R.string.shared_preferences_user_email_key), sharedPreferences));
             loginButton.setVisibility(View.GONE);
+            seeMyTicketsButton.setVisibility(View.VISIBLE);
         } else {
             drawerImageView.setImageResource(R.mipmap.ic_launcher);
             drawerNameTextView.setText(getString(R.string.app_name));
             drawerEmailTextView.setText(" ");
             loginButton.setVisibility(View.VISIBLE);
+            seeMyTicketsButton.setVisibility(View.GONE);
         }
     }
 
