@@ -160,6 +160,11 @@ public class MainActivity extends AppCompatActivity {
 
         Ticket[] tickets = TicketDbHelper.getAllTickets(db);
 
-        new PutTickets(this, handler).execute(tickets);
+        if (tickets.length > 0) {
+            new PutTickets(this, handler).execute(tickets);
+        }
+        else {
+            handler.onTaskCompleted("No tickets to upload! Go scan some tickets first.");
+        }
     }
 }

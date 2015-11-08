@@ -229,6 +229,10 @@ Ticket.getStatistics = function() {
           ' on t1.day = t2.day;')
       .then(function (history) {
         data.history = history;
+        data.history.forEach(function(day) {
+          day.total = day.total || 0;
+          day.used = day.used || 0;
+        });
         return knex.raw('select count(*) as verified, ' +
             ' (select count(*) from ticket where used = 0) as unverified ' +
             ' from ticket where used = 1;')
