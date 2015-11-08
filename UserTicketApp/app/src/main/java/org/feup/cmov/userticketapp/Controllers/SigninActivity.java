@@ -7,6 +7,7 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -348,6 +349,12 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    public void onRegisterButtonClick(View v) {
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
 

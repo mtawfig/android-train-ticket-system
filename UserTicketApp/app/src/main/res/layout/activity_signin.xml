@@ -71,6 +71,13 @@
                     android:textStyle="bold"
                     android:textColor="@color/colorWhite" />
 
+                <Button android:id="@+id/register_button" style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp" android:text="@string/register_account_instead"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorWhite"
+                    android:onClick="onRegisterButtonClick"/>
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

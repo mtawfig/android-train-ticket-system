@@ -10,10 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Api;
+
 import org.feup.cmov.userticketapp.Models.ErrorResponse;
 import org.feup.cmov.userticketapp.Models.Ticket;
 import org.feup.cmov.userticketapp.Models.TicketDbHelper;
 import org.feup.cmov.userticketapp.R;
+import org.feup.cmov.userticketapp.Services.ApiService;
 import org.feup.cmov.userticketapp.Services.GetTickets;
 
 import java.util.ArrayList;
@@ -37,6 +40,11 @@ public class TicketsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (!ApiService.isUserSignedIn(this)) {
+            finish();
+            return;
+        }
         
         mDbHelper = new TicketDbHelper(this);
 

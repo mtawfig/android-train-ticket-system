@@ -104,4 +104,5 @@
     <string name="free_seat">Free seat</string>
     <string name="taken_seat">Taken seat</string>
     <string name="picked_seat">Picked seat</string>
+    <string name="register_account_instead">Register an account instead</string>
 </resources>
